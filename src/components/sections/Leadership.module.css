@@ -1,400 +1,89 @@
-/* ==========================================================================
-   #leadership — "Two generations, one line." Ivory ground.
-   Mobile first: founder → vertical line → chairman, then the belief and the
-   tagline row. ≥ 720px: a diptych joined by one horizontal hairline.
-   ========================================================================== */
-
 .section {
   background: var(--ivory);
   padding-top: var(--s-3xl);
-  padding-bottom: var(--s-2xl);
+  padding-bottom: var(--s-3xl);
 }
 
-.heading {
+.header {
+  display: grid;
+  gap: 10px;
   margin-bottom: var(--s-xl);
 }
 
-/* ---------- Diptych ---------- */
-.diptych {
-  --gap: clamp(12px, 2vw, 32px);
+.intro {
+  max-width: 40ch;
+}
+
+.people {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-xl);
 }
 
 .person {
   display: grid;
-  row-gap: var(--s-lg);
+  gap: 20px;
   align-content: start;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-strong);
 }
 
-.frame {
-  width: min(100%, 440px);
-}
-
-.name {
-  margin-bottom: var(--s-xs);
-  text-wrap: balance;
-}
-
-.honorific {
-  margin-right: 0.3em;
-  font-family: var(--font-text);
-  font-size: 0.5em;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--ink-soft);
-}
-
-.role {
-  margin-bottom: var(--s-md);
-  color: var(--forest);
-}
-
-.text p {
-  max-width: 44ch;
-}
-
-/* The one line — vertical between the stacked people on small screens */
-.link {
-  position: relative;
-  z-index: 1; /* end nodes sit over the frame edges */
-  height: clamp(112px, 22vw, 160px);
-  margin-block: var(--s-xl);
-}
-
-.link path {
-  fill: none;
-  stroke: var(--forest);
-  stroke-width: 1;
-}
-
-/* Chrome does not restyle descendants matched only by the global [pathLength]
-   selector when data-inview flips; a type selector does invalidate. */
-:global(html.js) .link[data-inview="true"] path,
-:global(html.js) .monoContours[data-inview="true"] path {
-  stroke-dashoffset: 0;
-}
-
-.lineH {
-  display: none;
-}
-
-.lineV {
-  position: absolute;
-  top: 0;
-  left: 3.5px;
-  width: 2px;
-  height: 100%;
-  overflow: visible;
-}
-
-.node {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--forest);
-}
-
-.nodeStart {
-  top: -4.5px;
-  left: 0;
-}
-
-.nodeEnd {
-  bottom: -4.5px;
-  left: 0;
-}
-
-.linkLabel {
-  position: absolute;
-  left: 22px;
-  color: var(--forest);
-}
-
-.linkStart {
-  top: -8px;
-}
-
-.linkEnd {
-  bottom: -8px;
-}
-
-@media (min-width: 720px) {
-  .diptych {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: auto auto;
-    column-gap: var(--gap);
-    row-gap: var(--s-lg);
-  }
-
-  .person {
-    grid-row: 1 / span 2;
-    grid-template-rows: subgrid;
-  }
-
-  .founder {
-    grid-column: 1 / span 5;
-  }
-
-  .chairman {
-    grid-column: 8 / span 5;
-  }
-
-  .frame {
-    width: 100%;
-  }
-
-  /* Horizontal: runs edge to edge between the two frames, at mid-height */
-  .link {
-    grid-row: 1;
-    grid-column: 6 / span 2;
-    align-self: center;
-    height: 2px;
-    margin: 0 calc(var(--gap) * -1);
-  }
-
-  .lineV {
-    display: none;
-  }
-
-  .lineH {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    overflow: visible;
-  }
-
-  .nodeStart {
-    top: -3.5px;
-    left: -4.5px;
-  }
-
-  .nodeEnd {
-    top: -3.5px;
-    right: -4.5px;
-    bottom: auto;
-    left: auto;
-  }
-
-  .linkLabel {
-    top: auto;
-    bottom: 14px;
-  }
-
-  .linkStart {
-    left: 16px;
-  }
-
-  .linkEnd {
-    left: auto;
-    right: 16px;
-  }
-}
-
-/* Narrow gap (tablet): stagger the labels either side of the line */
-@media (min-width: 720px) and (max-width: 1099px) {
-  .linkStart {
-    left: 10px;
-  }
-
-  .linkEnd {
-    right: 10px;
-    top: 14px;
-    bottom: auto;
-  }
-}
-
-@media (min-width: 1100px) {
-  .founder {
-    grid-column: 1 / span 4;
-  }
-
-  .chairman {
-    grid-column: 9 / span 4;
-  }
-
-  .link {
-    grid-column: 5 / span 4;
-  }
-}
-
-/* Wide: smaller sheets, so the line between them carries the composition */
-@media (min-width: 1280px) {
-  .founder {
-    grid-column: 1 / span 3;
-  }
-
-  .chairman {
-    grid-column: 10 / span 3;
-  }
-
-  .link {
-    grid-column: 4 / span 6;
-  }
-}
-
-/* ---------- Monogram frame (portrait placeholder sheet) ---------- */
-.mono {
+.photo {
   position: relative;
   aspect-ratio: 4 / 5;
-  container-type: inline-size;
-  background: var(--sage);
-}
-
-.mono[data-tone="archive"] {
+  width: min(100%, 300px);
+  overflow: hidden;
   background: var(--stone);
 }
 
-.monoContours {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+/* Portraits are presented in a quiet, consistent monochrome. */
+.img {
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: grayscale(1) contrast(1.04);
 }
 
-.monoContours path {
-  stroke: var(--line);
-  stroke-width: 1;
+.name {
+  font-size: var(--t-h3);
 }
 
-/* sheet margin line */
-.monoBorder {
-  position: absolute;
-  inset: 12px;
-  border: 1px solid var(--line);
-  pointer-events: none;
-}
-
-.monogram {
-  position: absolute;
-  left: calc(12px + 7cqi);
-  bottom: calc(12px + 6cqi);
-  font-family: var(--font-display);
-  font-size: 36cqi;
-  font-weight: 220;
-  line-height: 0.78;
-  letter-spacing: -0.045em;
-  color: var(--forest);
-}
-
-.monoNote {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  padding: 10px 12px;
-  font-size: var(--t-micro);
-  letter-spacing: 0.16em;
+.role {
+  margin-top: 6px;
   color: var(--ink-soft);
 }
 
-/* ---------- The founding belief ---------- */
-.belief {
-  display: grid;
-  row-gap: var(--s-md);
-  margin-top: var(--s-3xl);
-}
-
-.beliefIntro {
-  max-width: 24ch;
-  font-size: var(--t-small);
-  line-height: 1.5;
-  color: var(--ink-soft);
-}
-
-.beliefIntro::before {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 1px;
-  margin-bottom: var(--s-sm);
-  background: var(--forest);
-}
-
-.beliefText {
-  font-family: var(--font-display);
-  font-size: min(var(--t-h2), 4.5rem);
-  font-weight: 300;
-  line-height: 1.04;
-  letter-spacing: -0.028em;
-  color: var(--forest);
-  text-wrap: balance;
-}
-
-@media (min-width: 900px) {
-  .belief {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(12px, 2vw, 32px);
-    align-items: start;
-  }
-
-  .beliefIntro {
-    grid-column: 1 / span 3;
-    /* sit the leader rule level with the statement's cap height */
-    margin-top: calc(min(var(--t-h2), 4.5rem) * 0.2);
-  }
-
-  .beliefText {
-    grid-column: 4 / span 9;
-  }
-}
-
-/* ---------- Legacy. Design. Delivery. ---------- */
-.principles {
-  display: grid;
-  margin-top: var(--s-2xl);
-  border-top: 1px solid var(--line);
-}
-
-.principle {
-  padding-block: var(--s-lg);
-}
-
-.principle + .principle {
-  border-top: 1px solid var(--line);
-}
-
-.principle:last-child {
-  padding-bottom: 0;
-}
-
-.word {
-  margin-bottom: var(--s-md);
-  font-family: var(--font-display);
-  font-size: var(--t-statement);
-  font-weight: 320;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--forest);
-}
-
-.evidence {
-  max-width: 34ch;
+.bio {
+  margin-top: 14px;
+  max-width: 52ch;
+  line-height: 1.65;
   text-wrap: pretty;
 }
 
 @media (min-width: 900px) {
-  .principles {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .header {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(12px, 2vw, 32px);
+    align-items: end;
   }
 
-  .principle {
-    padding: var(--s-lg) var(--s-lg) var(--s-xs);
+  .header > :first-child {
+    grid-column: 1 / span 5;
   }
 
-  .principle:first-child {
-    padding-left: 0;
+  .intro {
+    grid-column: 7 / -1;
   }
 
-  .principle:last-child {
-    padding-bottom: var(--s-xs);
+  .people {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(28px, 4vw, 64px);
   }
 
-  .principle + .principle {
-    border-top: 0;
-    border-left: 1px solid var(--line);
+  .person[data-has-photo] {
+    grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1fr);
+    column-gap: 28px;
+  }
+
+  .person[data-has-photo] .photo {
+    width: 100%;
   }
 }

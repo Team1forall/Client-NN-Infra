@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { DESKTOP_MOTION, loadGsap } from "@/lib/motion";
+import { ANY_MOTION, DESKTOP_MOTION, loadGsap } from "@/lib/motion";
 
 /**
- * The signature transition. The stage pins briefly while the plot boundary
- * opens to a full-bleed frame, the survey annotations lift away, the north
- * arrow settles on true north, and the north-star line sits down on its
- * baseline. Desktop + motion only; otherwise the static band below the hero
- * carries the same line.
+ * Scroll behaviour for the hero.
+ * Desktop: the stage pins briefly while the framed render opens to full bleed
+ * and zooms in. Smaller screens: no pin; the render zooms in gently as the hero
+ * scrolls away. Reduced motion: nothing moves.
  */
 export function HeroMotion() {
   const marker = useRef<HTMLSpanElement>(null);
@@ -16,9 +15,11 @@ export function HeroMotion() {
   useEffect(() => {
     const section = marker.current?.closest("section");
     if (!section) return;
-    const q = <T extends Element = HTMLElement>(key: string) => section.querySelectorAll<T & Element>(`[data-hero="${key}"]`);
-    const stage = q("stage")[0];
-    if (!stage) return;
+    const get = (key: string) => section.querySelector<HTMLElement>(`[data-hero="${key}"]`);
+    const stage = get("stage");
+    const frame = get("frame");
+    const zoom = get("zoom");
+    if (!stage || !frame || !zoom) return;
 
     let revert: (() => void) | undefined;
     let cancelled = false;
@@ -28,64 +29,43 @@ export function HeroMotion() {
       const mm = gsap.matchMedia();
 
       mm.add(DESKTOP_MOTION, () => {
-        const plot = q("plot")[0];
-        const zoom = q("zoom")[0];
-        const scrim = q("scrim")[0];
-        const copy = q("copy")[0];
-        const north = q("north")[0];
-        const fades = Array.from(q("fade"));
-        const titleBlock = section.querySelector<HTMLElement>("dl");
-        const starLines = Array.from(q("northstar-line"));
-        const endFrame = q("endframe")[0];
-
-        gsap.set(zoom, { scale: 1.14, transformOrigin: "60% 50%" });
-        gsap.set(starLines, { y: 0, yPercent: 108 });
-
+        // Mirrors --gutter: clamp(20px, 4.2vw, 64px)
+        const gutter = () => Math.min(64, Math.max(20, window.innerWidth * 0.042));
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: stage,
-            start: "top top",
-            end: "+=95%",
+            start: "top top+=72",
+            end: "+=70%",
             pin: true,
-            scrub: 0.7,
+            scrub: 0.6,
             anticipatePin: 1,
             refreshPriority: 10,
             invalidateOnRefresh: true,
           },
         });
-
-        // Explicit start state: the CSS intro may still be animating clip-path when this runs.
+        // Explicit start values: the CSS intro may still be running when this is set up.
         tl.fromTo(
-          plot,
-          { clipPath: "polygon(43% 14%, 95.5% 10%, 97% 80%, 71% 88%, 40% 79%)" },
-          { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 55% 100%, 0% 100%)", duration: 1, immediateRender: false },
+          frame,
+          { clipPath: () => `inset(14px ${gutter()}px 14px ${gutter()}px)` },
+          { clipPath: "inset(0px 0px 0px 0px)", duration: 1, immediateRender: false },
           0,
-        )
-          .to(zoom, { scale: 1, duration: 1 }, 0)
-          .fromTo(fades, { opacity: 1 }, { opacity: 0, duration: 0.3, immediateRender: false }, 0)
-          .to(titleBlock, { opacity: 0, duration: 0.25 }, 0)
-          .to(copy, { yPercent: -14, opacity: 0, duration: 0.42 }, 0)
-          // The arrow settles on true north and docks inside the end frame's corner.
-          .fromTo(
-            north,
-            { rotate: -16, x: 0, y: 0 },
-            {
-              rotate: 0,
-              x: () => endFrame.offsetLeft + 24 - north.offsetLeft,
-              y: () => endFrame.offsetTop + 22 - north.offsetTop,
-              duration: 0.8,
-              immediateRender: false,
-            },
-            0,
-          )
-          .fromTo(endFrame, { opacity: 0 }, { opacity: 1, duration: 0.2, immediateRender: false }, 0.9)
-          .to(scrim, { opacity: 1, duration: 0.5 }, 0.35)
-          .to(starLines, { yPercent: 0, duration: 0.32, stagger: 0.07, ease: "power3.out" }, 0.8)
-          .to({}, { duration: 0.12 });
-
+        ).fromTo(zoom, { scale: 1 }, { scale: 1.08, duration: 1, immediateRender: false }, 0);
         ScrollTrigger.sort();
         ScrollTrigger.refresh();
+      });
+
+      mm.add(`(max-width: 899px) and ${ANY_MOTION}`, () => {
+        gsap.fromTo(
+          zoom,
+          { scale: 1 },
+          {
+            scale: 1.08,
+            ease: "none",
+            immediateRender: false,
+            scrollTrigger: { trigger: stage, start: "top top+=64", end: "bottom top", scrub: 0.4 },
+          },
+        );
       });
 
       revert = () => mm.revert();

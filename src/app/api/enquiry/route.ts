@@ -1,20 +1,16 @@
-import type { Interest } from "@/components/enquiry/InterestLink";
-import { enquiry } from "@/content/site";
-
 /**
- * POST /api/enquiry — validates a Project N registration and forwards it to the
- * Google Apps Script web app that appends it to the enquiries Sheet.
- * Validation rules mirror src/components/enquiry/EnquiryForm.tsx.
+ * POST /api/enquiry — validates a Project N enquiry (name, phone, email, optional
+ * message) and forwards it to the Google Apps Script web app that appends it to
+ * the enquiries Sheet. Validation rules mirror src/components/enquiry/EnquiryForm.tsx.
  */
 
-type Field = "name" | "phone" | "email" | "interest" | "message" | "consent";
+type Field = "name" | "phone" | "email" | "message";
 type FieldErrors = Partial<Record<Field, string>>;
 
 type Enquiry = {
   name: string;
   phone: string;
   email: string;
-  interest: Interest;
   message: string;
 };
 
@@ -22,7 +18,6 @@ const MAX_BODY_CHARS = 16_000;
 const MESSAGE_MAX = 1000;
 const PHONE_RE = /^(?:\+91|91|0)?([1-9]\d{9})$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const INTERESTS: string[] = enquiry.interests.map((i) => i.value);
 
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
@@ -79,19 +74,14 @@ function validate(input: Record<string, unknown>): { ok: true; data: Enquiry } |
   else if (email.length > 254 || !EMAIL_RE.test(email))
     fields.email = "Enter an email address in the correct format, like name@example.com";
 
-  const interest = str(input.interest);
-  if (!INTERESTS.includes(interest)) fields.interest = "Select what you would like to receive";
-
   const message = multiLine(str(input.message));
   if (message.length > MESSAGE_MAX) {
     const over = message.length - MESSAGE_MAX;
     fields.message = `Message must be 1,000 characters or fewer. Remove ${over} ${over === 1 ? "character" : "characters"}`;
   }
 
-  if (input.consent !== true) fields.consent = "Tick the box to agree to NN Infra contacting you about Project N";
-
   if (Object.keys(fields).length > 0 || !phone) return { ok: false, fields };
-  return { ok: true, data: { name, phone, email, interest: interest as Interest, message } };
+  return { ok: true, data: { name, phone, email, message } };
 }
 
 function clientKey(request: Request): string {
@@ -165,7 +155,6 @@ export async function POST(request: Request) {
         secret,
         submittedAt: new Date(now).toISOString(),
         ...result.data,
-        consent: true,
         page,
         userAgent,
       }),

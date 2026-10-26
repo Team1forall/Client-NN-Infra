@@ -1,6 +1,24 @@
-/* Brand marks and survey glyphs, drawn as inline SVG. */
+import Image from "next/image";
+import { brand } from "@/content/media";
 
 type SvgProps = { className?: string; title?: string };
+
+/**
+ * Company logo (supplied by the client), used unchanged everywhere a logo appears.
+ * Size it with `height` on the wrapper class; width follows the logo's proportions.
+ */
+export function BrandLogo({ className, priority = false }: { className?: string; priority?: boolean }) {
+  return (
+    <Image
+      src={brand.logo.src}
+      alt={brand.logo.alt}
+      className={className}
+      sizes="160px"
+      loading={priority ? "eager" : "lazy"}
+      style={{ width: "auto" }}
+    />
+  );
+}
 
 /**
  * Surveyor's north arrow. Half-filled arrowhead, fine shaft, "N" above.
@@ -32,54 +50,5 @@ export function NorthArrow({ className, title }: SvgProps) {
       <path d="M24 66 V128" stroke="currentColor" strokeWidth="1" />
       <path d="M18 128 H30" stroke="currentColor" strokeWidth="1" />
     </svg>
-  );
-}
-
-/** Nethravathi Group three-bar mark, redrawn from the supplied logo. */
-export function GroupBars({ className, title = "Nethravathi Group" }: SvgProps) {
-  return (
-    <svg className={className} viewBox="0 0 794 601" role="img" aria-label={title}>
-      <rect x="0" y="379" width="229" height="222" fill="var(--group-lime)" />
-      <rect x="277" y="159" width="228" height="442" fill="var(--group-leaf)" />
-      <rect x="567" y="0" width="227" height="601" fill="var(--group-deep)" />
-    </svg>
-  );
-}
-
-/**
- * Typeset NN Infra wordmark. PLACEHOLDER until an NN Infra logo is supplied.
- */
-export function Wordmark({ className }: { className?: string }) {
-  return (
-    <span
-      className={className}
-      role="img"
-      aria-label="NN Infra"
-      style={{ display: "inline-flex", alignItems: "baseline", gap: "0.42em", lineHeight: 1 }}
-    >
-      <span
-        aria-hidden="true"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 460,
-          fontSize: "1.5em",
-          letterSpacing: "-0.04em",
-        }}
-      >
-        NN
-      </span>
-      <span
-        aria-hidden="true"
-        style={{
-          fontFamily: "var(--font-text)",
-          fontWeight: 560,
-          fontSize: "0.72em",
-          letterSpacing: "0.32em",
-          textTransform: "uppercase",
-        }}
-      >
-        Infra
-      </span>
-    </span>
   );
 }

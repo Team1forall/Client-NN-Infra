@@ -3,155 +3,54 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { company, project } from "@/content/site";
 
-export const alt = `${project.name} by ${company.name}, ${project.city}, announcing ${project.announcement}: the name set on an ivory survey sheet beside a plot boundary, contour lines and a north arrow.`;
+export const alt = `${project.name} by ${company.name}: ${project.type.toLowerCase()} in ${project.city}, launching ${project.launch}. Artist's impression of the building at dusk.`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 // Static TTFs (Satori can't read woff2). Read once at module scope.
 const zodiak = await readFile(join(process.cwd(), "src/app/og/zodiak-400.ttf"));
 const switzer = await readFile(join(process.cwd(), "src/app/og/switzer-500.ttf"));
+const render = await readFile(join(process.cwd(), "src/assets/media/project-n-front.jpg"));
+const logo = await readFile(join(process.cwd(), "src/assets/brand/nethravathi-group-logo.png"));
 
-/* Token values from globals.css (Satori has no CSS variables). */
-const IVORY = "#f7f5ee";
-const SAGE = "#e9eedf";
-const FOREST = "#35483a";
-const INK_SOFT = "#4e5a50";
-const LINE = "rgba(53,72,58,0.28)";
-const LINE_STRONG = "rgba(53,72,58,0.6)";
+const dataUrl = (buf: Buffer, type: string) => `data:${type};base64,${buf.toString("base64")}`;
 
-/* Drawing placement: a 500×470 viewBox scaled into the right of the card. */
-const DRAW = { x: 696, y: 92, w: 440, h: 414, k: 440 / 500 };
-
-const PLOT: [number, number][] = [
-  [92, 118],
-  [318, 76],
-  [398, 300],
-  [236, 404],
-  [70, 330],
-];
-
-const CONTOURS = [
-  "M0 92 C 90 60, 210 120, 300 84 S 440 40, 500 70",
-  "M0 170 C 110 132, 200 196, 320 160 S 450 120, 500 150",
-  "M0 252 C 120 214, 230 282, 340 240 S 460 206, 500 230",
-  "M0 338 C 100 306, 220 370, 330 330 S 460 296, 500 318",
-  "M0 420 C 130 392, 240 448, 350 410 S 460 384, 500 404",
-];
-
-export default function Image() {
-  const plotPath = `M${PLOT.map(([x, y]) => `${x} ${y}`).join(" L")} Z`;
-  const ticks = Array.from({ length: 21 }, (_, i) => i);
-
+export default function OpengraphImage() {
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          position: "relative",
-          background: IVORY,
-          color: FOREST,
-          fontFamily: "Switzer",
-        }}
-      >
-        {/* Sheet border */}
+      <div style={{ position: "relative", display: "flex", width: "100%", height: "100%", background: "#26352b" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={dataUrl(render, "image/jpeg")}
+          alt=""
+          width={1290}
+          height={630}
+          style={{ position: "absolute", left: -45, top: 0, width: 1290, height: 630, objectFit: "cover" }}
+        />
         <div
           style={{
             position: "absolute",
-            left: 36,
-            top: 36,
-            right: 36,
-            bottom: 36,
+            top: 0,
+            left: 0,
+            width: 1200,
+            height: 630,
             display: "flex",
-            border: `1px solid ${LINE_STRONG}`,
+            backgroundImage: "linear-gradient(90deg, rgba(38,53,43,0.95) 0%, rgba(38,53,43,0.86) 42%, rgba(38,53,43,0.35) 72%, rgba(38,53,43,0.1) 100%)",
           }}
         />
-
-        {/* Survey drawing */}
-        <svg
-          width={DRAW.w}
-          height={DRAW.h}
-          viewBox="0 0 500 470"
-          style={{ position: "absolute", left: DRAW.x, top: DRAW.y }}
-        >
-          <rect x="0" y="0" width="500" height="470" fill={SAGE} />
-          {CONTOURS.map((d) => (
-            <path key={d} d={d} fill="none" stroke={LINE} strokeWidth="1.25" />
-          ))}
-          <path d={plotPath} fill={IVORY} fillOpacity="0.55" stroke={FOREST} strokeWidth="2" strokeLinejoin="round" />
-          {PLOT.map(([x, y]) => (
-            <circle key={`${x}-${y}`} cx={x} cy={y} r="5" fill={IVORY} stroke={FOREST} strokeWidth="1.5" />
-          ))}
-          {/* Chainage line with ticks */}
-          <path d="M40 444 H460" stroke={LINE_STRONG} strokeWidth="1" />
-          {ticks.map((i) => (
-            <path
-              key={i}
-              d={`M${40 + i * 21} 444 V${i % 5 === 0 ? 430 : 437}`}
-              stroke={LINE_STRONG}
-              strokeWidth="1"
-            />
-          ))}
-          {/* North arrow (the "N" is set as text below) */}
-          <path d="M440 66 L452 106 L440 98 Z" fill={FOREST} />
-          <path d="M440 66 L428 106 L440 98 Z" fill="none" stroke={FOREST} strokeWidth="1.25" strokeLinejoin="round" />
-          <path d="M440 98 V150 M433 150 H447" stroke={FOREST} strokeWidth="1.25" fill="none" />
-        </svg>
-
-        {/* "N" above the north arrow */}
-        <div
-          style={{
-            position: "absolute",
-            left: DRAW.x + 440 * DRAW.k - 12,
-            top: DRAW.y + 30 * DRAW.k - 8,
-            width: 24,
-            display: "flex",
-            justifyContent: "center",
-            fontFamily: "Zodiak",
-            fontSize: 26,
-            color: FOREST,
-          }}
-        >
-          N
-        </div>
-
-        {/* Name and facts */}
-        <div
-          style={{
-            position: "absolute",
-            left: 88,
-            top: 0,
-            bottom: 0,
-            width: 568,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Zodiak",
-              fontSize: 128,
-              lineHeight: 1,
-              letterSpacing: -3.5,
-              color: FOREST,
-            }}
-          >
-            {project.name}
+        <div style={{ position: "relative", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "56px 64px", width: "100%" }}>
+          <div style={{ display: "flex", background: "#f7f5ee", padding: "10px 12px", alignSelf: "flex-start" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={dataUrl(logo, "image/png")} alt="" width={78} height={88} style={{ width: 78, height: 88 }} />
           </div>
-          <div
-            style={{
-              display: "flex",
-              marginTop: 36,
-              paddingTop: 22,
-              borderTop: `1px solid ${LINE_STRONG}`,
-              fontSize: 25,
-              color: INK_SOFT,
-            }}
-          >
-            {`${company.name} · ${project.city} · Announcing ${project.announcement}`}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ fontFamily: "Zodiak", fontSize: 104, lineHeight: 1, color: "#f7f5ee", letterSpacing: -2 }}>{project.name}</div>
+            <div style={{ fontFamily: "Switzer", fontSize: 30, color: "rgba(247,245,238,0.9)", marginTop: 18 }}>
+              {`Premium 3 & 4 BHK apartments in ${project.city}`}
+            </div>
+            <div style={{ fontFamily: "Switzer", fontSize: 20, color: "#b9c9af", marginTop: 14, letterSpacing: 3, textTransform: "uppercase" }}>
+              {`Launching ${project.launch} · ${company.name}`}
+            </div>
           </div>
         </div>
       </div>
@@ -159,8 +58,8 @@ export default function Image() {
     {
       ...size,
       fonts: [
-        { name: "Zodiak", data: zodiak, style: "normal", weight: 400 },
-        { name: "Switzer", data: switzer, style: "normal", weight: 500 },
+        { name: "Zodiak", data: zodiak, weight: 400, style: "normal" },
+        { name: "Switzer", data: switzer, weight: 500, style: "normal" },
       ],
     },
   );

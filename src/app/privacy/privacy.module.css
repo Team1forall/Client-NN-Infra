@@ -195,3 +195,7 @@
   color: var(--forest);
   font-weight: 520;
 }
+
+.email {
+  overflow-wrap: anywhere;
+}

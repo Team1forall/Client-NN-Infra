@@ -4,6 +4,9 @@
  * Receives JSON from the website's /api/enquiry route and appends one row per
  * enquiry to the "Enquiries" sheet of the spreadsheet this script is bound to.
  *
+ * Payload: { secret, submittedAt, name, phone, email, message, page, userAgent }
+ * (message may be empty; phone arrives normalised as +91XXXXXXXXXX).
+ *
  * Script Properties (Project Settings → Script Properties):
  *   SHARED_SECRET   required  Must equal GOOGLE_SHEETS_WEBHOOK_SECRET on the website.
  *   NOTIFY_EMAIL    optional  Comma-separated address(es) to email on every new enquiry.
@@ -14,12 +17,8 @@
  */
 
 const SHEET_NAME = 'Enquiries';
-const HEADERS = ['Submitted at', 'Name', 'Phone', 'Email', 'Interest', 'Message', 'Consent', 'Page', 'User agent'];
-const INTEREST_LABELS = {
-  'project-updates': 'Project N updates',
-  ownership: 'Fractional ownership details',
-  both: 'Both',
-};
+const HEADERS = ['Submitted at', 'Name', 'Phone', 'Email', 'Message', 'Page', 'User agent'];
+const MESSAGE_COLUMN = HEADERS.indexOf('Message') + 1;
 
 /** Website → Sheet. Always answers JSON: { ok: true } or { ok: false, error }. */
 function doPost(e) {
@@ -37,7 +36,6 @@ function doPost(e) {
   if (typeof data.secret !== 'string' || !safeEqual_(data.secret, expected)) {
     return respond_({ ok: false, error: 'unauthorized' });
   }
-  if (data.consent !== true) return respond_({ ok: false, error: 'consent_required' });
   if (!data.name || !data.phone || !data.email) return respond_({ ok: false, error: 'missing_fields' });
 
   const lock = LockService.getScriptLock();
@@ -53,9 +51,7 @@ function doPost(e) {
       text_(data.name, 100),
       text_(data.phone, 20),
       text_(data.email, 254),
-      text_(INTEREST_LABELS[data.interest] || data.interest, 60),
       text_(data.message, 1000),
-      'Yes',
       text_(data.page, 500),
       text_(data.userAgent, 300),
     ]);
@@ -97,7 +93,7 @@ function getSheet_(props) {
     sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
     sheet.setFrozenRows(1);
     sheet.getRange('A2:A').setNumberFormat('yyyy-mm-dd hh:mm:ss');
-    sheet.setColumnWidth(6, 360); // Message
+    sheet.setColumnWidth(MESSAGE_COLUMN, 360);
   }
   return sheet;
 }
@@ -128,12 +124,11 @@ function notify_(props, data) {
       to: to,
       subject: 'New Project N enquiry: ' + name,
       body: [
-        'A new Project N enquiry was registered on the website.',
+        'A new Project N enquiry was sent from the website.',
         '',
         'Name: ' + name,
         'Phone: ' + String(data.phone || ''),
         'Email: ' + String(data.email || ''),
-        'Interest: ' + (INTEREST_LABELS[data.interest] || String(data.interest || '')),
         'Message: ' + (String(data.message || '').slice(0, 1000) || '(none)'),
         'Page: ' + String(data.page || ''),
         'Submitted at: ' + String(data.submittedAt || ''),

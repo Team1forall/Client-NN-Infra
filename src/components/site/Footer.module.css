@@ -1,279 +1,97 @@
-/* ==========================================================================
-   Footer — forest-deep sheet, closing on the contour lines of a low hill.
-   ========================================================================== */
-
+/* Light, quiet footer so the company logo shows in its own colours. */
 .footer {
-  position: relative;
-  overflow: hidden;
-  padding: var(--s-2xl) var(--gutter) clamp(96px, 13vw, 196px);
-  background: var(--forest-deep);
-  color: var(--on-forest);
+  background: var(--stone);
+  color: var(--charcoal);
+  padding-top: var(--s-2xl);
+  padding-bottom: 28px;
+  border-top: 1px solid var(--line);
 }
 
-.inner {
-  position: relative;
-  z-index: 1;
-}
-
-/* ---------- Tagline ---------- */
-.tagline {
-  margin-bottom: var(--s-xl);
-  font-family: var(--font-display);
-  font-size: var(--t-h1);
-  font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.035em;
-  color: var(--on-forest);
-  text-wrap: balance;
-}
-
-.word {
-  white-space: nowrap;
-}
-
-/* ---------- Grid of four, separated by hairlines ---------- */
 .grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  border-block: 1px solid var(--line-inverse);
+  gap: var(--s-xl);
 }
 
-.col {
-  min-width: 0;
-  padding-block: 28px 32px;
+.brand {
+  display: grid;
+  justify-items: start;
+  gap: 18px;
 }
 
-.col + .col {
-  border-top: 1px solid var(--line-inverse);
-}
-
-@media (min-width: 640px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .col + .col {
-    border-top: 0;
-  }
-
-  .col:nth-child(n + 3) {
-    border-top: 1px solid var(--line-inverse);
-  }
-
-  .col:nth-child(odd) {
-    padding-right: clamp(20px, 3vw, 40px);
-  }
-
-  .col:nth-child(even) {
-    padding-left: clamp(20px, 3vw, 40px);
-    border-left: 1px solid var(--line-inverse);
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
-  }
-
-  .col {
-    padding-block: 32px 44px;
-    padding-right: clamp(20px, 2.2vw, 40px);
-  }
-
-  .col:nth-child(n + 3) {
-    border-top: 0;
-  }
-
-  .col + .col {
-    padding-left: clamp(20px, 2.2vw, 40px);
-    border-left: 1px solid var(--line-inverse);
-  }
-}
-
-.colTitle {
-  margin-bottom: 14px;
-  color: var(--on-forest-soft);
-}
-
-/* ---------- Brand ---------- */
-.wordmark {
-  font-size: 1.5rem;
-  color: var(--on-forest);
-}
-
-.venture {
-  display: flex;
-  align-items: flex-end;
-  gap: 14px;
-  margin-top: 28px;
-  font-size: var(--t-small);
-  line-height: 1.45;
-  color: var(--on-forest-soft);
-}
-
-.groupMark {
-  flex: none;
-}
-
-.groupMark svg {
-  width: 53px;
-  height: 40px;
-}
-
-.since {
+.logo {
   display: block;
-  margin-top: 4px;
-  color: var(--on-forest-soft);
+  height: 104px;
+  width: auto;
 }
 
-/* ---------- Links: 44px targets, underline drawn just under the text ---------- */
+.tagline {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--forest);
+}
+
+.label {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+}
+
 .list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 20px;
-  justify-items: start;
+  gap: 10px;
 }
 
-@media (min-width: 640px) {
-  .list {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.link {
-  padding-block: 10px;
-  line-height: 1.5;
-}
-
-.link.link::after {
-  bottom: 9px;
-}
-
-.list .link {
-  font-size: var(--t-body);
-}
-
-.ext {
-  display: inline-block;
-  margin-left: 7px;
-  vertical-align: 0.1em;
-}
-
-/* ---------- Visit ---------- */
-.address {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 4px;
-  font-style: normal;
-  line-height: 1.55;
-  color: var(--on-forest);
-}
-
-/* ---------- Contact ---------- */
-.contact {
+.list li {
   display: grid;
-  gap: 6px;
+  gap: 2px;
 }
 
-.contactRow {
-  display: grid;
-  gap: 0;
-}
-
-.contactLabel {
-  color: var(--on-forest-soft);
-  font-size: var(--t-micro);
-}
-
-/* A deliberately marked gap in the drawing: the client sees where each detail goes */
-.placeholder {
-  display: inline-block;
-  margin-block: 8px 10px;
-  padding-bottom: 3px;
-  border-bottom: 1px dashed var(--line-inverse-strong);
-  color: var(--on-forest-soft);
-  line-height: 1.5;
-}
-
-/* ---------- Base row ---------- */
-.base {
-  display: grid;
-  gap: 14px;
-  padding-top: var(--s-lg);
+.key {
   font-size: var(--t-small);
-  line-height: 1.55;
-  color: var(--on-forest-soft);
+  color: var(--ink-soft);
 }
 
-.legal {
-  max-width: 68ch;
-  text-wrap: pretty;
+.list a,
+.map {
+  font-size: var(--t-body);
+  font-weight: 500;
+  color: var(--forest);
 }
 
-.top {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  justify-self: start;
-  min-height: 44px;
-  color: var(--on-forest);
+.email {
+  overflow-wrap: anywhere;
 }
 
-.north {
-  flex: none;
-  width: 15px;
-  height: 40px;
-  transition: transform 0.6s var(--ease-out);
+.address {
+  display: grid;
+  font-style: normal;
+  line-height: 1.6;
 }
 
-.top:hover .north,
-.top:focus-visible .north {
-  transform: translateY(-4px);
+.map {
+  margin-top: 12px;
 }
 
-.top:hover .topLabel::after,
-.top:focus-visible .topLabel::after {
-  transform: scaleX(1);
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: var(--s-xl);
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: var(--t-meta);
+  color: var(--ink-soft);
 }
 
-@media (min-width: 1024px) {
-  .base {
-    grid-template-columns: minmax(max-content, 1fr) minmax(0, 2.4fr) auto;
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1.3fr 1fr 1fr;
+    column-gap: clamp(32px, 5vw, 80px);
     align-items: start;
-    column-gap: var(--s-xl);
   }
 
-  .top {
-    justify-self: end;
-    margin-top: -10px;
-  }
-}
-
-/* ---------- Contours along the bottom edge (decorative) ---------- */
-.contours {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: clamp(200px, 24vw, 360px);
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
-  mask-image: linear-gradient(to top, black 30%, transparent 100%);
-}
-
-.contours path {
-  fill: none;
-  stroke: var(--line-inverse);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-
-.contours .indexContour {
-  stroke-width: 1.6;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .north {
-    transition: none;
+  .bottom p:nth-child(2) {
+    flex: 1;
   }
 }

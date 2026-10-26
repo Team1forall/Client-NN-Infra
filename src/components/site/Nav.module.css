@@ -1,22 +1,12 @@
+/* Fixed, always visible. Solid ivory sheet with a hairline rule. */
 .bar {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 100;
   height: var(--nav-h);
-  color: var(--forest);
-  transition:
-    transform 0.6s var(--ease-out),
-    background-color 0.5s var(--ease-out),
-    box-shadow 0.5s var(--ease-out);
-}
-
-.bar[data-solid] {
   background: var(--ivory);
-  box-shadow: 0 1px 0 var(--line-strong);
-}
-
-.bar[data-hidden] {
-  transform: translateY(-100%);
+  box-shadow: 0 1px 0 var(--line);
+  color: var(--forest);
 }
 
 .inner {
@@ -33,12 +23,14 @@
 .brand {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  color: var(--forest);
+  height: 100%;
+  padding-block: 8px;
 }
 
-.wordmark {
-  font-size: var(--t-body);
+.logo {
+  display: block;
+  height: 56px;
+  width: auto;
 }
 
 /* ---------- Desktop links ---------- */
@@ -48,7 +40,7 @@
 
 .links {
   display: flex;
-  gap: clamp(18px, 2.2vw, 36px);
+  gap: clamp(20px, 2.4vw, 40px);
 }
 
 .link {
@@ -56,7 +48,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 0.875rem;
+  font-size: var(--t-small);
   font-weight: 500;
   letter-spacing: 0.01em;
   color: var(--charcoal);
@@ -91,27 +83,39 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 18px;
+}
+
+.phone {
+  display: none;
+  min-height: 44px;
+  align-items: center;
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--forest);
+  font-variant-numeric: tabular-nums;
+}
+
+.phone:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .cta {
   min-height: 44px;
   padding-block: 10px;
-  font-size: 0.875rem;
+  font-size: var(--t-small);
   gap: 18px;
 }
 
 /* ---------- Menu toggle (mobile/tablet) ---------- */
 .menuBtn,
 .closeBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  min-width: 44px;
-  padding: 0 4px 0 10px;
-  font-size: 0.875rem;
-  font-weight: 520;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
   color: var(--forest);
 }
 
@@ -127,25 +131,16 @@
   position: absolute;
   left: 0;
   width: 100%;
-  height: 1.25px;
+  height: 1.5px;
   background: currentColor;
-  transition: transform 0.45s var(--ease-out);
 }
 
 .menuIcon i:first-child {
-  top: 2px;
+  top: 1px;
 }
 
 .menuIcon i:last-child {
-  bottom: 2px;
-  width: 64%;
-  left: auto;
-  right: 0;
-}
-
-.menuBtn:hover .menuIcon i:last-child {
-  transform: scaleX(1.56);
-  transform-origin: right;
+  bottom: 1px;
 }
 
 .closeIcon i {
@@ -153,56 +148,46 @@
 }
 
 .closeIcon i:first-child {
-  transform: rotate(35deg);
+  transform: rotate(45deg);
 }
 
 .closeIcon i:last-child {
-  transform: rotate(-35deg);
+  transform: rotate(-45deg);
 }
 
-/* ---------- Menu sheet ---------- */
+/* ---------- Mobile menu: compact sheet that fits any phone screen ---------- */
 .sheet {
   position: fixed;
-  inset: 0;
-  width: 100%;
+  inset: 0 0 auto auto;
+  width: min(100%, 420px);
   max-width: none;
   height: 100dvh;
   max-height: none;
   margin: 0;
-  padding: 0 var(--gutter) max(28px, env(safe-area-inset-bottom));
+  padding: 0 var(--gutter) max(20px, env(safe-area-inset-bottom));
   border: 0;
-  background: var(--sage);
+  background: var(--ivory);
   color: var(--forest);
   display: none;
   flex-direction: column;
+  gap: 20px;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .sheet[open] {
   display: flex;
-  animation: sheetIn 0.55s var(--ease-out) both;
-}
-
-.sheet[data-closing] {
-  animation: sheetOut 0.32s var(--ease-in-out) both;
+  animation: sheetIn 0.4s var(--ease-out) both;
 }
 
 .sheet::backdrop {
-  background: rgb(38 53 43 / 0.3);
+  background: rgb(38 53 43 / 0.45);
 }
 
 @keyframes sheetIn {
   from {
-    clip-path: inset(0 0 100% 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-@keyframes sheetOut {
-  to {
-    clip-path: inset(0 0 100% 0);
+    transform: translateX(24px);
+    opacity: 0;
   }
 }
 
@@ -212,17 +197,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
 }
 
-.sheetNav {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding-block: 24px;
-}
-
-.sheetNav ol {
-  width: 100%;
+.sheetNav ul {
   border-top: 1px solid var(--line);
 }
 
@@ -233,55 +213,37 @@
 .sheetNav a {
   display: flex;
   align-items: center;
-  min-height: 64px;
+  min-height: 54px;
   font-family: var(--font-display);
-  font-size: var(--t-h2);
-  font-weight: 340;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-  padding-block: 8px;
+  font-size: var(--t-subtitle);
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
-.sheet[open] .sheetNav li {
-  animation: itemIn 0.8s var(--ease-out) both;
-  animation-delay: calc(120ms + var(--i) * 55ms);
-}
-
-@keyframes itemIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-}
-
-.sheetFoot {
+.sheetContact {
   display: grid;
-  gap: 24px;
-  flex: none;
+  gap: 2px;
+}
+
+.sheetContact a {
+  display: grid;
+  gap: 2px;
+  min-height: 48px;
+  padding-block: 6px;
+  font-size: var(--t-ui);
+  font-weight: 500;
+  color: var(--charcoal);
+  overflow-wrap: anywhere;
+}
+
+.sheetContact .annot,
+.sheetContact :global(.annot) {
+  color: var(--ink-soft);
 }
 
 .sheetCta {
   width: 100%;
-}
-
-.sheetMeta {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 16px;
-  row-gap: 4px;
-  align-items: start;
-  color: var(--ink-soft);
-}
-
-.sheetNorth {
-  grid-row: span 2;
-  width: 18px;
-  height: auto;
-  color: var(--forest);
-}
-
-.sheetAddress {
-  font-size: var(--t-small);
+  margin-top: auto;
 }
 
 @media (min-width: 1080px) {
@@ -292,20 +254,24 @@
   .menuBtn {
     display: none;
   }
+
+  .phone {
+    display: inline-flex;
+  }
 }
 
 @media (max-width: 520px) {
   .cta {
     display: none;
   }
+
+  .logo {
+    height: 50px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bar,
-  .sheet[open],
-  .sheet[data-closing],
-  .sheet[open] .sheetNav li {
-    transition: none;
+  .sheet[open] {
     animation: none;
   }
 }

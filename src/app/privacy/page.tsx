@@ -3,12 +3,12 @@ import { ScrollFx } from "@/components/motion/ScrollFx";
 import { Footer } from "@/components/site/Footer";
 import { Nav } from "@/components/site/Nav";
 import { TitleBlock } from "@/components/ui/TitleBlock";
-import { company, contact } from "@/content/site";
+import { company, contact, enquiry } from "@/content/site";
 import styles from "./privacy.module.css";
 
 export const metadata: Metadata = {
   title: "Privacy notice",
-  description: `How ${company.name} handles the details you share when you register interest in Project N.`,
+  description: `How ${company.name} handles the details you share when you send an enquiry about Project N.`,
   alternates: { canonical: "/privacy" },
 };
 
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
               </h1>
               <p className={`lead ${styles.lead}`}>
                 How {company.name}, {company.venture.charAt(0).toLowerCase() + company.venture.slice(1)}, handles the
-                details you share when you register interest in Project N.
+                details you share when you send an enquiry about Project N.
               </p>
               <TitleBlock
                 className={styles.titleBlock}
@@ -90,14 +90,12 @@ export default function PrivacyPage() {
                   <h2 id="what-we-collect" className="h3">
                     {title("what-we-collect")}
                   </h2>
-                  <p>When you register interest in Project N, the form asks for:</p>
+                  <p>When you send an enquiry through the website’s contact form, it asks for:</p>
                   <ul className={styles.list}>
                     <li>your full name</li>
                     <li>your phone number</li>
                     <li>your email address</li>
-                    <li>what you would like to receive: Project N updates, fractional ownership details, or both</li>
                     <li>a message, if you choose to write one</li>
-                    <li>your agreement to be contacted about Project N</li>
                   </ul>
                   <p>
                     With each enquiry the website also records the time it was sent, the address of the page it was sent
@@ -111,14 +109,10 @@ export default function PrivacyPage() {
                   <h2 id="why" className="h3">
                     {title("why")}
                   </h2>
+                  <p>{enquiry.privacy}</p>
                   <p>
-                    We use your details only to respond to your enquiry about Project N and to share the project
-                    information you asked for, such as announcements and, if you requested them, fractional ownership
-                    details.
-                  </p>
-                  <p>
-                    We contact you by phone, email or WhatsApp because you agreed to it when you sent the form. We do not
-                    use your details for unrelated marketing.
+                    We reply by phone, email or WhatsApp, using the details you gave us in the form. We do not use your
+                    details for unrelated marketing.
                   </p>
                 </section>
 
@@ -161,9 +155,9 @@ export default function PrivacyPage() {
                     {title("choices")}
                   </h2>
                   <p>
-                    You can ask to see the details we hold about you, to correct them or to delete them, and you can
-                    withdraw your agreement to be contacted at any time. Contact {company.name} using the details below
-                    and we will act on your request.
+                    You can ask to see the details we hold about you, to correct them or to delete them, and you can ask
+                    us to stop contacting you at any time. Contact {company.name} using the details below and we will act
+                    on your request.
                   </p>
                 </section>
 
@@ -201,25 +195,31 @@ export default function PrivacyPage() {
                     <div className={styles.row}>
                       <dt className={`annot ${styles.key}`}>Phone</dt>
                       <dd>
-                        {contact.phone ? (
-                          <a className={`tlink ${styles.link}`} href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}>
-                            {contact.phone}
-                          </a>
-                        ) : (
-                          <Pending>Phone number — to be added</Pending>
-                        )}
+                        <a className={`tlink ${styles.link}`} href={contact.phone.href}>
+                          {contact.phone.display}
+                        </a>
+                      </dd>
+                    </div>
+                    <div className={styles.row}>
+                      <dt className={`annot ${styles.key}`}>WhatsApp</dt>
+                      <dd>
+                        <a
+                          className={`tlink ${styles.link}`}
+                          href={contact.whatsapp.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {contact.whatsapp.display}
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
                       </dd>
                     </div>
                     <div className={styles.row}>
                       <dt className={`annot ${styles.key}`}>Email</dt>
                       <dd>
-                        {contact.email ? (
-                          <a className={`tlink ${styles.link}`} href={`mailto:${contact.email}`}>
-                            {contact.email}
-                          </a>
-                        ) : (
-                          <Pending>Email address — to be added</Pending>
-                        )}
+                        <a className={`tlink ${styles.link} ${styles.email}`} href={contact.email.href}>
+                          {contact.email.display}
+                        </a>
                       </dd>
                     </div>
                   </dl>

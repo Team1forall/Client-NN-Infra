@@ -1,83 +1,61 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react";
-import { INTEREST_EVENT, type Interest } from "@/components/enquiry/InterestLink";
+import { useEffect, useRef, useState, type FormEvent, type InputHTMLAttributes, type MouseEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { contact, enquiry } from "@/content/site";
 import styles from "./EnquiryForm.module.css";
 
-// copy: form-only strings (labels, hints, validation and status messages) not held in site.ts
+// copy: form-only strings (labels, validation and status messages) not held in site.ts
 const COPY = {
-  requiredNote: "All fields are required unless marked optional.",
   name: "Full name",
   phone: "Phone number",
-  phoneHint: "Indian number, 10 digits. You can start with +91 or 0.",
   email: "Email address",
-  interest: "I would like to receive",
   message: "Message",
   optional: "(optional)",
   messageLimit: "You can enter up to 1,000 characters.",
-  consent: "I agree to NN Infra contacting me about Project N by phone, email or WhatsApp.",
-  consentHint: "to see how your details are used.",
-  privacyLink: "Read the privacy notice",
   sending: "Sending…",
-  sendingStatus: "Sending your details…",
-  tryAgain: "Try again",
+  sendingStatus: "Sending your enquiry…",
   summaryTitle: "There is a problem",
   errorPrefix: "Error:",
-  stampTop: "Project N",
-  stampWord: "Registered",
-  stampBottom: "NN Infra · Bengaluru",
-  another: "Register another person",
-  map: "Open in Google Maps",
+  successText: "Your enquiry has been sent. The NN Infra team will get back to you.",
+  another: "Send another enquiry",
+  call: "Call",
+  whatsapp: "WhatsApp",
+  emailKey: "Email",
   newTab: "(opens in a new tab)",
-  notConfiguredTitle: "Online registration isn’t connected yet.",
+  notConfiguredTitle: "Online enquiries aren’t connected yet.",
   notConfiguredText:
-    "Your details have not been sent, and everything you entered is still in the form. Until registration opens online, please reach the NN Infra team directly:",
-  errorTitle: "Your details could not be sent.",
-  errorText: "Please check your connection and try again. Everything you entered is still in the form.",
+    "Your enquiry has not been sent, and everything you entered is still in the form. Please reach us directly by phone, WhatsApp or email:",
+  errorTitle: "Your enquiry could not be sent.",
+  errorText:
+    "Please check your connection and submit again. Everything you entered is still in the form. You can also reach us directly by phone, WhatsApp or email:",
   rateTitle: "Too many attempts.",
-  rateText: "Please wait a few minutes, then try again. Everything you entered is still in the form.",
+  rateText:
+    "Please wait a few minutes, then submit again. Everything you entered is still in the form. You can also reach us directly by phone, WhatsApp or email:",
 } as const;
 
 const MESSAGE_MAX = 1000;
 const PHONE_RE = /^(?:\+91|91|0)?([1-9]\d{9})$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const INTERESTS = enquiry.interests.map((i) => i.value);
 
-const FIELDS = ["name", "phone", "email", "interest", "message", "consent"] as const;
+const FIELDS = ["name", "phone", "email", "message"] as const;
 type Field = (typeof FIELDS)[number];
 type Errors = Partial<Record<Field, string>>;
+type Values = Record<Field, string>;
 type Status = "idle" | "submitting" | "success" | "not_configured" | "error" | "rate_limited";
 type FocusTarget = "summary" | "notice" | "success" | "name";
 
-type Values = {
-  name: string;
-  phone: string;
-  email: string;
-  interest: Interest;
-  message: string;
-  consent: boolean;
-};
-
-const INITIAL: Values = { name: "", phone: "", email: "", interest: "project-updates", message: "", consent: false };
+const INITIAL: Values = { name: "", phone: "", email: "", message: "" };
 
 const ID: Record<Field, string> = {
   name: "enq-name",
   phone: "enq-phone",
   email: "enq-email",
-  interest: "enq-interest",
   message: "enq-message",
-  consent: "enq-consent",
 };
 
 const errId = (f: Field) => `${ID[f]}-error`;
 const describedBy = (...ids: (string | false | undefined)[]) => ids.filter(Boolean).join(" ") || undefined;
-
-function isInterest(value: unknown): value is Interest {
-  return typeof value === "string" && INTERESTS.includes(value);
-}
 
 /** Mirrors the server rules in src/app/api/enquiry/route.ts. */
 function normalisePhone(raw: string): string | null {
@@ -106,14 +84,12 @@ function validateField(field: Field, v: Values): string | undefined {
         return "Enter an email address in the correct format, like name@example.com";
       return undefined;
     }
-    case "interest":
-      return isInterest(v.interest) ? undefined : "Select what you would like to receive";
     case "message": {
       const over = v.message.trim().length - MESSAGE_MAX;
-      return over > 0 ? `Message must be 1,000 characters or fewer. Remove ${over} ${over === 1 ? "character" : "characters"}` : undefined;
+      return over > 0
+        ? `Message must be 1,000 characters or fewer. Remove ${over} ${over === 1 ? "character" : "characters"}`
+        : undefined;
     }
-    case "consent":
-      return v.consent ? undefined : "Tick the box to agree to NN Infra contacting you about Project N";
   }
 }
 
@@ -140,6 +116,33 @@ function countText(length: number): string {
   return `${over.toLocaleString("en-IN")} ${over === 1 ? "character" : "characters"} too many`;
 }
 
+/** Direct contact routes, shown inside the "not connected" and error notices. */
+function DirectContact() {
+  return (
+    <ul className={styles.direct}>
+      <li>
+        <span className={`annot ${styles.directKey}`}>{COPY.call}</span>
+        <a href={contact.phone.href}>
+          {contact.phone.display}
+        </a>
+      </li>
+      <li>
+        <span className={`annot ${styles.directKey}`}>{COPY.whatsapp}</span>
+        <a href={contact.whatsapp.href} target="_blank" rel="noopener noreferrer">
+          {contact.whatsapp.display}
+          <span className="sr-only"> {COPY.newTab}</span>
+        </a>
+      </li>
+      <li>
+        <span className={`annot ${styles.directKey}`}>{COPY.emailKey}</span>
+        <a href={contact.email.href}>
+          {contact.email.display}
+        </a>
+      </li>
+    </ul>
+  );
+}
+
 type ApiBody = { ok?: boolean; code?: string; fields?: Record<string, unknown> };
 
 export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
@@ -148,7 +151,7 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
   const [summary, setSummary] = useState<Field[]>([]);
   const [attempted, setAttempted] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
-  const [registered, setRegistered] = useState<{ name: string; interest: Interest } | null>(null);
+  const [sentName, setSentName] = useState<string | null>(null);
   const [focusRequest, setFocusRequest] = useState<{ target: FocusTarget; n: number } | null>(null);
   const [announcedCount, setAnnouncedCount] = useState("");
 
@@ -174,16 +177,6 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
     el?.focus();
   }, [focusRequest]);
 
-  // InterestLink buttons elsewhere on the page preselect the interest.
-  useEffect(() => {
-    const onInterest = (event: Event) => {
-      const detail = (event as CustomEvent<unknown>).detail;
-      if (isInterest(detail)) setValues((prev) => ({ ...prev, interest: detail }));
-    };
-    window.addEventListener(INTEREST_EVENT, onInterest);
-    return () => window.removeEventListener(INTEREST_EVENT, onInterest);
-  }, []);
-
   // Announce the character count politely, only near or over the limit, after typing pauses.
   const messageLength = values.message.trim().length;
   useEffect(() => {
@@ -193,22 +186,14 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
     return () => window.clearTimeout(timer);
   }, [messageLength]);
 
-  function update<K extends keyof Values>(key: K, value: Values[K]) {
+  function update(key: Field, value: string) {
     const next = { ...values, [key]: value };
     setValues(next);
     if (attempted) setErrors((prev) => ({ ...prev, [key]: validateField(key, next) }));
   }
 
   function focusField(field: Field) {
-    if (field === "interest") {
-      const radio =
-        document.querySelector<HTMLInputElement>(`#${ID.interest} input:checked`) ??
-        document.querySelector<HTMLInputElement>(`#${ID.interest} input`);
-      radio?.focus();
-      return;
-    }
-    const input = document.getElementById(ID[field]);
-    input?.focus();
+    document.getElementById(ID[field])?.focus();
     document.querySelector(`label[for="${ID[field]}"]`)?.scrollIntoView({ block: "center" });
   }
 
@@ -235,9 +220,7 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
           name: values.name.trim(),
           phone: values.phone.trim(),
           email: values.email.trim(),
-          interest: values.interest,
           message: values.message.trim(),
-          consent: values.consent,
           website: honeypotRef.current?.value ?? "",
           page: window.location.href,
         }),
@@ -250,7 +233,7 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
       }
 
       if (res.ok && body?.ok) {
-        setRegistered({ name: firstName(values.name), interest: values.interest });
+        setSentName(firstName(values.name));
         setStatus("success");
         requestFocus("success");
         return;
@@ -297,13 +280,12 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
     setErrors({});
     setSummary([]);
     setAttempted(false);
-    setRegistered(null);
+    setSentName(null);
     setStatus("idle");
     requestFocus("name");
   }
 
-  if (status === "success" && registered) {
-    const ownership = registered.interest === "ownership" || registered.interest === "both";
+  if (status === "success" && sentName !== null) {
     return (
       <div className={styles.root}>
         <div
@@ -314,27 +296,15 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
           aria-labelledby="enq-success-title"
           aria-describedby="enq-success-text"
         >
-          <span className="cropmarks" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-            <i />
-          </span>
-          <div className={styles.stamp} aria-hidden="true">
-            <span className={`annot ${styles.stampMeta}`}>{COPY.stampTop}</span>
-            <span className={styles.stampWord}>{COPY.stampWord}</span>
-            <span className={`annot ${styles.stampMeta}`}>{COPY.stampBottom}</span>
-          </div>
           <h3 id="enq-success-title" className={`h3 ${styles.successTitle}`}>
-            Thank you, {registered.name}. You’re registered.
+            Thank you, {sentName}.
           </h3>
           <p id="enq-success-text" className={styles.successText}>
-            The NN Infra team will be in touch as Project N information is released
-            {ownership ? ", including the fractional ownership details you asked for" : ""}.
+            {COPY.successText}
           </p>
-          <Button variant="outline" arrow={false} onClick={reset}>
+          <button type="button" className={styles.another} onClick={reset}>
             {COPY.another}
-          </Button>
+          </button>
         </div>
       </div>
     );
@@ -343,8 +313,7 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
   const summaryItems = summary.filter((f) => errors[f]);
   const showSummary = attempted && summaryItems.length > 0;
   const showNotice = status === "not_configured" || status === "error" || status === "rate_limited";
-  const retry = status === "error" || status === "rate_limited";
-  const over = values.message.trim().length > MESSAGE_MAX;
+  const over = messageLength > MESSAGE_MAX;
 
   const errorText = (f: Field) =>
     errors[f] ? (
@@ -359,6 +328,32 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
       </p>
     ) : null;
 
+  const textField = (
+    f: Exclude<Field, "message">,
+    label: string,
+    props: InputHTMLAttributes<HTMLInputElement>,
+    span?: "full",
+  ) => (
+    <div className={styles.field} data-span={span} data-invalid={errors[f] ? "true" : undefined}>
+      <label htmlFor={ID[f]} className={styles.label}>
+        {label}
+      </label>
+      {errorText(f)}
+      <input
+        id={ID[f]}
+        name={f}
+        className={styles.input}
+        enterKeyHint="next"
+        required
+        value={values[f]}
+        onChange={(e) => update(f, e.target.value)}
+        aria-invalid={errors[f] ? true : undefined}
+        aria-describedby={describedBy(errors[f] && errId(f))}
+        {...props}
+      />
+    </div>
+  );
+
   return (
     <div className={styles.root}>
       <form
@@ -368,7 +363,6 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
         noValidate
         onSubmit={onSubmit}
         aria-labelledby={labelledBy}
-        aria-describedby="enq-note"
       >
         {showSummary && (
           <div
@@ -400,114 +394,21 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
           </div>
         )}
 
-        <p id="enq-note" className={styles.note}>
-          {COPY.requiredNote}
-        </p>
-
         <div className={styles.fields}>
-          {/* Full name */}
-          <div className={styles.field} data-span="full" data-invalid={errors.name ? "true" : undefined}>
-            <label htmlFor={ID.name} className={styles.label}>
-              {COPY.name}
-            </label>
-            {errorText("name")}
-            <input
-              id={ID.name}
-              name="name"
-              type="text"
-              className={styles.input}
-              autoComplete="name"
-              autoCapitalize="words"
-              spellCheck={false}
-              enterKeyHint="next"
-              required
-              value={values.name}
-              onChange={(e) => update("name", e.target.value)}
-              aria-invalid={errors.name ? true : undefined}
-              aria-describedby={describedBy(errors.name && errId("name"))}
-            />
-          </div>
+          {textField("name", COPY.name, {
+            type: "text",
+            autoComplete: "name",
+            autoCapitalize: "words",
+            spellCheck: false,
+          })}
+          {textField("phone", COPY.phone, { type: "tel", inputMode: "tel", autoComplete: "tel" })}
+          {textField(
+            "email",
+            COPY.email,
+            { type: "email", inputMode: "email", autoComplete: "email", autoCapitalize: "none", spellCheck: false },
+            "full",
+          )}
 
-          {/* Phone */}
-          <div className={styles.field} data-invalid={errors.phone ? "true" : undefined}>
-            <label htmlFor={ID.phone} className={styles.label}>
-              {COPY.phone}
-            </label>
-            {errorText("phone")}
-            <input
-              id={ID.phone}
-              name="phone"
-              type="tel"
-              inputMode="tel"
-              className={styles.input}
-              autoComplete="tel"
-              enterKeyHint="next"
-              required
-              value={values.phone}
-              onChange={(e) => update("phone", e.target.value)}
-              aria-invalid={errors.phone ? true : undefined}
-              aria-describedby={describedBy("enq-phone-hint", errors.phone && errId("phone"))}
-            />
-            <p id="enq-phone-hint" className={styles.hint}>
-              {COPY.phoneHint}
-            </p>
-          </div>
-
-          {/* Email */}
-          <div className={styles.field} data-invalid={errors.email ? "true" : undefined}>
-            <label htmlFor={ID.email} className={styles.label}>
-              {COPY.email}
-            </label>
-            {errorText("email")}
-            <input
-              id={ID.email}
-              name="email"
-              type="email"
-              inputMode="email"
-              className={styles.input}
-              autoComplete="email"
-              autoCapitalize="none"
-              spellCheck={false}
-              enterKeyHint="next"
-              required
-              value={values.email}
-              onChange={(e) => update("email", e.target.value)}
-              aria-invalid={errors.email ? true : undefined}
-              aria-describedby={describedBy(errors.email && errId("email"))}
-            />
-          </div>
-
-          {/* Interest */}
-          <fieldset
-            id={ID.interest}
-            className={styles.fieldset}
-            data-span="full"
-            data-invalid={errors.interest ? "true" : undefined}
-            aria-describedby={describedBy(errors.interest && errId("interest"))}
-          >
-            <legend className={styles.label}>{COPY.interest}</legend>
-            {errorText("interest")}
-            <div className={styles.segments}>
-              {enquiry.interests.map((option) => (
-                <label key={option.value} className={styles.segment}>
-                  <input
-                    type="radio"
-                    name="interest"
-                    value={option.value}
-                    className={styles.radio}
-                    checked={values.interest === option.value}
-                    onChange={() => isInterest(option.value) && update("interest", option.value)}
-                  />
-                  <span className={styles.segmentBox}>
-                    <span className={styles.segmentMark} aria-hidden="true" />
-                    {option.label}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          {/* Message */}
           <div className={styles.field} data-span="full" data-invalid={errors.message ? "true" : undefined}>
             <label htmlFor={ID.message} className={styles.label}>
               {COPY.message} <span className={styles.optional}>{COPY.optional}</span>
@@ -527,42 +428,10 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
               aria-describedby={describedBy("enq-message-limit", errors.message && errId("message"))}
             />
             <p className={styles.count} data-over={over ? "true" : undefined} aria-hidden="true">
-              {countText(values.message.trim().length)}
+              {countText(messageLength)}
             </p>
             <p className="sr-only" aria-live="polite">
               {announcedCount}
-            </p>
-          </div>
-
-          {/* Consent */}
-          <div className={styles.consent} data-span="full" data-invalid={errors.consent ? "true" : undefined}>
-            {errorText("consent")}
-            <div className={styles.checkRow}>
-              <span className={styles.checkWrap}>
-                <input
-                  id={ID.consent}
-                  name="consent"
-                  type="checkbox"
-                  className={styles.checkbox}
-                  required
-                  checked={values.consent}
-                  onChange={(e) => update("consent", e.target.checked)}
-                  aria-invalid={errors.consent ? true : undefined}
-                  aria-describedby={describedBy("enq-consent-hint", errors.consent && errId("consent"))}
-                />
-                <svg className={styles.tick} viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M3.2 8.4l3.1 3.1 6.5-6.8" fill="none" stroke="currentColor" strokeWidth="1.8" />
-                </svg>
-              </span>
-              <label htmlFor={ID.consent} className={styles.checkLabel}>
-                {COPY.consent}
-              </label>
-            </div>
-            <p id="enq-consent-hint" className={styles.consentHint}>
-              <Link href="/privacy" className="tlink">
-                {COPY.privacyLink}
-              </Link>{" "}
-              {COPY.consentHint}
             </p>
           </div>
         </div>
@@ -574,44 +443,21 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
         </div>
 
         {showNotice && (
-          <div ref={noticeRef} className={styles.notice} role="alert" tabIndex={-1} data-kind={status}>
-            <p className={styles.noticeTitle}>
+          <div
+            ref={noticeRef}
+            className={styles.notice}
+            role="alert"
+            tabIndex={-1}
+            data-kind={status}
+            aria-labelledby="enq-notice-title"
+          >
+            <p id="enq-notice-title" className={styles.noticeTitle}>
               {status === "not_configured" ? COPY.notConfiguredTitle : status === "rate_limited" ? COPY.rateTitle : COPY.errorTitle}
             </p>
             <p className={styles.noticeText}>
               {status === "not_configured" ? COPY.notConfiguredText : status === "rate_limited" ? COPY.rateText : COPY.errorText}
             </p>
-            {status === "not_configured" && (
-              <div className={styles.fallback}>
-                <address className={styles.fallbackAddress}>
-                  {contact.address.lines.map((line) => (
-                    <span key={line}>{line}</span>
-                  ))}
-                </address>
-                <ul className={styles.fallbackLinks}>
-                  <li>
-                    <a href={contact.address.mapUrl} target="_blank" rel="noopener noreferrer" className="tlink">
-                      {COPY.map}
-                      <span className="sr-only"> {COPY.newTab}</span>
-                    </a>
-                  </li>
-                  {contact.phone && (
-                    <li>
-                      <a href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`} className="tlink">
-                        {contact.phone}
-                      </a>
-                    </li>
-                  )}
-                  {contact.email && (
-                    <li>
-                      <a href={`mailto:${contact.email}`} className="tlink">
-                        {contact.email}
-                      </a>
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
+            <DirectContact />
           </div>
         )}
 
@@ -623,12 +469,12 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
             aria-busy={submitting || undefined}
             arrow={submitting ? false : "right"}
           >
-            {submitting ? COPY.sending : retry ? COPY.tryAgain : enquiry.submit}
+            {submitting ? COPY.sending : enquiry.submit}
           </Button>
+          <p className="sr-only" role="status">
+            {submitting ? COPY.sendingStatus : ""}
+          </p>
         </div>
-        <p className="sr-only" role="status">
-          {submitting ? COPY.sendingStatus : ""}
-        </p>
       </form>
     </div>
   );

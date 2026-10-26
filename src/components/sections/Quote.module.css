@@ -1,0 +1,81 @@
+.section {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(78svh, 680px);
+  color: var(--ivory);
+  overflow: hidden;
+  background: var(--forest-deep);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+}
+
+.mediaInner {
+  position: absolute;
+  inset: -5% 0;
+}
+
+.img {
+  object-fit: cover;
+  object-position: 50% 60%;
+}
+
+/* Keeps the quote readable over any part of the image */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgb(20 28 22 / 0.88) 0%, rgb(20 28 22 / 0.55) 42%, rgb(20 28 22 / 0.15) 75%),
+    linear-gradient(90deg, rgb(20 28 22 / 0.45) 0%, rgb(20 28 22 / 0) 60%);
+}
+
+.body {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding-top: var(--s-3xl);
+  padding-bottom: var(--s-2xl);
+}
+
+.quote {
+  margin: 0;
+}
+
+.quote p {
+  max-width: 21ch;
+  font-family: var(--font-display);
+  font-size: var(--t-statement);
+  font-weight: 380;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: var(--s-lg);
+}
+
+.rule {
+  flex: none;
+  width: 40px;
+  height: 1px;
+  background: var(--botanical);
+}
+
+.name {
+  display: block;
+  font-size: var(--t-body);
+  font-weight: 500;
+}
+
+.role {
+  display: block;
+  margin-top: 4px;
+  color: rgb(247 245 238 / 0.75);
+}

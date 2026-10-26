@@ -1,60 +1,86 @@
-import type { ReactNode } from "react";
+import { ButtonLink } from "@/components/ui/Button";
 import { Lines } from "@/components/ui/Lines";
-import { TitleBlock } from "@/components/ui/TitleBlock";
-import { media, type Media } from "@/content/media";
-import { company, developments } from "@/content/site";
-import { PlotStrips, type Plot } from "./PlotStrips";
+import { MediaFrame } from "@/components/ui/MediaFrame";
+import { media } from "@/content/media";
+import { contact, developments } from "@/content/site";
 import styles from "./Developments.module.css";
 
-/** Stand-in image for each past development (all labelled "Representative image"). */
-const plotMedia: Record<(typeof developments.items)[number]["id"], Media> = {
-  krishnappa: media.devKrishnappa,
-  sai: media.devSai,
-  srirama: media.devSrirama,
-  commercial: media.devCommercial,
-  more: media.devMore,
-};
+// copy: UI labels for this section; every fact comes from site.ts
+const COPY = {
+  completed: "Completed",
+  enquire: `Enquire about ${developments.featured.name}`,
+  call: "Call",
+  whatsapp: "Chat on WhatsApp",
+  whatsappHint: "(opens WhatsApp)",
+} as const;
 
-/** Set the heading's final word in italic Zodiak ("covered."), keeping its punctuation upright. */
-function withEmphasis(lines: readonly string[]): ReactNode[] {
-  const last = lines[lines.length - 1] ?? "";
-  const match = last.match(/^(.*?)([^\s.,!?]+)([.,!?]*)$/);
-  if (!match) return [...lines];
-  const [, before, word, punct] = match;
-  const emphasised = (
-    <>
-      {before}
-      <em>{word}</em>
-      {punct}
-    </>
-  );
-  return [...lines.slice(0, -1), emphasised];
-}
+/** Left column is 7 of 12 columns from 900px; the wrap caps at 1480px. */
+const IMAGE_SIZES = "(min-width: 1560px) 860px, (min-width: 900px) 56vw, 92vw";
+
+/** Keep a configuration such as "3 & 4 BHK" on one line. */
+const keepTogether = (text: string) => text.replace(/\d+(?: & \d+)* BHK/g, (m) => m.replace(/ /g, " "));
 
 export function Developments() {
-  const plots: Plot[] = developments.items.map((item) => ({ ...item, media: plotMedia[item.id] }));
+  const { featured, completed } = developments;
 
   return (
     <section className={`sheet ${styles.section}`} id="developments" aria-labelledby="developments-title">
       <div className="wrap">
-        <div className={`grid12 ${styles.head}`}>
-          <Lines lines={withEmphasis(developments.heading)} className={`h2 ${styles.title}`} id="developments-title" />
-          <p className={`lead ${styles.intro}`} data-reveal="fade" style={{ "--delay": "180ms" } as React.CSSProperties}>
+        <div className={styles.head}>
+          <Lines lines={[developments.heading]} className={`h2 ${styles.title}`} id="developments-title" />
+          <p className={`lead ${styles.intro}`} data-reveal="fade" style={{ "--delay": "160ms" } as React.CSSProperties}>
             {developments.intro}
           </p>
         </div>
 
-        <PlotStrips plots={plots} />
+        <div className={styles.body}>
+          <article className={styles.featured} aria-labelledby="developments-featured">
+            <div className={styles.media}>
+              <MediaFrame media={media.projectAerial} sizes={IMAGE_SIZES} parallax={6} />
+            </div>
 
-        <div className={styles.foot}>
-          <TitleBlock
-            className={styles.titleBlock}
-            cells={[
-              { label: "Group", value: company.group },
-              { label: "Since", value: String(company.founded) },
-              { label: "Commercial", value: `${company.commercialSqFt} sq ft` },
-            ]}
-          />
+            <div className={styles.featuredText} data-reveal="fade">
+              <div className={styles.nameRow}>
+                <h3 className={`h3 ${styles.name}`} id="developments-featured">
+                  {featured.name}
+                </h3>
+                <p className={`annot ${styles.status}`}>{featured.status}</p>
+              </div>
+              <p className={styles.summary}>{keepTogether(featured.summary)}</p>
+
+              <div className={styles.actions}>
+                <ButtonLink href="#contact" className={styles.cta}>
+                  {COPY.enquire}
+                </ButtonLink>
+                <ButtonLink href={contact.phone.href} variant="outline" arrow={false} className={styles.cta}>
+                  {COPY.call}
+                  <span className="sr-only"> {contact.phone.display}</span>
+                </ButtonLink>
+                <a className={styles.whatsapp} href={contact.whatsapp.href} target="_blank" rel="noopener noreferrer">
+                  <span className="tlink">{COPY.whatsapp}</span>
+                  <span className="sr-only"> {COPY.whatsappHint}</span>
+                  <svg className={styles.out} width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+                    <path d="M1.5 8.5l7-7M3 1.5h5.5V7" fill="none" stroke="currentColor" strokeWidth="1.2" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <div className={styles.completed} data-reveal="fade" style={{ "--delay": "140ms" } as React.CSSProperties}>
+            <h3 className={`h3 ${styles.completedTitle}`} id="developments-completed">
+              {COPY.completed}
+            </h3>
+            <ul className={styles.list} aria-labelledby="developments-completed">
+              {completed.map((item) => (
+                <li className={styles.row} key={item.name}>
+                  <span className={styles.rowName}>{item.name}</span>
+                  <span className={`annot ${styles.rowYear}`}>{item.year}</span>
+                  <span className={styles.rowDetail}>{item.detail}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

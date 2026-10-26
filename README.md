@@ -62,23 +62,24 @@ Until the webhook is set, the form does **not** fail silently: it tells visitors
 
 Full steps in [`integrations/google-apps-script/README.md`](integrations/google-apps-script/README.md). In short: create a Sheet → Extensions → Apps Script → paste `Code.gs` → set Script Properties `SHARED_SECRET` (and optionally `NOTIFY_EMAIL`) → Deploy as web app (Execute as: Me, Access: Anyone) → put the URL and secret in `.env.local` → restart.
 
-## Before launch — replace the stand-ins
+## Content status
 
-Everything below is clearly marked on the site today. Nothing in it was invented as fact.
+All facts come from the client's company copy and Project N image (`src/content/site.ts`). Nothing is invented.
 
-| What | Where | Today |
+| What | Where | Status |
 |---|---|---|
-| NN Infra logo | `src/components/ui/Marks.tsx` → `Wordmark` | Typeset placeholder wordmark (no NN Infra logo was supplied). The Nethravathi Group bars are redrawn from the supplied `logo.pdf`. |
-| Phone, email, WhatsApp | `src/content/site.ts` → `contact` | `null` → shown as "to be added" placeholders |
-| Project N details (site location, type & configuration, regulatory registration) | `src/content/site.ts` → `projectFacts` | Shown as "To be announced" |
-| Project N imagery and video | `src/assets/media/hero*.jpg`, `public/media/video/` | AI-generated (Nano Banana Pro) and licensed stock, tagged "Illustrative image" / "Representative image" |
-| Past development photos | `src/assets/media/dev-*.jpg` | Licensed stock, tagged "Representative image" |
-| Leadership portraits | `src/components/sections/MonogramFrame.tsx` | Designed monogram frames marked "Portrait to be supplied". No stock or AI faces were used for real people. |
-| Privacy notice | `src/app/privacy/page.tsx` | Draft; review with your legal adviser |
+| Company logo | `src/assets/brand/nethravathi-group-logo.png` (source: `media-src/client/nethravathi-group-logo.png`) | Client's Nethravathi Group logo, used unchanged in the nav, menu, footer, share image and favicons |
+| Contact details | `src/content/site.ts` → `contact` | Live: phone 8197666839, WhatsApp 9448063384, nethravathigroupinfo@gmail.com (all clickable) |
+| Project N facts | `src/content/site.ts` → `projectFacts`, `projectAmenities` | From the client's Project N image (20,000 sq ft, 20 homes, G+4, 3 & 4 BHK, amenities) |
+| Project N renders | `src/assets/media/project-n-*.jpg` | Cropped from the client's 1280×853 collage (no edits to the building) and upscaled 2×, labelled "Artist's impression". **Send full-resolution renders without text** for a sharper hero. |
+| Leadership portraits | `src/content/media.ts` → `leaders` | **Awaiting files.** The section shows names, roles and bios; portraits appear once added (no placeholders in the meantime). |
+| Legacy visuals | `src/components/sections/LegacyVisuals.tsx` | Layout diagrams (51 / 220 + school / 400+ plots, commercial) are schematic and labelled "Illustrative diagram"; the 1986 image is AI-generated and labelled |
+| Quote background | `src/assets/media/land.jpg` | AI-generated landscape (Nano Banana), atmosphere only |
+| Privacy notice | `src/app/privacy/page.tsx` | Draft: confirm the data retention period and review with your legal adviser |
 
-**Swapping an image:** drop the real file into `src/assets/media/` with the same file name (or update the mapping in `scripts/process-media.mjs` and run `node scripts/process-media.mjs`), update its `alt` in `src/content/media.ts`, and set `tag: null` for genuine photographs.
+**Rebuilding images:** `node scripts/process-media.mjs` recreates every web image (Project N crops, the transparent logo, favicons) from `media-src/`. To use full-resolution renders, save them as `src/assets/media/project-n-front.jpg` (etc.) and remove the matching crop from the script.
 
-**Image credits:** stock sources, licences and creators are listed in `media-src/stock/credits.json` (Unsplash License; Mixkit free licence). Generation prompts are in `media-src/generated/manifest.json`. Raw source files are kept locally in `media-src/` and are git-ignored.
+**Image credits:** the AI image prompts are in `media-src/generated/manifest.json`. Raw source files are kept locally in `media-src/` and are git-ignored.
 
 > **Compliance note (not legal advice):** under RERA, real-estate projects in Karnataka generally need K-RERA registration before they are advertised or marketed, and fractional-ownership offerings can raise securities questions. The site deliberately makes no offer, price, return or availability claim and states this in its disclaimers. Please have the Project N and ownership copy reviewed before launch.
 

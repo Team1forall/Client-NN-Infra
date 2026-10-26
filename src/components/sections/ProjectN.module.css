@@ -1,259 +1,161 @@
+/* Project N at a glance — the render spans the full width behind a forest gradient. */
 .section {
-  background: var(--sage);
-  padding-top: var(--s-3xl);
-  padding-bottom: var(--s-2xl);
+  position: relative;
+  background: var(--forest-deep);
+  color: var(--ivory);
   overflow: hidden;
 }
 
-/* ---------- Opening statement ---------- */
-.intro {
-  display: grid;
-  gap: var(--s-lg);
+.media {
+  position: relative;
+  height: min(58vw, 340px);
 }
 
-.heading {
-  /* keeps "Every survey starts" on one line on phones */
-  font-size: min(var(--t-h2), 9.2vw);
+.mediaInner {
+  position: absolute;
+  inset: -4% 0;
+}
+
+.img {
+  object-fit: cover;
+  object-position: 62% 55%;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(38 53 43 / 0.1) 0%, rgb(38 53 43 / 0.25) 55%, var(--forest-deep) 100%);
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  margin: 0;
+  font-size: var(--t-micro);
+  letter-spacing: 0.16em;
+  color: rgb(247 245 238 / 0.8);
 }
 
 .body {
-  font-size: 1.0625rem;
-}
-
-/* ---------- Composition ---------- */
-.composition {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: clamp(12px, 2vw, 32px);
-  margin-top: var(--s-2xl);
+  padding-top: 8px;
+  padding-bottom: var(--s-2xl);
 }
 
-.videoCell {
-  grid-column: 1 / -1;
-  aspect-ratio: 4 / 3;
-  position: relative;
-  z-index: 1;
+.heading {
+  color: var(--ivory);
 }
 
-.detailCell {
-  grid-column: 5 / -1;
-  aspect-ratio: 4 / 5;
-  margin-top: 32px;
-  position: relative;
-  z-index: 2;
-}
-
-.survey {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -64px;
-  width: 100%;
-  height: 120px;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.survey path {
-  fill: none;
-  stroke: var(--forest);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-
-.survey .tick {
-  stroke: var(--line-strong);
-}
-
-.surveyNorth {
-  position: absolute;
-  right: 0;
-  bottom: -76px;
-  width: 16px;
-  color: var(--forest);
-}
-
-/* ---------- Record: facts + QR ---------- */
-.record {
-  display: grid;
-  gap: var(--s-2xl);
-  margin-top: calc(var(--s-2xl) + 64px);
-}
-
-.sheetTitle {
-  margin-bottom: var(--s-md);
+.intro {
+  margin-top: 12px;
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: rgb(247 245 238 / 0.82);
+  max-width: 44ch;
 }
 
 .facts {
-  border-top: 1px solid var(--line-strong);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: var(--s-lg);
+  border-top: 1px solid var(--line-inverse);
 }
 
-.row {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
-  gap: 16px;
-  padding: 15px 0 14px;
-  border-bottom: 1px solid var(--line);
-  align-items: baseline;
+.fact {
+  padding: 14px 0 13px;
+  border-bottom: 1px solid var(--line-inverse);
+}
+
+.fact:nth-child(odd) {
+  padding-right: 16px;
+}
+
+.fact:nth-child(even) {
+  padding-left: 16px;
+  border-left: 1px solid var(--line-inverse);
 }
 
 .label {
-  color: var(--ink-soft);
+  display: block;
+  color: var(--botanical);
+  margin-bottom: 4px;
 }
 
 .value {
-  font-size: var(--t-body);
-  font-weight: 500;
-  color: var(--forest);
-  line-height: 1.4;
-}
-
-.value[data-pending] {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 400;
-  color: var(--ink-soft);
-}
-
-.dash {
-  flex: none;
-  width: 34px;
-  border-top: 1px dashed var(--line-strong);
-}
-
-.note {
-  display: block;
-  margin-top: 2px;
-  font-size: var(--t-small);
-  font-weight: 400;
-  color: var(--ink-soft);
-}
-
-.pending {
-  margin-top: var(--s-md);
-  max-width: 56ch;
-  font-size: var(--t-small);
-  line-height: 1.6;
-}
-
-.qrCol {
-  display: grid;
-  justify-items: start;
-  align-content: start;
-}
-
-.qrFrame {
-  position: relative;
-  width: min(220px, 60vw);
-  aspect-ratio: 1;
-  padding: 16px;
-  background: var(--ivory);
-}
-
-.qr,
-.qr svg {
-  width: 100%;
-  height: 100%;
-}
-
-.qrTitle {
-  margin-top: 26px;
   font-family: var(--font-display);
   font-size: var(--t-subtitle);
-  font-weight: 380;
+  font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.01em;
-  color: var(--forest);
-  max-width: 18ch;
+  color: var(--ivory);
 }
 
-.qrUrl {
-  margin-top: 8px;
-  text-transform: none;
-  letter-spacing: 0.04em;
-  word-break: break-all;
+.amenities {
+  margin-top: var(--s-md);
+  font-size: var(--t-small);
+  line-height: 1.7;
+  color: rgb(247 245 238 / 0.78);
+  max-width: 60ch;
 }
 
-.qrActions {
+.footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 14px 24px;
-  margin-top: 24px;
+  margin-top: var(--s-lg);
 }
 
-.share {
-  display: inline-flex;
-  flex-direction: column;
+.footer > a {
+  flex: 1 1 100%;
 }
 
-.shareBtn {
-  min-height: 44px;
-  font-size: var(--t-ui);
-  font-weight: 520;
-  color: var(--forest);
+.ownership {
+  font-size: var(--t-small);
+  color: var(--botanical);
 }
 
-.shareStatus {
-  min-height: 1em;
-  color: var(--ink-soft);
-}
-
-/* ---------- Desktop ---------- */
+/* ---------- Desktop: image fills the section, content sits on a left gradient ---------- */
 @media (min-width: 900px) {
-  .intro {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(12px, 2vw, 32px);
-    align-items: end;
+  .section {
+    min-height: min(calc(100svh - var(--nav-h)), 860px);
+    display: flex;
+    align-items: center;
   }
 
-  .heading {
-    grid-column: 1 / span 7;
+  .media {
+    position: absolute;
+    inset: 0;
+    height: auto;
+  }
+
+  .img {
+    object-position: 70% 55%;
+  }
+
+  .scrim {
+    background:
+      linear-gradient(90deg, rgb(38 53 43 / 0.96) 0%, rgb(38 53 43 / 0.9) 32%, rgb(38 53 43 / 0.55) 56%, rgb(38 53 43 / 0.12) 82%),
+      linear-gradient(0deg, rgb(38 53 43 / 0.35) 0%, rgb(38 53 43 / 0) 40%);
+  }
+
+  .tag {
+    top: auto;
+    bottom: 16px;
+    right: calc(var(--gutter) + 4px);
   }
 
   .body {
-    grid-column: 8 / -1;
-    padding-bottom: 0.4em;
+    width: 100%;
+    padding-block: var(--s-2xl);
   }
 
-  .videoCell {
-    grid-column: 1 / span 8;
-    aspect-ratio: 16 / 10;
+  .content {
+    max-width: 560px;
   }
 
-  .detailCell {
-    grid-column: 9 / -1;
-    margin-top: 34%;
-  }
-
-  .survey {
-    bottom: -78px;
-  }
-
-  .surveyNorth {
-    bottom: -92px;
-  }
-
-  .record {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(12px, 2vw, 32px);
-    margin-top: calc(var(--s-3xl) + 20px);
-  }
-
-  .sheetCol {
-    grid-column: 1 / span 7;
-  }
-
-  .qrCol {
-    grid-column: 9 / -1;
-    padding-top: 6px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .row {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+  .footer > a {
+    flex: none;
   }
 }

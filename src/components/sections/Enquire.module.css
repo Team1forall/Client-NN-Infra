@@ -1,150 +1,45 @@
-/* #enquire — the closing sheet: dawn → dusk band, then heading, form and contact. */
+/* #contact — the closing sage sheet: heading and contact routes beside the enquiry form. */
 
 .section {
-  background: var(--ivory);
-  padding-top: var(--s-2xl);
+  background: var(--sage);
+  padding-top: var(--s-3xl);
   padding-bottom: var(--s-2xl);
 }
 
-/* ---------- Dawn → dusk band ---------- */
-.bandWrap {
-  position: relative;
-}
-
-.band {
-  /* 0 = dawn only, 1 = dusk fully drawn over it. No JS: dusk. */
-  --reveal: 1;
-  position: relative;
-  aspect-ratio: 4 / 3;
-  background: var(--botanical);
-}
-
-@media (min-width: 700px) {
-  .band {
-    aspect-ratio: 16 / 9;
-  }
-}
-
-@media (min-width: 1024px) {
-  .band {
-    aspect-ratio: 21 / 9;
-  }
-}
-
-:global(html.js) .band {
-  --reveal: 0;
-}
-
-:global(html.js) .band[data-dusk="on"] {
-  --reveal: 1;
-}
-
-.layer {
-  position: absolute;
-  inset: 0;
-}
-
-/* Dusk opens from the bottom edge upward. */
-.dusk {
-  clip-path: inset(calc((1 - var(--reveal)) * 100%) 0 0 0);
-  transition: clip-path 1.9s var(--ease-in-out) 0.25s;
-}
-
-.band[data-mode="scrub"] .dusk {
-  transition: none;
-}
-
-/* The wipe edge, drawn as a hairline while it travels. */
-.edge {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc((1 - var(--reveal)) * 100%);
-  height: 1px;
-  background: var(--line-inverse-strong);
-  opacity: calc(min(var(--reveal), 1 - var(--reveal)) * 24);
-  pointer-events: none;
-}
-
-.repTag {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  padding: 6px 10px 5px;
-  font-size: var(--t-micro);
-  letter-spacing: 0.16em;
-  background: var(--forest-deep);
-  color: var(--on-forest);
-}
-
-.titleBlock {
-  position: relative;
-  z-index: 2;
-  margin-top: 16px;
-  background: var(--forest-deep);
-}
-
-@media (min-width: 700px) {
-  .titleBlock {
-    position: absolute;
-    left: clamp(16px, 2vw, 28px);
-    bottom: clamp(16px, 2vw, 28px);
-    margin-top: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :global(html.js) .band {
-    --reveal: 1;
-  }
-
-  .dusk {
-    transition: none;
-  }
-}
-
-/* ---------- Heading, form, contact ---------- */
-.body {
+/* Mobile order follows the DOM: heading, body, form, contact rows, visit. */
+.grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   row-gap: var(--s-xl);
-  margin-top: var(--s-2xl);
 }
 
-.intro {
+.intro,
+.formCol,
+.contact {
   min-width: 0;
-  container-type: inline-size;
 }
 
-/* Keep each heading entry on one line: size to the column, never above --t-h2. */
-.intro .title {
-  font-size: min(var(--t-h2), 11.5cqi);
-}
-
-.intro .lead {
-  max-width: 40ch;
-  margin-top: var(--s-lg);
+.lead {
+  max-width: 34ch;
+  margin-top: var(--s-md);
   color: var(--charcoal);
 }
 
 .formCol {
-  min-width: 0;
-  max-width: 760px;
+  max-width: 640px;
 }
 
 .contact {
-  min-width: 0;
+  container: contact / inline-size;
   max-width: 560px;
-  padding-top: var(--s-lg);
-  border-top: 1px solid var(--line);
 }
 
-@media (min-width: 1200px) {
-  .body {
+@media (min-width: 900px) {
+  .grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto 1fr;
     column-gap: clamp(12px, 2vw, 32px);
+    row-gap: var(--s-xl);
   }
 
   .intro {
@@ -152,95 +47,111 @@
     grid-row: 1;
   }
 
-  .formCol {
-    grid-column: 6 / span 7;
-    grid-row: 1 / span 2;
-    max-width: none;
-    padding-left: clamp(24px, 3.6vw, 64px);
-    border-left: 1px solid var(--line);
-  }
-
   .contact {
     grid-column: 1 / span 5;
     grid-row: 2;
-    align-self: end;
+    align-self: start;
     max-width: 30rem;
+  }
+
+  .formCol {
+    grid-column: 7 / span 6;
+    grid-row: 1 / span 2;
+    max-width: none;
+    /* Line the first field label up with the heading's cap height. */
+    padding-top: 6px;
   }
 }
 
-.contactTitle {
-  margin-bottom: var(--s-md);
+/* ---------- Links ---------- */
+.textLink {
+  color: var(--forest);
+  font-weight: 520;
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.3s var(--ease-out);
 }
 
+.textLink:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ---------- Contact rows ---------- */
 .rows {
   display: grid;
+  border-top: 1px solid var(--line);
 }
 
 .row {
   display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr);
-  column-gap: var(--s-md);
-  padding-block: 14px;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 2px;
+  padding-block: 12px;
   border-bottom: 1px solid var(--line);
 }
 
-.row:first-child {
-  padding-top: 0;
+@container contact (min-width: 380px) {
+  .row {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    column-gap: var(--s-md);
+    align-items: baseline;
+  }
 }
 
 .key {
-  padding-top: 0.3em;
   color: var(--ink-soft);
 }
 
 .value {
   min-width: 0;
-  color: var(--forest);
-  font-weight: 500;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-.value a {
-  padding-block: 4px;
+/* Tap targets of at least 44px without loosening the rows visually. */
+.value > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: -8px;
+}
+
+.email {
+  overflow-wrap: anywhere;
 }
 
 .address {
   display: flex;
   flex-direction: column;
   font-style: normal;
-  font-weight: 400;
+  line-height: 1.55;
   color: var(--charcoal);
 }
 
-.mapLink {
-  display: inline-flex;
-  align-items: center;
+.value > .mapLink {
   gap: 8px;
-  margin-top: 10px;
-  color: var(--forest);
+  margin-top: 2px;
+  margin-bottom: -10px;
+  font-size: var(--t-ui);
 }
 
 .ext {
   flex: none;
 }
 
-/* Marked placeholder for contact details not yet supplied. */
-.pending {
-  color: var(--ink-soft);
-  font-weight: 400;
-  text-decoration: underline dashed var(--line-strong);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
-}
-
+/* ---------- Privacy line under the Submit button ---------- */
 .privacy {
-  max-width: 46ch;
+  max-width: 52ch;
   margin-top: var(--s-md);
   font-size: var(--t-small);
+  line-height: 1.5;
   color: var(--ink-soft);
   text-wrap: pretty;
 }
 
-.privacy a {
-  color: var(--forest);
-  font-weight: 520;
+@media (prefers-reduced-motion: reduce) {
+  .textLink {
+    transition: none;
+  }
 }
