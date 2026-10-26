@@ -238,7 +238,7 @@ Every literal font size in a module maps to one of these tokens (`--t-*` in `glo
 ### Named Rules
 **The One Italic Rule.** Italic Zodiak (weight 300) marks at most one word per heading; punctuation stays upright.
 
-**The Graphic Numeral Exception.** The hero "N" glyph, legacy year numerals and the footer wordmark may exceed 6rem because they are drawn objects, not text blocks. No running heading does.
+**The Graphic Numeral Exception.** The hero "N" glyph, legacy year numerals and the footer wordmark (**Wordmark**, clamp 4.5–19rem, 21vw) may exceed 6rem because they are drawn objects, not text blocks. No running heading does.
 
 **The No Eyebrow Rule.** No kicker or eyebrow label sits above a heading, and no section carries "01/02/03" numbering. Annotation belongs at a sheet corner or beside a fact, not as a heading's preface.
 

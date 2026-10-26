@@ -1,4 +1,4 @@
-/* #contact — the closing sage sheet: heading and contact routes beside the enquiry form. */
+/* #contact — the closing sage sheet: heading beside the enquiry form. */
 
 .section {
   background: var(--sage);
@@ -6,7 +6,7 @@
   padding-bottom: var(--s-2xl);
 }
 
-/* Mobile order follows the DOM: heading, body, form, contact rows, visit. */
+/* Mobile order follows the DOM: heading, body, form. */
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -14,8 +14,7 @@
 }
 
 .intro,
-.formCol,
-.contact {
+.formCol {
   min-width: 0;
 }
 
@@ -29,15 +28,9 @@
   max-width: 640px;
 }
 
-.contact {
-  container: contact / inline-size;
-  max-width: 560px;
-}
-
 @media (min-width: 900px) {
   .grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: auto 1fr;
     column-gap: clamp(12px, 2vw, 32px);
     row-gap: var(--s-xl);
   }
@@ -47,16 +40,9 @@
     grid-row: 1;
   }
 
-  .contact {
-    grid-column: 1 / span 5;
-    grid-row: 2;
-    align-self: start;
-    max-width: 30rem;
-  }
-
   .formCol {
     grid-column: 7 / span 6;
-    grid-row: 1 / span 2;
+    grid-row: 1;
     max-width: none;
     /* Line the first field label up with the heading's cap height. */
     padding-top: 6px;
@@ -76,68 +62,6 @@
 
 .textLink:hover {
   text-decoration-color: currentColor;
-}
-
-/* ---------- Contact rows ---------- */
-.rows {
-  display: grid;
-  border-top: 1px solid var(--line);
-}
-
-.row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  row-gap: 2px;
-  padding-block: 12px;
-  border-bottom: 1px solid var(--line);
-}
-
-@container contact (min-width: 380px) {
-  .row {
-    grid-template-columns: 6.5rem minmax(0, 1fr);
-    column-gap: var(--s-md);
-    align-items: baseline;
-  }
-}
-
-.key {
-  color: var(--ink-soft);
-}
-
-.value {
-  min-width: 0;
-  font-variant-numeric: tabular-nums lining-nums;
-}
-
-/* Tap targets of at least 44px without loosening the rows visually. */
-.value > a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  margin-block: -8px;
-}
-
-.email {
-  overflow-wrap: anywhere;
-}
-
-.address {
-  display: flex;
-  flex-direction: column;
-  font-style: normal;
-  line-height: 1.55;
-  color: var(--charcoal);
-}
-
-.value > .mapLink {
-  gap: 8px;
-  margin-top: 2px;
-  margin-bottom: -10px;
-  font-size: var(--t-ui);
-}
-
-.ext {
-  flex: none;
 }
 
 /* ---------- Privacy line under the Submit button ---------- */

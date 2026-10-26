@@ -49,6 +49,7 @@
   --t-hero: clamp(3.25rem, 2rem + 4.6vw, 6rem); /* the one hero title */
   --t-hero-phone: clamp(3.4rem, 15vw, 5.5rem); /* hero title over the full-screen render on phones/tablets */
   --t-hero-short: clamp(2.6rem, 11vh + 1rem, 3.6rem); /* hero title on landscape phones */
+  --t-wordmark: clamp(4.5rem, 21vw, 19rem); /* footer NN Infra wordmark (graphic object) */
   --t-statement: clamp(1.75rem, 1.2rem + 2.2vw, 3.25rem); /* founder quote */
 
   /* Space */
