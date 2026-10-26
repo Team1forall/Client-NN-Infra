@@ -109,8 +109,9 @@
   transform-origin: left top;
 }
 
+/* Phones: the launch line already carries these facts. Doubled class beats TitleBlock’s own display rule. */
 @media (max-width: 599px) {
-  .titleBlock {
+  .titleBlock.titleBlock {
     display: none;
   }
 }
