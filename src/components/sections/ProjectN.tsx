@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
+import { CountUp } from "@/components/ui/CountUp";
 import { Lines } from "@/components/ui/Lines";
 import { media } from "@/content/media";
 import { projectAmenities, projectFacts, projectGlance } from "@/content/site";
@@ -29,7 +30,7 @@ export function ProjectN() {
               {projectFacts.map((f) => (
                 <div className={styles.fact} key={f.label}>
                   <dt className={`annot ${styles.label}`}>{f.label}</dt>
-                  <dd className={styles.value}>{f.value}</dd>
+                  <dd className={styles.value}>{/^[0-9]/.test(f.value) ? <CountUp value={f.value} /> : f.value}</dd>
                 </div>
               ))}
             </dl>

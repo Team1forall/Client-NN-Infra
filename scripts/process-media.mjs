@@ -1,12 +1,15 @@
-// Builds every web-ready image from the sources in media-src/.
-// Usage: node scripts/process-media.mjs
+// Builds every web-ready image from the sources in media-src/, at 4K where the source allows.
+// Usage:
+//   REALESRGAN_BIN="C:/path/to/realesrgan-ncnn-vulkan.exe" node scripts/process-media.mjs
+// Real-ESRGAN (https://github.com/xinntao/Real-ESRGAN, ncnn-vulkan build) does the super-resolution:
+// it restores detail from the pixels that are there rather than repainting the image, so the
+// Project N building is never altered. Without REALESRGAN_BIN the script falls back to Lanczos.
 //
-// Project N imagery is cut from the client's marketing collage
-// (media-src/client/project-n-collage.jpg, 1280×853). Crops + resampling only:
-// nothing is painted over or generated, so the building is never altered.
-// When full-resolution renders arrive, drop them into src/assets/media under the
-// same names (project-n-front.jpg etc.) and remove the matching crop below.
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+// Project N imagery is cut from the client's marketing collage (media-src/client/project-n-collage.jpg,
+// 1280×853): crops + super-resolution only, nothing painted over or generated.
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -15,40 +18,87 @@ const brandDir = path.resolve("src/assets/brand");
 mkdirSync(media, { recursive: true });
 mkdirSync(brandDir, { recursive: true });
 
-// ---- 1. Project N renders: crops from the collage, upscaled 2× (Lanczos) with a light sharpen
-const collage = "media-src/client/project-n-collage.jpg";
-const crops = {
-  "project-n-front.jpg": { left: 225, top: 96, width: 853, height: 417 }, // main elevation, no text overlays
-  "project-n-aerial.jpg": { left: 0, top: 517, width: 447, height: 291 },
-  "project-n-entrance.jpg": { left: 452, top: 517, width: 339, height: 291 },
-};
-if (existsSync(collage)) {
-  for (const [name, box] of Object.entries(crops)) {
-    const info = await sharp(collage)
-      .extract(box)
-      .resize({ width: box.width * 2, kernel: "lanczos3" })
-      .sharpen({ sigma: 0.6 })
-      .jpeg({ quality: 88, mozjpeg: true, progressive: true })
-      .toFile(path.join(media, name));
-    console.log(name.padEnd(24), `${info.width}x${info.height}`);
+const ESRGAN = process.env.REALESRGAN_BIN && existsSync(process.env.REALESRGAN_BIN) ? process.env.REALESRGAN_BIN : null;
+const tmp = mkdtempSync(path.join(os.tmpdir(), "nn-media-"));
+const TARGET = 3840; // 4K UHD width
+
+/** Super-resolve `input` (a sharp-readable buffer or path) `passes` times at 4×. Returns a PNG path. */
+function superResolve(inputPng, name, passes) {
+  let current = inputPng;
+  for (let i = 0; i < passes; i++) {
+    const out = path.join(tmp, `${name}-sr${i}.png`);
+    execFileSync(ESRGAN, ["-i", current, "-o", out, "-n", "realesrgan-x4plus", "-s", "4", "-f", "png"], {
+      cwd: path.dirname(ESRGAN),
+      stdio: "ignore",
+    });
+    current = out;
   }
+  return current;
 }
 
-// ---- 2. Atmospheric / illustrative images (AI-generated with Nano Banana)
-const plain = {
-  "land.jpg": ["media-src/generated/g01-dawn-land.png", 2752],
-  "survey-stone.jpg": ["media-src/generated/g02-survey-stone.png", 2200],
-};
-for (const [name, [src, max]] of Object.entries(plain)) {
-  if (!existsSync(src)) continue;
-  const info = await sharp(src)
-    .resize({ width: max, height: max, fit: "inside", withoutEnlargement: true })
-    .jpeg({ quality: 84, mozjpeg: true, progressive: true })
+/** Writes a 4K-wide (or as large as sensible) JPEG from a source region. */
+async function build(name, { src, crop, passes = 1, width = TARGET, maxInput }) {
+  const base = path.join(tmp, `${name}-base.png`);
+  let img = sharp(src);
+  if (crop) img = img.extract(crop);
+  // Large sources are supersampled: shrink to maxInput, super-resolve 4×, then resize to the target.
+  if (maxInput) img = img.resize({ width: maxInput, height: maxInput, fit: "inside", withoutEnlargement: true });
+  await img.png().toFile(base);
+  let from = base;
+  if (ESRGAN) from = superResolve(base, name, passes);
+  const info = await sharp(from)
+    .resize({ width, kernel: "lanczos3" })
+    .jpeg({ quality: 86, mozjpeg: true, progressive: true, chromaSubsampling: "4:4:4" })
     .toFile(path.join(media, name));
-  console.log(name.padEnd(24), `${info.width}x${info.height}`);
+  console.log(name.padEnd(28), `${info.width}x${info.height}`, ESRGAN ? `(Real-ESRGAN ×${4 ** passes})` : "(Lanczos)");
 }
 
-// ---- 3. Company logo (client-supplied): white background → transparency, then favicons
+// ---- 1. Project N renders (client collage crops)
+const collage = "media-src/client/project-n-collage.jpg";
+if (existsSync(collage)) {
+  await build("project-n-front.jpg", { src: collage, crop: { left: 225, top: 96, width: 853, height: 417 }, passes: 1 });
+  await build("project-n-aerial.jpg", { src: collage, crop: { left: 0, top: 517, width: 447, height: 291 }, passes: 2 });
+  await build("project-n-entrance.jpg", { src: collage, crop: { left: 452, top: 517, width: 339, height: 291 }, passes: 2, width: 3200 });
+}
+
+// ---- 2. AI-generated imagery (Nano Banana Pro, ~2.7K) → 4K
+const generated = {
+  "land.jpg": "g01-dawn-land.png",
+  "survey-stone.jpg": "g02-survey-stone.png",
+  "legacy-founding.jpg": "l1-founding-1986.png",
+  "legacy-krishnappa.jpg": "l2-krishnappa-aerial.png",
+  "legacy-sai.jpg": "l3-sai-aerial.png",
+  "legacy-srirama.jpg": "l4-srirama-aerial.png",
+  "legacy-commercial.jpg": "l5-commercial.png",
+  "dev-krishnappa.jpg": "d1-krishnappa-street.png",
+  "dev-sai.jpg": "d2-sai-school.png",
+  "dev-srirama.jpg": "d3-srirama-avenue.png",
+  "dev-commercial.jpg": "d4-commercial-facade.png",
+};
+for (const [name, file] of Object.entries(generated)) {
+  const src = path.join("media-src/generated", file);
+  if (!existsSync(src)) continue;
+  const meta = await sharp(src).metadata();
+  // Portrait images get 4K on the long edge.
+  const width = meta.height > meta.width ? Math.round((TARGET * meta.width) / meta.height) : TARGET;
+  await build(name, { src, passes: 1, width, maxInput: 1920 });
+}
+
+// ---- 3. Leadership portraits (client photographs): crop the decorative frame, keep the photo honest
+const portraits = {
+  "leader-chairman.jpg": { src: "media-src/client/jayanth-n.jpg" },
+  "leader-founder.jpg": { src: "media-src/client/bk-nagabhushana-reddy.jpg", trimFrame: 16 },
+};
+for (const [name, { src, trimFrame }] of Object.entries(portraits)) {
+  if (!existsSync(src)) continue;
+  const meta = await sharp(src).metadata();
+  let img = sharp(src);
+  if (trimFrame) img = img.extract({ left: trimFrame, top: trimFrame, width: meta.width - trimFrame * 2, height: meta.height - trimFrame * 2 });
+  const info = await img.jpeg({ quality: 88, mozjpeg: true, progressive: true }).toFile(path.join(media, name));
+  console.log(name.padEnd(28), `${info.width}x${info.height}`, "(original photo)");
+}
+
+// ---- 4. Company logo (client-supplied): white background → transparency, then favicons
 const logoSrc = "media-src/client/nethravathi-group-logo.png";
 if (existsSync(logoSrc)) {
   const { data, info } = await sharp(logoSrc).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -63,9 +113,8 @@ if (existsSync(logoSrc)) {
   const png = await sharp(out, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
   const logo = await sharp(png).trim({ threshold: 1 }).png().toBuffer({ resolveWithObject: true });
   writeFileSync(path.join(brandDir, "nethravathi-group-logo.png"), logo.data);
-  console.log("logo".padEnd(24), `${logo.info.width}x${logo.info.height}`);
+  console.log("logo".padEnd(28), `${logo.info.width}x${logo.info.height}`);
 
-  // Bars-only mark on white for favicons
   const bars = await sharp(logo.data)
     .extract({ left: 0, top: 0, width: logo.info.width, height: Math.round(logo.info.height * 0.69) })
     .trim({ threshold: 1 })
@@ -97,5 +146,5 @@ if (existsSync(logoSrc)) {
     return d;
   });
   writeFileSync("src/app/favicon.ico", Buffer.concat([header, ...dirs, ...pngs]));
-  console.log("favicons".padEnd(24), "icon.png, apple-icon.png, favicon.ico");
+  console.log("favicons".padEnd(28), "icon.png, apple-icon.png, favicon.ico");
 }

@@ -1,6 +1,6 @@
 /* ==========================================================================
-   #developments — Project N (featured) and the completed record, on ivory.
-   Mobile first: one column. From 900px: heading row, then 7 + 5 columns.
+   #developments — Project N and past work drawn as plots on a layout plan.
+   Ivory sheet: heading row, plot strips (or the accordion), CTA row.
    ========================================================================== */
 
 .section {
@@ -16,52 +16,581 @@
   margin-bottom: var(--s-xl);
 }
 
-/* ---------- Body ---------- */
-.body {
-  display: grid;
-  row-gap: var(--s-2xl);
+@media (min-width: 900px) {
+  .head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(12px, 2vw, 32px);
+    align-items: end;
+  }
+
+  .title {
+    grid-column: 1 / span 6;
+  }
+
+  .intro {
+    grid-column: 8 / -1;
+    justify-self: end;
+    /* sit on the heading's baseline */
+    padding-bottom: 0.3em;
+  }
 }
 
-/* ---------- Featured: Project N ---------- */
-.featured {
-  display: grid;
-  /* clear the crop marks (8px) under the image */
-  row-gap: calc(var(--s-md) + 8px);
+/* ==========================================================================
+   Which view: strips need a fine pointer that can hover and room for five
+   parcels; everything else gets the accordion.
+   ========================================================================== */
+.strips {
+  display: none;
 }
 
-.media {
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .strips {
+    display: flex;
+  }
+
+  .acc {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Plot strips
+   ========================================================================== */
+.strips {
+  --over: 10px; /* boundary lines overshoot the corners, as drafted */
+  --pad: clamp(16px, 1.5vw, 24px);
+  --pad-d: clamp(22px, 2.2vw, 36px);
+  --grow: 4.5;
+
   position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 2;
+  height: clamp(420px, 60vh, 620px);
+  margin-block: var(--over);
+  container-type: inline-size;
 }
 
-.featuredText {
-  display: grid;
-  row-gap: var(--s-sm);
+/* Top and bottom plot boundaries */
+.strips::before,
+.strips::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--over) * -1);
+  right: calc(var(--over) * -1);
+  height: 1px;
+  background: var(--forest);
+  pointer-events: none;
 }
 
-.nameRow {
+.strips::before {
+  top: 0;
+}
+
+.strips::after {
+  bottom: 0;
+}
+
+.strip {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  transition: flex-grow 0.9s var(--ease-out);
+}
+
+.strip[data-active="true"] {
+  flex-grow: var(--grow);
+}
+
+.strip:focus-within {
+  z-index: 1;
+}
+
+/* Side boundaries: every plot's left edge, plus the last plot's right edge */
+.strip::before,
+.strip:last-child::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: calc(var(--over) * -1);
+  bottom: calc(var(--over) * -1);
+  left: 0;
+  width: 1px;
+  background: var(--forest);
+  pointer-events: none;
+}
+
+.strip:last-child::after {
+  left: auto;
+  right: 0;
+}
+
+.stripHeading {
+  font: inherit;
+}
+
+/* The trigger covers the whole parcel: hover, click and focus all open it */
+.stripButton {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 18px;
-  row-gap: 6px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--pad);
+  color: var(--forest);
+  text-align: left;
+  cursor: pointer;
 }
 
-.status {
+.strip[data-active="true"] .stripButton {
+  cursor: default;
+}
+
+/* Two-tone ring: forest outside on the ivory ground, ivory inside over the image */
+.stripButton:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--ivory);
+}
+
+/* Drawn plus on a small ivory plate: this parcel can be opened */
+.plus {
+  position: relative;
+  flex: none;
+  width: 25px;
+  height: 25px;
+  background: rgb(247 245 238 / 0.86);
+  transition: opacity 0.45s var(--ease-out) 0.3s;
+}
+
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.plus::before {
+  left: 7px;
+  right: 7px;
+  top: 12px;
+  height: 1px;
+}
+
+.plus::after {
+  top: 7px;
+  bottom: 7px;
+  left: 12px;
+  width: 1px;
+}
+
+/* Collapsed label: name + label set vertically, reading bottom to top */
+.vLabel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  transition: opacity 0.45s var(--ease-out) 0.3s;
+}
+
+/* The only light scrim: a soft ivory field behind the label, the rest of the print stays clear */
+.vLabel::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -10px -9px;
+  background: rgb(247 245 238 / 0.78);
+  filter: blur(9px);
+  pointer-events: none;
+}
+
+.vName {
+  font-family: var(--font-display);
+  font-size: var(--t-lead);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.vType {
   color: var(--ink-soft);
+  white-space: nowrap;
 }
 
-.summary {
-  max-width: 60ch;
+.strip[data-active="true"] .plus,
+.strip[data-active="true"] .vLabel {
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-out);
+}
+
+/* Panel: image, scrims, details */
+.stripPanel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ivory);
+}
+
+/* Collapsed: a bright greyscale print; open: full colour */
+.stripMedia {
+  position: absolute;
+  inset: 0;
+  opacity: 0.85;
+  filter: grayscale(1) brightness(1.06);
+  transform: scale(1.06);
+  transform-origin: 50% 60%;
+  transition:
+    transform 1.3s var(--ease-out),
+    filter 0.9s var(--ease-out),
+    opacity 0.9s var(--ease-out);
+}
+
+.strip[data-active="true"] .stripMedia {
+  opacity: 1;
+  filter: grayscale(0) brightness(1);
+  transform: scale(1);
+}
+
+/* Open: a low forest scrim carries the details */
+.scrimDark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--forest-deep) 92%, transparent) 0%,
+    color-mix(in srgb, var(--forest-deep) 78%, transparent) 40%,
+    transparent 78%
+  );
+  transition: opacity 0.7s var(--ease-out);
+}
+
+.strip[data-active="true"] .scrimDark {
+  opacity: 1;
+}
+
+.stripDetails {
+  position: absolute;
+  /* above the trigger so the enquiry link can be clicked; the rest lets clicks through */
+  z-index: 3;
+  left: var(--pad-d);
+  bottom: var(--pad-d);
+  /* Laid out at the open width from the start, so text never reflows while the parcel grows */
+  width: calc(100cqw * var(--grow) / (var(--grow) + 4) - 2 * var(--pad-d));
+  color: var(--on-forest);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out);
+}
+
+.strip[data-active="true"] .stripDetails {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.8s var(--ease-out) 0.32s,
+    transform 1s var(--ease-out) 0.32s;
+}
+
+.dName {
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 380;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.dMeta {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-inverse-strong);
+  color: var(--on-forest-soft);
+}
+
+.dText {
+  max-width: 50ch;
+  margin-top: 6px;
+  line-height: 1.5;
   text-wrap: pretty;
 }
 
+.dLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-top: 6px;
+  font-size: var(--t-ui);
+  font-weight: 520;
+  letter-spacing: 0.01em;
+  pointer-events: auto;
+}
+
+.dArrow {
+  flex: none;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.dLink:hover .dArrow,
+.dLink:focus-visible .dArrow,
+.accLink:hover .dArrow,
+.accLink:focus-visible .dArrow {
+  transform: translateX(4px);
+}
+
+.dLink:focus-visible {
+  outline-color: var(--sage);
+}
+
+.stripTag {
+  position: absolute;
+  top: var(--pad);
+  right: var(--pad);
+  padding: 6px 10px 5px;
+  font-size: var(--t-micro);
+  letter-spacing: 0.16em;
+  background: color-mix(in srgb, var(--forest-deep) 72%, transparent);
+  color: var(--on-forest);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-out);
+}
+
+.strip[data-active="true"] .stripTag {
+  opacity: 1;
+  transition: opacity 0.6s var(--ease-out) 0.45s;
+}
+
+/* Drafting reveal (JS only): boundaries are drawn, then the plots fade up in sequence */
+:global(html.js) .strips[data-reveal]::before,
+:global(html.js) .strips[data-reveal]::after {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1.6s var(--ease-out);
+}
+
+:global(html.js) .strips[data-reveal] .strip::before,
+:global(html.js) .strips[data-reveal] .strip:last-child::after {
+  transform: scaleY(0);
+  transform-origin: center top;
+  transition: transform 1.3s var(--ease-out) calc(var(--i, 0) * 90ms + 240ms);
+}
+
+:global(html.js) .strips[data-reveal] .stripPanel,
+:global(html.js) .strips[data-reveal] .stripButton {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 1.1s var(--ease-out) calc(var(--i, 0) * 90ms + 420ms),
+    transform 1.1s var(--ease-out) calc(var(--i, 0) * 90ms + 420ms);
+}
+
+:global(html.js) .strips[data-inview="true"]::before,
+:global(html.js) .strips[data-inview="true"]::after,
+:global(html.js) .strips[data-inview="true"] .strip::before,
+:global(html.js) .strips[data-inview="true"] .strip:last-child::after {
+  transform: none;
+}
+
+:global(html.js) .strips[data-inview="true"] .stripPanel,
+:global(html.js) .strips[data-inview="true"] .stripButton {
+  opacity: 1;
+  transform: none;
+}
+
+/* ==========================================================================
+   Accordion of plots
+   ========================================================================== */
+.acc {
+  border-bottom: 1px solid var(--forest);
+}
+
+.accRow {
+  border-top: 1px solid var(--forest);
+}
+
+.accHeading {
+  font: inherit;
+}
+
+.accButton {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  grid-template-areas:
+    "name icon"
+    "type icon";
+  align-items: center;
+  column-gap: 16px;
+  width: 100%;
+  min-height: 76px;
+  padding-block: 16px;
+  color: var(--forest);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.accName {
+  grid-area: name;
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 380;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.accType {
+  grid-area: type;
+  margin-top: 6px;
+  color: var(--ink-soft);
+}
+
+/* Drawn plus that closes to a minus */
+.accIcon {
+  grid-area: icon;
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+.accIcon::before,
+.accIcon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: currentColor;
+}
+
+.accIcon::before {
+  width: 18px;
+  height: 1px;
+  transform: translate(-50%, -50%);
+}
+
+.accIcon::after {
+  width: 1px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.5s var(--ease-out);
+}
+
+.accRow[data-open="true"] .accIcon::after {
+  transform: translate(-50%, -50%) scaleY(0);
+}
+
+/* Panels are open without JS; with JS, closed panels fold away and leave the accessibility tree */
+.accPanel {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+:global(html.js) .accPanel {
+  transition:
+    grid-template-rows 0.7s var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+:global(html.js) .accPanel[data-open="false"] {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.7s var(--ease-out),
+    visibility 0s linear 0.7s;
+}
+
+.accClip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.accBody {
+  display: grid;
+  gap: 14px;
+  padding-bottom: 24px;
+}
+
+.accMedia {
+  position: relative;
+  aspect-ratio: 3 / 2;
+}
+
+.accText {
+  display: grid;
+  justify-items: start;
+  row-gap: 6px;
+}
+
+.accMeta {
+  color: var(--ink-soft);
+}
+
+.accDetail {
+  max-width: 52ch;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.accLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--forest);
+  font-size: var(--t-ui);
+  font-weight: 520;
+  letter-spacing: 0.01em;
+}
+
+/* Tablet and touch desktops: an index — names left, images under the label column */
+@media (min-width: 600px) {
+  .accButton {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+    grid-template-areas: "name type icon";
+    align-items: baseline;
+    min-height: 84px;
+  }
+
+  .accType {
+    margin-top: 0;
+  }
+
+  .accIcon {
+    align-self: center;
+  }
+
+  .accBody {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+    column-gap: 16px;
+    padding-bottom: 32px;
+  }
+
+  .accMedia {
+    grid-column: 2 / -1;
+    grid-row: 1;
+  }
+
+  .accText {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+  }
+}
+
+/* ==========================================================================
+   CTA row
+   ========================================================================== */
 .actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: var(--s-xs);
+  margin-top: var(--s-lg);
 }
 
 .cta {
@@ -90,91 +619,7 @@
   transform: translate(2px, -2px);
 }
 
-/* ---------- Completed: hairline rows, text only ---------- */
-.completedTitle {
-  margin-bottom: var(--s-sm);
-}
-
-.list {
-  border-bottom: 1px solid var(--line);
-}
-
-.row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "name year"
-    "detail detail";
-  align-items: baseline;
-  column-gap: 16px;
-  row-gap: 4px;
-  padding-block: 16px 17px;
-  border-top: 1px solid var(--line);
-}
-
-.rowName {
-  grid-area: name;
-  font-family: var(--font-display);
-  font-size: var(--t-subtitle);
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: var(--forest);
-  text-wrap: balance;
-}
-
-.rowYear {
-  grid-area: year;
-  color: var(--ink-soft);
-  text-align: right;
-  white-space: nowrap;
-}
-
-.rowDetail {
-  grid-area: detail;
-  line-height: 1.5;
-  text-wrap: pretty;
-}
-
-/* ==========================================================================
-   Desktop
-   ========================================================================== */
 @media (min-width: 900px) {
-  .head,
-  .body {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: clamp(12px, 2vw, 32px);
-  }
-
-  .head {
-    align-items: end;
-  }
-
-  .title {
-    grid-column: 1 / span 6;
-  }
-
-  .intro {
-    grid-column: 8 / -1;
-    justify-self: end;
-    /* sit on the heading's baseline */
-    padding-bottom: 0.3em;
-  }
-
-  .body {
-    align-items: start;
-  }
-
-  .featured {
-    grid-column: 1 / span 7;
-  }
-
-  /* 16:10, shortened on low viewports so the CTAs stay in view */
-  .media {
-    aspect-ratio: 16 / 10;
-    max-height: max(360px, calc(100svh - 470px));
-  }
-
   .actions {
     flex-direction: row;
     flex-wrap: wrap;
@@ -189,38 +634,57 @@
   .whatsapp {
     margin-left: 12px;
   }
-
-  .completed {
-    grid-column: 8 / -1;
-    padding-left: clamp(0px, 2.4vw, 44px);
-  }
-
-  .row {
-    padding-block: 20px 21px;
-  }
 }
 
-/* Short desktop viewports (e.g. 1280×720): tighten so the CTAs stay in view */
+/* Short desktop viewports (e.g. 1280×720): tighten so the CTA row stays in view */
 @media (min-width: 900px) and (max-height: 800px) {
   .head {
     margin-bottom: var(--s-md);
   }
 
-  .featured {
-    row-gap: var(--s-md);
-  }
-
-  .media {
-    max-height: max(340px, calc(100svh - 400px));
-  }
-
   .actions {
-    margin-top: 0;
+    margin-top: var(--s-md);
   }
 }
 
+/* ---------- Reduced motion: instant state changes, no draw-in ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .out {
-    transition: none;
+  .strip,
+  .plus,
+  .vLabel,
+  .stripMedia,
+  .scrimDark,
+  .stripDetails,
+  .stripTag,
+  .strips::before,
+  .strips::after,
+  .strip::before,
+  .strip:last-child::after,
+  .stripPanel,
+  .stripButton,
+  .dArrow,
+  .out,
+  .accIcon::after,
+  .accPanel {
+    transition: none !important;
+  }
+
+  .stripMedia,
+  .stripDetails,
+  .stripPanel,
+  .stripButton {
+    transform: none !important;
+  }
+
+  .strips::before,
+  .strips::after,
+  .strip::before,
+  .strip:last-child::after {
+    transform: none !important;
+  }
+
+  .stripPanel,
+  .stripButton {
+    opacity: 1 !important;
   }
 }

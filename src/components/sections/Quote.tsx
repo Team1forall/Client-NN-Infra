@@ -15,8 +15,15 @@ export function Quote() {
       </div>
       <figure className={`sheet ${styles.body}`}>
         <div className="wrap">
-          <blockquote className={styles.quote} data-reveal="fade">
-            <p>“{quote.text}”</p>
+          <blockquote className={styles.quote}>
+            <p data-reveal="words">
+              <span className="sr-only">“{quote.text}”</span>
+              {`“${quote.text}”`.split(" ").map((w, i) => (
+                <span key={i} className="w" aria-hidden="true" style={{ "--i": i } as React.CSSProperties}>
+                  {w}{" "}
+                </span>
+              ))}
+            </p>
           </blockquote>
           <figcaption className={styles.caption} data-reveal="fade" style={{ "--delay": "160ms" } as React.CSSProperties}>
             <span className={styles.rule} aria-hidden="true" />

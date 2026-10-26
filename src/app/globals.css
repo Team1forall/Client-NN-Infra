@@ -463,6 +463,29 @@ html.js [data-reveal="draw"][data-inview="true"] :is(path, line, polyline, polyg
   stroke-dashoffset: 0;
 }
 
+/* Words sharpen in one after another (quotes, statements) */
+[data-reveal="words"] .w {
+  display: inline-block;
+  white-space: pre;
+}
+
+html.js [data-reveal="words"] .w {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(0.12em);
+  transition:
+    opacity 0.9s var(--ease-out),
+    filter 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+html.js [data-reveal="words"][data-inview="true"] .w {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
 html.js [data-reveal="mask"] {
   clip-path: inset(12% 8% 12% 8%);
   transition: clip-path 1.4s var(--ease-out);
@@ -475,6 +498,7 @@ html.js [data-reveal="mask"][data-inview="true"] {
 
 @media (prefers-reduced-motion: reduce) {
   html.js [data-reveal="lines"] .line > span,
+  html.js [data-reveal="words"] .w,
   html.js [data-reveal="fade"],
   html.js [data-reveal="mask"] {
     transform: none !important;

@@ -1,38 +1,43 @@
 /* ==========================================================================
-   Hero — the Project N render in a clean frame.
-   Desktop: framed inside the first viewport; scrolling opens it to full bleed
-   while the image zooms in (HeroMotion). Mobile: full-width image, copy over a
-   scrim, gentle zoom on scroll.
+   Hero — the plot. Mobile first: plot box on top, announcement below.
+   Desktop (≥ 900px): the plot box fills the stage; copy sits bottom-left.
    ========================================================================== */
 
 .hero {
   position: relative;
   background: var(--ivory);
-  padding-top: var(--nav-h);
 }
 
 .stage {
   position: relative;
-  height: calc(100svh - var(--nav-h));
-  min-height: 560px;
-  max-height: 980px;
+  padding: calc(var(--nav-h) + 4px) var(--gutter) 40px;
 }
 
-.frame {
-  --inset-y: 0px;
-  --inset-x: 0px;
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  background: var(--forest-deep);
-  clip-path: inset(var(--inset-y) var(--inset-x) var(--inset-y) var(--inset-x));
+/* ---------- Plot box ---------- */
+.box {
+  --plot: polygon(5% 7%, 96% 2%, 98% 88%, 63% 98%, 2% 84%);
+  --plot-from: polygon(40% 42%, 58% 40%, 59% 58%, 52% 60%, 40% 57%);
+  position: relative;
+  height: min(46svh, 120vw);
+  min-height: 280px;
 }
 
-.zoom {
+.plot {
   position: absolute;
   inset: 0;
-  transform-origin: 50% 58%;
-  animation: settle 2.2s var(--ease-out) backwards;
+  clip-path: var(--plot);
+  animation: plotOpen 1.7s var(--ease-out) 0.1s backwards;
+  background: var(--botanical);
+}
+
+.zoom,
+.intro {
+  position: absolute;
+  inset: 0;
+}
+
+.intro {
+  animation: introScale 2.4s var(--ease-out) backwards;
 }
 
 .img {
@@ -43,134 +48,650 @@
 .scrim {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(180deg, rgb(20 28 22 / 0.18) 0%, rgb(20 28 22 / 0) 30%),
-    linear-gradient(0deg, rgb(20 28 22 / 0.86) 0%, rgb(20 28 22 / 0.5) 34%, rgb(20 28 22 / 0) 62%);
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(38 53 43 / 0.08) 0%,
+    rgb(38 53 43 / 0.18) 45%,
+    rgb(38 53 43 / 0.66) 100%
+  );
+}
+
+.boundary {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
   pointer-events: none;
 }
 
-.tag {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  margin: 0;
-  font-size: var(--t-micro);
-  letter-spacing: 0.16em;
-  color: rgb(247 245 238 / 0.82);
+.boundary {
+  animation: wipe 2s var(--ease-out) 0.35s backwards;
 }
 
-.copy {
+.boundary path {
+  fill: none;
+  stroke: var(--forest);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.lineDesktop,
+.pinDesktop,
+.edgeTop,
+.edgeRight {
+  display: none;
+}
+
+.pins span {
   position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: clamp(24px, 5vh, 48px);
-  color: var(--ivory);
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border: 1px solid var(--forest);
+  border-radius: 50%;
+  background: var(--ivory);
+  animation: pinIn 0.7s var(--ease-out) backwards;
+  animation-delay: calc(0.55s + var(--i) * 0.12s);
+}
+
+.edge {
+  position: absolute;
+  margin: 0;
+  color: var(--forest);
+  white-space: nowrap;
+  animation: fadeIn 1s var(--ease-out) 1.1s backwards;
+}
+
+.edgeBottom {
+  display: none;
+  transform-origin: left top;
+}
+
+/* Phones: the brand line follows the title (the title overlaps the plot). */
+@media (max-width: 899px) {
+  .copy {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand {
+    order: 2;
+    margin: 18px 0 0;
+  }
+
+  .lead {
+    order: 3;
+  }
+
+  .launch {
+    order: 4;
+  }
+
+  .ctas {
+    order: 5;
+  }
+}
+
+/* Phones: the launch line already carries these facts. Doubled class beats TitleBlock’s own display rule. */
+@media (max-width: 599px) {
+  .titleBlock.titleBlock {
+    display: none;
+  }
+}
+
+.repTag {
+  position: absolute;
+  right: 6%;
+  top: calc(2% + 14px);
+  margin: 0;
+  padding: 5px 9px 4px;
+  font-size: var(--t-micro);
+  letter-spacing: 0.16em;
+  background: rgb(247 245 238 / 0.86);
+  color: var(--forest);
+}
+
+.north {
+  position: absolute;
+  left: 7%;
+  top: 14%;
+  width: 34px;
+  padding: 6px 7px;
+  background: rgb(247 245 238 / 0.88);
+  color: var(--forest);
+  transform: rotate(-16deg);
+  transform-origin: 50% 55%;
+  animation: needle 2.2s var(--ease-out) 0.6s backwards;
+}
+
+.northGlyph {
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Announcement ---------- */
+.copy {
+  position: relative;
+  z-index: 2;
+  margin-top: -0.62em;
+  font-size: clamp(7.5rem, 40vw, 11rem); /* drives the N; children reset */
 }
 
 .title {
-  margin: 0;
+  font-size: inherit;
   font-family: var(--font-display);
+  font-weight: 300;
+  color: var(--forest);
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 0.06em;
+}
+
+.titleWord {
   font-size: var(--t-h1);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  animation: rise 1.2s var(--ease-out) 0.35s backwards;
+  letter-spacing: -0.035em;
+  order: 0;
+}
+
+.titleN {
+  font-size: 1em;
+  font-weight: 260;
+  line-height: 0.74;
 }
 
 .lead {
-  margin-top: 12px;
+  font-family: var(--font-text);
   font-size: var(--t-lead);
   line-height: 1.45;
-  color: rgb(247 245 238 / 0.9);
-  max-width: 36ch;
-  animation: rise 1.2s var(--ease-out) 0.5s backwards;
+  letter-spacing: 0;
+  color: var(--charcoal);
+  max-width: 30ch;
+  margin-top: 22px;
+  text-wrap: pretty;
 }
 
 .launch {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 14px;
-  color: var(--botanical);
-  animation: rise 1.2s var(--ease-out) 0.6s backwards;
+  margin-top: 18px;
+  font-size: 0.6875rem;
+  color: var(--forest);
 }
 
-.rule {
+.launchRule {
   width: 28px;
   height: 1px;
-  background: currentColor;
+  background: var(--forest);
 }
 
 .ctas {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 24px;
-  animation: rise 1.2s var(--ease-out) 0.7s backwards;
+  margin-top: 26px;
 }
 
-/* ---------- Mobile: copy sits low on the image, buttons full width ---------- */
-@media (max-width: 599px) {
-  .stage {
-    min-height: 520px;
-  }
-
-  .img {
-    object-position: 46% 55%;
-  }
-
-  .ctas {
-    flex-direction: column;
-  }
-
-  .ctas > * {
-    width: 100%;
-  }
+.ctaPrimary,
+.ctaSecondary {
+  flex: 1 1 auto;
 }
 
-/* ---------- Desktop: framed first viewport ---------- */
+.titleBlock {
+  margin-top: 36px;
+}
+
+/* Intro motion: letters for names, words for the tagline, a rise for the rest */
+.letter {
+  display: inline-block;
+  animation: letterIn 0.9s var(--ease-out) backwards;
+  animation-delay: calc(0.25s + var(--i) * 0.06s);
+}
+
+.word {
+  display: inline-block;
+  white-space: pre;
+  animation: wordIn 0.7s var(--ease-out) backwards;
+  animation-delay: calc(0.75s + var(--i) * 0.09s);
+}
+
+.lead,
+.launch,
+.ctas {
+  animation: rise 1.3s var(--ease-out) backwards;
+}
+.lead {
+  animation-delay: 0.85s;
+}
+.launch {
+  animation-delay: 0.95s;
+}
+.ctas {
+  animation-delay: 1.05s;
+}
+
+/* ---------- Brand line: company + tagline ---------- */
+.brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 0 0 18px;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.brandName {
+  font-family: var(--font-display);
+  font-size: var(--t-subtitle);
+  font-weight: 420;
+  letter-spacing: -0.01em;
+  color: var(--forest);
+}
+
+.brandRule {
+  width: 28px;
+  height: 1px;
+  background: var(--forest);
+  animation: grow 0.8s var(--ease-out) 0.6s backwards;
+  transform-origin: left;
+}
+
+.brandTag {
+  font-size: var(--t-annot);
+  font-weight: 560;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- Contours on the paper ---------- */
+.contours {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: none;
+}
+
+/* No non-scaling-stroke here: the dash draw needs pathLength units. */
+.contours path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.drift {
+  position: absolute;
+  inset: -2%;
+}
+
+/* ---------- North-star overlay + end frame (desktop motion only) ---------- */
+.northStar,
+.endFrame {
+  display: none;
+}
+
+/* ---------- Static band (mobile + reduced motion) ---------- */
+.band {
+  position: relative;
+  height: min(78svh, 680px);
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 var(--gutter) clamp(40px, 7vh, 72px);
+  color: var(--ivory);
+}
+
+.bandMedia {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.bandInner {
+  position: absolute;
+  inset: -6% 0;
+}
+
+.bandCopy {
+  position: relative;
+}
+
+.bandKicker {
+  margin-bottom: 12px;
+  color: var(--botanical);
+}
+
+.bandImg {
+  object-fit: cover;
+  object-position: 50% 60%;
+}
+
+.bandScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(38 53 43 / 0) 30%, rgb(38 53 43 / 0.7) 100%);
+}
+
+.bandText,
+.northStarText {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--t-statement);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+/* ==========================================================================
+   Desktop
+   ========================================================================== */
 @media (min-width: 900px) {
-  .frame {
-    --inset-y: 14px;
-    --inset-x: var(--gutter);
-    animation: open 1.6s var(--ease-out) 0.05s backwards;
+  .stage {
+    height: 100svh;
+    min-height: 640px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .box {
+    --plot: polygon(43% 14%, 95.5% 10%, 97% 80%, 71% 88%, 40% 79%);
+    --plot-from: polygon(64% 46.6%, 74.5% 45.8%, 74.8% 59.8%, 69.6% 61.4%, 63.4% 59.6%);
+    position: absolute;
+    inset: 0;
+    height: auto;
+  }
+
+  .lineDesktop,
+  .edgeTop,
+  .edgeRight,
+  .edgeBottom {
+    display: block;
+  }
+
+  .pinDesktop {
+    display: block;
+  }
+
+  .lineMobile,
+  .pinMobile {
+    display: none;
+  }
+
+  .contours {
+    display: block;
+    clip-path: inset(0 58% 0 0);
+  }
+
+  .contours path {
+    stroke-dasharray: 1;
+    animation: draw 2.6s var(--ease-out) backwards;
+    animation-delay: calc(0.2s + var(--i) * 0.12s);
+  }
+
+  .edgeTop {
+    left: 46%;
+    top: 13.75%;
+    transform-origin: left bottom;
+    transform: translateY(calc(-100% - 12px)) rotate(-2.6deg);
+  }
+
+  .edgeRight {
+    left: calc(96% + 14px);
+    top: 24%;
+    writing-mode: vertical-rl;
+    transform: rotate(-1.6deg);
+  }
+
+  .edgeBottom {
+    left: 44.5%;
+    top: calc(80.3% + 14px);
+    transform: rotate(10deg);
+  }
+
+  .repTag {
+    right: calc(4.5% + 18px);
+    top: calc(10% + 18px);
+  }
+
+  .north {
+    left: 36.5%;
+    top: 12%;
+    width: 30px;
+    padding: 0;
+    background: none;
   }
 
   .copy {
-    left: calc(var(--gutter) + clamp(28px, 3.4vw, 56px));
-    bottom: calc(14px + clamp(28px, 6vh, 64px));
-    max-width: 640px;
+    position: absolute;
+    left: var(--gutter);
+    bottom: max(7vh, 48px);
+    width: min(44vw, 640px);
+    margin: 0;
+    font-size: min(26vw, 40vh);
   }
 
-  .tag {
-    top: 30px;
-    right: calc(var(--gutter) + 16px);
+  .title {
+    display: block;
+  }
+
+  .titleWord {
+    display: block;
+    font-size: var(--t-h1);
+    margin-bottom: 0.04em;
+  }
+
+  .titleN {
+    display: block;
+    margin-left: 1.15em;
+  }
+
+  .lead {
+    margin-top: 26px;
+    max-width: 31ch;
+  }
+
+  .ctas {
+    flex-wrap: nowrap;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    flex: none;
+  }
+
+  .titleBlock {
+    position: absolute;
+    right: var(--gutter);
+    bottom: max(2.6vh, 18px);
+    margin: 0;
+    z-index: 2;
+    background: var(--ivory);
   }
 }
 
-@keyframes open {
-  from {
-    clip-path: inset(9% 12% 9% 12%);
+/* Desktop + motion + JS: the signature transition replaces the static band */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .band {
+    display: none;
+  }
+
+  :global(html.js) .northStar {
+    display: block;
+    position: absolute;
+    left: var(--gutter);
+    bottom: max(10vh, 72px);
+    z-index: 3;
+    color: var(--ivory);
+    pointer-events: none;
+  }
+
+  :global(html.js) .northStarText {
+    font-size: clamp(2.75rem, 1.6rem + 3vw, 4.75rem);
+    line-height: 0.98;
+    max-width: 16ch;
+  }
+
+  :global(html.js) .northStarKicker {
+    margin: 0 0 14px;
+    color: var(--botanical);
+    opacity: 0;
+  }
+
+  :global(html.js) .northStar :global(.line) > span {
+    transform: translateY(108%);
+  }
+
+  :global(html.js) .endFrame {
+    display: block;
+    position: absolute;
+    inset: calc(var(--nav-h) + 24px) var(--gutter) 28px;
+    z-index: 2;
+    border: 1px solid rgb(247 245 238 / 0.55);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .endFrame i {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    margin: -5px 0 0 -5px;
+    border: 1px solid var(--forest);
+    border-radius: 50%;
+    background: var(--ivory);
+  }
+
+  .endFrame i:nth-child(1) {
+    left: 0;
+    top: 0;
+  }
+  .endFrame i:nth-child(2) {
+    left: 100%;
+    top: 0;
+  }
+  .endFrame i:nth-child(3) {
+    left: 100%;
+    top: 100%;
+  }
+  .endFrame i:nth-child(4) {
+    left: 0;
+    top: 100%;
+  }
+
+  .endNote {
+    position: absolute;
+    right: 20px;
+    bottom: 16px;
+    margin: 0;
+    color: var(--ivory);
   }
 }
 
-@keyframes settle {
+@media (min-width: 900px) and (max-height: 760px) {
+  .lead {
+    margin-top: 18px;
+  }
+
+  .ctas {
+    margin-top: 20px;
+  }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes plotOpen {
   from {
-    transform: scale(1.08);
+    clip-path: var(--plot-from);
+  }
+}
+
+@keyframes introScale {
+  from {
+    transform: scale(1.14);
+  }
+}
+
+@keyframes wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes pinIn {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(26px);
+  }
+}
+
+@keyframes letterIn {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(0.18em);
+  }
+}
+
+@keyframes wordIn {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes needle {
+  from {
+    opacity: 0;
+    transform: rotate(-58deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .frame,
-  .zoom,
-  .title,
+  .plot,
+  .intro,
+  .boundary,
+  .pins span,
+  .edge,
+  .north,
+  .letter,
+  .word,
+  .brandRule,
+  .contours path,
   .lead,
   .launch,
   .ctas {

@@ -1,5 +1,7 @@
 /* Light, quiet footer so the company logo shows in its own colours. */
 .footer {
+  position: relative;
+  overflow: hidden;
   background: var(--stone);
   color: var(--charcoal);
   padding-top: var(--s-2xl);
@@ -94,4 +96,25 @@
   .bottom p:nth-child(2) {
     flex: 1;
   }
+}
+
+.contours {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 240px;
+  pointer-events: none;
+}
+
+.contours path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.grid,
+.bottom {
+  position: relative;
 }

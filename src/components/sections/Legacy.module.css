@@ -1,10 +1,13 @@
 /* ==========================================================================
-   #legacy — stone ground, seven topics, one visual each.
+   #legacy — stone ground, seven topics, one image each.
    Default (phones, tablets, no JS, reduced motion, short screens): heading,
-   then a plain list; each topic is followed by its visual.
+   then a plain list; each topic is followed by its image. On phones the
+   image wipes up once and the marker fades up as each enters.
    Desktop stage (html.js, ≥ 900 × 600, motion allowed): the same list inside
    one sticky, viewport-high stage. Invisible scroll steps behind it pick the
-   active topic (LegacyScene); topic text and visual crossfade.
+   active topic (LegacyScene): the image wipes in from the bottom and settles,
+   the big marker rolls, the title blurs in word by word, and the chainage
+   rail draws with the scroll.
    ========================================================================== */
 
 .section {
@@ -12,6 +15,33 @@
   padding-top: var(--s-3xl);
   padding-bottom: var(--s-2xl);
   overflow: clip; /* clip, not hidden: position: sticky keeps working */
+}
+
+.stage {
+  position: relative;
+  isolation: isolate; /* the contours sit at z-index -1 inside it */
+}
+
+/* ---------- Background contours ---------- */
+.contours {
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--s-3xl) * -0.55);
+  right: calc(var(--gutter) * -1 - 250px);
+  width: 640px;
+  height: 640px;
+  pointer-events: none;
+}
+
+.contours path {
+  stroke: rgb(53 72 58 / 0.2);
+  stroke-width: 1.4; /* ≈ 1px at this size */
+}
+
+/* Chrome does not restyle descendants matched only by the global [pathLength]
+   selector when data-inview flips; a type selector does invalidate. */
+:global(html.js) .contours[data-inview="true"] path {
+  stroke-dashoffset: 0;
 }
 
 /* ---------- Heading ---------- */
@@ -59,6 +89,7 @@
 }
 
 .rail,
+.roll,
 .steps {
   display: none;
 }
@@ -71,20 +102,87 @@
     align-items: start;
     padding-block: var(--s-xl);
   }
+
+  .contours {
+    top: calc(var(--s-3xl) * -0.6);
+    width: 900px;
+    height: 900px;
+  }
+
+  .contours path {
+    stroke-width: 1;
+  }
 }
 
-/* ---------- Milestone rail (desktop stage only) ---------- */
+/* Phones and tablets: one wipe per image and a small marker rise, once */
+@media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .visual {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1.2s var(--ease-out) 0.1s;
+  }
+
+  :global(html.js) .visual[data-inview="true"] {
+    clip-path: inset(0);
+  }
+
+  :global(html.js) .marker {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.7s var(--ease-out),
+      transform 0.7s var(--ease-out);
+  }
+
+  :global(html.js) .marker[data-inview="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Chainage rail (desktop stage only) ---------- */
 .railList {
+  --slot: 32px;
+  --node: 11px;
+  --draw: 0;
+  position: relative;
   display: grid;
-  border-left: 1px solid var(--line);
+}
+
+/* Survey guide: faint route between the first and last node, ticks every 8px */
+.railList::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--slot) / 2);
+  bottom: calc(var(--slot) / 2);
+  left: 0;
+  width: var(--node);
+  background:
+    linear-gradient(var(--line), var(--line)) center top / 1px 100% no-repeat,
+    repeating-linear-gradient(to bottom, var(--line-strong) 0 1px, transparent 1px 8px) center top / 5px 100%
+      no-repeat;
+  pointer-events: none;
+}
+
+/* The drawn chainage: forest hairline, scrubbed from the first node */
+.railList::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--slot) / 2);
+  bottom: calc(var(--slot) / 2);
+  left: calc((var(--node) - 1px) / 2);
+  width: 1px;
+  background: var(--forest);
+  transform: scaleY(var(--draw));
+  transform-origin: top;
+  pointer-events: none;
 }
 
 .railBtn {
   position: relative;
   display: block;
   width: 100%;
-  min-height: 32px;
-  padding: 9px 0 8px 16px;
+  min-height: var(--slot);
+  padding: 9px 0 8px calc(var(--node) + 14px);
   font-size: var(--t-micro);
   letter-spacing: 0.15em;
   line-height: 1.5;
@@ -94,33 +192,66 @@
   transition: color 0.3s var(--ease-out);
 }
 
-/* the active segment of the rail */
-.railBtn::before {
-  content: "";
-  position: absolute;
-  top: 7px;
-  bottom: 7px;
-  left: -1px;
-  width: 2px;
-  background: var(--forest);
-  transform: scaleY(0);
-  transition: transform 0.45s var(--ease-out);
-}
-
 .railBtn:hover,
 .railBtn[aria-current] {
   color: var(--forest);
-}
-
-.railBtn[aria-current]::before {
-  transform: none;
 }
 
 .railBtn:focus-visible {
   outline-offset: 0;
 }
 
-/* ---------- Desktop stage ---------- */
+.node {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0;
+  width: var(--node);
+  height: var(--node);
+  margin-top: calc(var(--node) / -2);
+  border: 1px solid var(--forest);
+  border-radius: 50%;
+  background: var(--stone);
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+  transition:
+    background-color 0.45s var(--ease-out),
+    outline-color 0.45s var(--ease-out);
+}
+
+.railBtn[data-state="past"] .node,
+.railBtn[data-state="active"] .node {
+  background: var(--forest);
+}
+
+.railBtn[data-state="active"] .node {
+  outline-color: var(--forest);
+}
+
+/* ---------- Marker roll (desktop stage only) ---------- */
+.rollItem {
+  grid-area: m;
+  font-family: var(--font-display);
+  font-size: min(var(--size), calc(100cqi / var(--em, 2.4)));
+  font-weight: 280;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  font-variant-numeric: lining-nums;
+  transform: translateY(105%);
+  opacity: 0;
+  transition:
+    transform 0.9s var(--ease-out),
+    opacity 0s linear 0.9s;
+}
+
+.rollItem[data-state="above"] {
+  transform: translateY(-105%);
+}
+
+/* ==========================================================================
+   Desktop stage
+   ========================================================================== */
 @media (min-width: 900px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
   :global(html.js) .section {
     padding-block: 0;
@@ -150,7 +281,13 @@
     padding-block: var(--pad-y);
   }
 
-  /* Right column: heading at the visual's top edge, topic at its foot */
+  /* Contours behind the text column, drifting gently (LegacyScene) */
+  :global(html.js) .contours {
+    top: calc(50% - 450px);
+    right: calc(var(--gutter) * -1 - 300px);
+  }
+
+  /* Right column: heading at the image's top edge, topic at its foot */
   :global(html.js) .copy {
     grid-column: 2;
     display: flex;
@@ -165,80 +302,123 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: clamp(24px, 2.6cqi, 44px);
-    align-items: start;
+    align-items: end;
   }
 
   :global(html.js) .rail {
     display: block;
   }
 
-  /* Every topic in one cell: the tallest sets the height, nothing jumps */
+  /* ---- Marker roll: the active marker rolls through a mask ---- */
+  :global(html.js) .roll {
+    --size: clamp(3.25rem, 5vw, 5.5rem);
+    display: grid;
+    grid-template-areas: "m";
+    align-items: last baseline;
+    overflow: hidden;
+    container-type: inline-size;
+    margin: 0 0 var(--s-xs) -0.04em;
+    color: var(--forest);
+  }
+
+  :global(html.js) .main[data-inview="true"] .rollItem[data-state="active"] {
+    transform: none;
+    opacity: 1;
+    transition:
+      transform 0.9s var(--ease-out),
+      opacity 0s;
+  }
+
+  /* ---- Topics: all in one cell, the tallest sets the height ---- */
   :global(html.js) .topics {
     display: grid;
     margin-top: 0;
     border-top: 0;
   }
 
-  :global(html.js) .section .topic {
+  :global(html.js) .topic {
     grid-area: 1 / 1;
     display: block;
     padding: 0;
     border: 0;
-    /* the list's fade reveal is off here: the stage owns the motion */
-    opacity: 1;
-    transform: none;
-    transition: none;
   }
 
+  /* the roll shows the marker; the text marker stays for assistive tech */
   :global(html.js) .marker {
-    margin-bottom: var(--s-sm);
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
-  :global(html.js) .text {
-    transition:
-      opacity 0.28s ease-out,
-      transform 0.28s ease-out;
-  }
-
-  :global(html.js) .topic[data-state="before"] .text {
+  /* Title: per-word blur-in */
+  :global(html.js) .word {
+    display: inline-block;
     opacity: 0;
-    transform: translateY(-12px);
-  }
-
-  :global(html.js) .topic[data-state="after"] .text {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  :global(html.js) .topic[data-state="active"] .text {
+    filter: blur(6px);
     transition:
-      opacity 0.6s var(--ease-out) 0.2s,
-      transform 0.6s var(--ease-out) 0.2s;
+      opacity 0.2s ease-out,
+      filter 0.2s ease-out;
   }
 
-  /* Visuals: positioned against the sticky stage, in the left column.
-     The outgoing one holds until the incoming one has covered it. */
+  :global(html.js) .main[data-inview="true"] .topic[data-state="active"] .word {
+    opacity: 1;
+    filter: none;
+    transition:
+      opacity 0.35s var(--ease-out) calc(0.22s + var(--w, 0) * 60ms),
+      filter 0.35s var(--ease-out) calc(0.22s + var(--w, 0) * 60ms);
+  }
+
+  /* Body: simple fade */
+  :global(html.js) .prose {
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+  }
+
+  :global(html.js) .main[data-inview="true"] .topic[data-state="active"] .prose {
+    opacity: 1;
+    transition: opacity 0.6s var(--ease-out) 0.4s;
+  }
+
+  /* ---- Images: positioned against the sticky stage, in the left column.
+     The incoming image wipes over the outgoing one (from below when scrolling
+     down, from above when scrolling back) while it settles from 1.08 to 1;
+     the outgoing one is cut away only once it is covered. ---- */
   :global(html.js) .visual {
     position: absolute;
+    z-index: 1;
     left: 0;
     top: calc(50% - var(--vis-h) / 2);
     width: var(--vis-w);
     height: var(--vis-h);
     aspect-ratio: auto;
-    opacity: 0;
-    transform: scale(1.025);
-    transition:
-      opacity 0s linear 0.65s,
-      transform 0s linear 0.65s;
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 0s linear 0.95s;
+  }
+
+  :global(html.js) .topic[data-state="before"] .visual {
+    clip-path: inset(0 0 100% 0);
   }
 
   :global(html.js) .topic[data-state="active"] .visual {
-    z-index: 1;
-    opacity: 1;
+    z-index: 2;
+  }
+
+  :global(html.js) .topic[data-state="active"] .visual[data-inview="true"] {
+    clip-path: inset(0);
+    transition: clip-path 0.9s var(--ease-out);
+  }
+
+  :global(html.js) .visual :global(img) {
+    transform: scale(1.08);
+    transition: transform 0s linear 0.95s;
+  }
+
+  :global(html.js) .topic[data-state="active"] .visual[data-inview="true"] :global(img) {
     transform: none;
-    transition:
-      opacity 0.6s var(--ease-out),
-      transform 0.9s var(--ease-out);
+    transition: transform 1.6s var(--ease-out);
   }
 
   /* Steps start where the viewport centre sits when the stage first sticks */
@@ -256,154 +436,9 @@
   }
 }
 
-/* ==========================================================================
-   Diagrams (LegacyVisuals): schematic, sage ground, 1px forest linework.
-   ========================================================================== */
-.diagram {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--sage);
-}
-
-.dSvg {
-  width: 100%;
-  height: 100%;
-}
-
-.dSvg * {
-  vector-effect: non-scaling-stroke;
-}
-
-.dGround {
-  fill: var(--sage);
-}
-
-.dParcel {
-  fill: var(--ivory);
-  stroke: var(--forest);
-  stroke-width: 1;
-  stroke-linejoin: round;
-}
-
-.dBoundary {
-  fill: none;
-  stroke: var(--forest);
-  stroke-width: 1;
-}
-
-.dPlots {
-  fill: color-mix(in srgb, var(--botanical) 30%, var(--ivory));
-  stroke: var(--forest);
-  stroke-opacity: 0.5;
-  stroke-width: 1;
-}
-
-.dRoad {
-  fill: var(--ivory);
-}
-
-.dEdge {
-  fill: none;
-  stroke: var(--forest);
-  stroke-opacity: 0.55;
-  stroke-width: 1;
-}
-
-.dCentre {
-  fill: none;
-  stroke: var(--forest);
-  stroke-opacity: 0.35;
-  stroke-width: 1;
-  stroke-dasharray: 5 5;
-}
-
-.dGreen {
-  fill: var(--botanical);
-}
-
-.dTree {
-  fill: var(--botanical);
-  stroke: var(--forest);
-  stroke-opacity: 0.5;
-  stroke-width: 1;
-}
-
-.dSchool {
-  fill: color-mix(in srgb, var(--botanical) 75%, var(--ivory));
-  stroke: var(--forest);
-  stroke-width: 1;
-}
-
-.dBuilding {
-  fill: color-mix(in srgb, var(--forest) 15%, var(--ivory));
-  stroke: var(--forest);
-  stroke-width: 1;
-}
-
-.dFaint {
-  fill: none;
-  stroke: var(--forest);
-  stroke-opacity: 0.3;
-  stroke-width: 1;
-}
-
-.dStalls {
-  fill: none;
-  stroke: var(--forest);
-  stroke-opacity: 0.45;
-  stroke-width: 1;
-}
-
-.dLabel {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 7px 11px 6px;
-  background: color-mix(in srgb, var(--ivory) 90%, transparent);
-  color: var(--forest);
-}
-
-.dNote {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  font-size: var(--t-micro);
-  letter-spacing: 0.16em;
-  color: var(--forest-deep);
-  white-space: nowrap;
-}
-
-.dNorth {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  width: 12px;
-  height: auto;
-  color: var(--forest);
-}
-
-/* Same as the image frames' tag */
-.dTag {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  padding: 6px 10px 5px;
-  font-size: var(--t-micro);
-  letter-spacing: 0.16em;
-  background: rgb(247 245 238 / 0.86);
-  color: var(--forest);
-}
-
-@media (min-width: 900px) {
-  .dNorth {
-    width: 15px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .railBtn,
-  .railBtn::before {
+  .node {
     transition: none;
   }
 }

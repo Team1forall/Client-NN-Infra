@@ -14,32 +14,41 @@
   max-width: 40ch;
 }
 
-.people {
+.diptych {
   display: grid;
-  gap: var(--s-xl);
+  gap: 28px;
 }
 
 .person {
   display: grid;
   gap: 20px;
   align-content: start;
-  padding-top: 20px;
-  border-top: 1px solid var(--line-strong);
 }
 
 .photo {
   position: relative;
   aspect-ratio: 4 / 5;
-  width: min(100%, 300px);
-  overflow: hidden;
+  width: min(100%, 340px);
   background: var(--stone);
 }
 
-/* Portraits are presented in a quiet, consistent monochrome. */
 .img {
   object-fit: cover;
-  object-position: 50% 22%;
-  filter: grayscale(1) contrast(1.04);
+  object-position: 50% 24%;
+}
+
+/* The portrait develops from monochrome into colour as it opens */
+:global(html.js) .photo[data-reveal] .img {
+  filter: grayscale(1) contrast(1.05);
+  transform: scale(1.06);
+  transition:
+    filter 1.8s var(--ease-out) 0.5s,
+    transform 1.8s var(--ease-out);
+}
+
+:global(html.js) .photo[data-inview="true"] .img {
+  filter: none;
+  transform: none;
 }
 
 .name {
@@ -53,9 +62,45 @@
 
 .bio {
   margin-top: 14px;
-  max-width: 52ch;
+  max-width: 46ch;
   line-height: 1.65;
   text-wrap: pretty;
+}
+
+/* ---------- The line between the generations ---------- */
+.link {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  color: var(--forest);
+}
+
+.line {
+  width: 100%;
+  height: 10px;
+  overflow: visible;
+}
+
+.line path {
+  fill: none;
+  stroke: var(--forest);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* non-scaling strokes can't use pathLength dashes, so the line draws with a clip */
+:global(html.js) .line[data-reveal] {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.8s var(--ease-out) 0.3s;
+}
+
+:global(html.js) .line[data-inview="true"] {
+  clip-path: inset(0 0 0 0);
+}
+
+.end {
+  color: var(--ink-soft);
 }
 
 @media (min-width: 900px) {
@@ -73,17 +118,37 @@
     grid-column: 7 / -1;
   }
 
-  .people {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: clamp(28px, 4vw, 64px);
+  .diptych {
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 0.7fr) minmax(0, 1fr);
+    column-gap: clamp(20px, 3vw, 48px);
+    align-items: start;
   }
 
-  .person[data-has-photo] {
-    grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1fr);
-    column-gap: 28px;
-  }
-
-  .person[data-has-photo] .photo {
+  .photo {
     width: 100%;
+    max-height: 56vh;
+  }
+
+  /* The line runs at the photos' mid-height */
+  .link {
+    align-self: start;
+    margin-top: min(calc((100vw - 2 * var(--gutter)) * 0.14), 28vh);
+  }
+}
+
+@media (max-width: 899px) {
+  .link {
+    grid-template-columns: auto 1fr auto;
+    padding-block: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html.js) .photo[data-reveal] .img,
+  :global(html.js) .line[data-reveal] {
+    filter: none;
+    transform: none;
+    clip-path: none;
+    transition: none;
   }
 }

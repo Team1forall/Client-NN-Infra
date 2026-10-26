@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [70, 75, 82],
-    deviceSizes: [640, 828, 1080, 1440, 1920, 2560],
+    deviceSizes: [640, 828, 1080, 1440, 1920, 2560, 3840],
   },
   poweredByHeader: false,
   // A stray package-lock.json in the user home folder confuses root detection.
