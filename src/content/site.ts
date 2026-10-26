@@ -4,7 +4,16 @@
  * `null` or rendered as "To be announced" — never guessed.
  */
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+/**
+ * Public site URL (metadata, sitemap, QR code). Server-side only.
+ * Order: explicit NEXT_PUBLIC_SITE_URL → Vercel's production domain (custom domain
+ * once one is primary, otherwise *.vercel.app) → local dev.
+ */
+const vercelProduction = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+export const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (vercelProduction ? `https://${vercelProduction}` : "http://localhost:3000")
+).replace(/\/$/, "");
 
 export const company = {
   name: "NN Infra",

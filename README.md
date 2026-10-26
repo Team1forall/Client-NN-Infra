@@ -23,6 +23,27 @@ npm start
 
 Deploys as a standard Next.js 16 app (Vercel, Netlify, or any Node host). The enquiry API route needs a server/edge runtime, so a purely static export is not supported.
 
+## Deploy on Vercel
+
+The project is set up for Vercel: `vercel.json` pins serverless functions (the enquiry API) to Mumbai (`bom1`), and `.vercelignore` keeps raw media sources and local files out of uploads.
+
+```bash
+npx vercel login                 # once, in your own terminal
+npx vercel link                  # link this folder to the Vercel project
+npx vercel deploy                # preview deployment (protected by Vercel Authentication by default)
+npx vercel deploy --prod         # production
+```
+
+Environment variables (Vercel → Project → Settings → Environment Variables, or `npx vercel env add NAME production`):
+
+| Variable | Production / Preview | Notes |
+|---|---|---|
+| `GOOGLE_SHEETS_WEBHOOK_SECRET` | required | Already generated in `.env.local`; the same value goes into the Apps Script `SHARED_SECRET` property. |
+| `GOOGLE_SHEETS_WEBHOOK_URL` | required for enquiries | The Apps Script `/exec` URL. Until it is set, the form clearly says online registration isn't connected yet. |
+| `NEXT_PUBLIC_SITE_URL` | optional | Leave unset on Vercel: the site uses the project's production domain automatically (your custom domain once it is primary). Set it only to force a specific URL. Changing it needs a redeploy because it is read at build time. |
+
+After adding or changing a variable, redeploy (`npx vercel deploy --prod`) so the build picks it up.
+
 ## Configuration (`.env.local`)
 
 | Variable | Purpose |

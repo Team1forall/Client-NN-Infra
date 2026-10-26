@@ -1,0 +1,11 @@
+# Raw media sources stay local; web-ready copies live in src/assets/media and public/media.
+media-src/**/*.png
+media-src/**/*.jpg
+media-src/**/*.mp4
+
+# Local-only working files
+shots/
+.claude/
+.impeccable/hook.cache.json
+.env*
+!.env.example
