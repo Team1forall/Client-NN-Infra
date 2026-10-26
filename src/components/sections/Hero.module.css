@@ -343,11 +343,19 @@
   max-width: 44ch;
 }
 
+/* The survey line the facts are staked along; drawn in by HeroMotion */
+.glanceRule {
+  display: block;
+  height: 1px;
+  margin-top: var(--s-lg);
+  background: var(--line-inverse);
+  transform-origin: left center;
+}
+
 .glanceFacts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: var(--s-lg) 0 0;
-  border-top: 1px solid var(--line-inverse);
+  margin: 0;
 }
 
 .glanceFact {
@@ -392,8 +400,17 @@
   margin-top: var(--s-lg);
 }
 
-.glanceFooter > a {
+.glanceFooter > span {
   flex: 1 1 100%;
+}
+
+.glanceFooter > span > a {
+  width: 100%;
+}
+
+.amenity {
+  display: inline-block;
+  margin-right: 0.45em;
 }
 
 .glanceNote {
@@ -402,7 +419,7 @@
 }
 
 @media (min-width: 600px) {
-  .glanceFooter > a {
+  .glanceFooter > span {
     flex: none;
   }
 }
@@ -435,6 +452,17 @@
       display: flex;
       align-items: center;
       padding: var(--nav-h) var(--gutter) 0;
+      background: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* The forest wash behind the details fades in on its own (--glance-bg 0 → 1) */
+    :global(html.js) .glance::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
       background: linear-gradient(
         90deg,
         rgb(30 42 34 / 0.94) 0%,
@@ -442,8 +470,7 @@
         rgb(30 42 34 / 0.5) 54%,
         rgb(30 42 34 / 0) 78%
       );
-      opacity: 0;
-      visibility: hidden;
+      opacity: var(--glance-bg, 0);
     }
   }
 }

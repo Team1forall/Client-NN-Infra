@@ -84,29 +84,39 @@ export function Hero() {
           role="region"
         >
           <div className={styles.glanceInner}>
-            <h2 id="project-n-title" className={`h2 ${styles.glanceTitle}`} data-glance>
+            <h2 id="project-n-title" className={`h2 ${styles.glanceTitle}`} data-glance="item">
               {projectGlance.heading}
             </h2>
-            <p className={styles.glanceIntro} data-glance>
+            <p className={styles.glanceIntro} data-glance="item">
               {projectGlance.intro}
             </p>
-            <dl className={styles.glanceFacts} data-glance>
+            <span className={styles.glanceRule} data-glance="rule" aria-hidden="true" />
+            <dl className={styles.glanceFacts}>
               {projectFacts.map((f) => (
-                <div className={styles.glanceFact} key={f.label}>
+                <div className={styles.glanceFact} key={f.label} data-glance="item">
                   <dt className={`annot ${styles.glanceLabel}`}>{f.label}</dt>
                   <dd className={styles.glanceValue}>{f.value}</dd>
                 </div>
               ))}
             </dl>
-            <p className={styles.glanceAmenities} data-glance>
+            <p className={styles.glanceAmenities}>
               <span className="sr-only">Amenities: </span>
-              {projectAmenities.join(" · ")}
+              {projectAmenities.map((a, i) => (
+                <span key={a} className={styles.amenity} data-glance="item">
+                  {a}
+                  {i < projectAmenities.length - 1 && <span aria-hidden="true"> ·</span>}
+                </span>
+              ))}
             </p>
-            <div className={styles.glanceFooter} data-glance>
-              <ButtonLink href="#contact" variant="inverse">
-                Enquire about Project N
-              </ButtonLink>
-              <p className={styles.glanceNote}>{projectGlance.ownership}</p>
+            <div className={styles.glanceFooter}>
+              <span data-glance="item">
+                <ButtonLink href="#contact" variant="inverse">
+                  Enquire about Project N
+                </ButtonLink>
+              </span>
+              <p className={styles.glanceNote} data-glance="item">
+                {projectGlance.ownership}
+              </p>
             </div>
           </div>
         </div>

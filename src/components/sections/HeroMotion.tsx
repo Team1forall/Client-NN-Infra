@@ -42,7 +42,7 @@ export function HeroMotion() {
           scrollTrigger: {
             trigger: stage,
             start: "top top",
-            end: "+=230%",
+            end: "+=560%",
             pin: true,
             scrub: 0.7,
             anticipatePin: 1,
@@ -61,21 +61,31 @@ export function HeroMotion() {
         if (overlay) {
           tl.fromTo(overlay, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out", immediateRender: false }, 0.78);
         }
-        // Then the tagline gives way to Project N at a glance.
+        // Then the tagline gives way to Project N at a glance, one detail at a time:
+        // title, line, the survey rule drawn across, each fact staked along it,
+        // each amenity, then the call to action. Long scroll, unhurried reveals.
         const glance = get("glance");
         if (glance) {
-          const parts = glance.querySelectorAll("[data-glance]");
+          const items = glance.querySelectorAll<HTMLElement>('[data-glance="item"]');
+          const rule = glance.querySelector<HTMLElement>('[data-glance="rule"]');
           if (overlay) tl.to(overlay, { autoAlpha: 0, y: -30, duration: 0.25, ease: "power2.in" }, 1.3);
-          tl.to(scrim, { opacity: 0.55, duration: 0.3 }, 1.35)
-            .fromTo(glance, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35, immediateRender: false }, 1.4)
-            .fromTo(
-              parts,
-              { autoAlpha: 0, y: 36 },
-              { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.07, ease: "power3.out", immediateRender: false },
-              1.45,
-            );
+          tl.to(scrim, { opacity: 0.55, duration: 0.3 }, 1.35).set(glance, { autoAlpha: 1 }, 1.45);
+          gsap.set(items, { autoAlpha: 0, y: 34 });
+          gsap.set(glance, { autoAlpha: 0 });
+          tl.fromTo(glance, { "--glance-bg": 0 }, { "--glance-bg": 1, duration: 0.4 }, 1.45);
+          let at = 1.6;
+          items.forEach((el, i) => {
+            const isAmenity = el.parentElement?.tagName === "P";
+            tl.to(el, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power3.out" }, at);
+            // Draw the survey rule just before the first fact lands
+            if (rule && i === 1) {
+              tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut", immediateRender: false }, at + 0.18);
+              at += 0.3;
+            }
+            at += isAmenity ? 0.14 : 0.24;
+          });
         }
-        tl.to({}, { duration: 0.3 });
+        tl.to({}, { duration: 0.4 });
 
         // "#project-n" links land on the finished glance, not the top of the pin.
         const st = tl.scrollTrigger;
@@ -98,6 +108,20 @@ export function HeroMotion() {
       });
 
       mm.add(`(max-width: 1023px) and ${ANY_MOTION}`, () => {
+        // Phones: each glance detail rises in on its own as it scrolls up.
+        const glance = get("glance");
+        glance?.querySelectorAll<HTMLElement>('[data-glance="item"]').forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 28 },
+            { autoAlpha: 1, y: 0, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 94%", end: "top 74%", scrub: 0.6 } },
+          );
+        });
+        const rule = glance?.querySelector<HTMLElement>('[data-glance="rule"]');
+        if (rule) {
+          gsap.fromTo(rule, { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { trigger: rule, start: "top 92%", end: "top 66%", scrub: 0.6 } });
+        }
+
         // Phones: the render drifts and zooms as it scrolls past.
         gsap.fromTo(
           zoom,
