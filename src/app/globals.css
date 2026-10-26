@@ -1,40 +1,128 @@
+/* ==========================================================================
+   NN Infra — "The Survey" design system
+   Tokens, reset, base typography, shared primitives.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Palette (brief) */
+  --ivory: #f7f5ee;
+  --sage: #e9eedf;
+  --botanical: #b9c9af;
+  --stone: #e6e0d5;
+  --forest: #35483a;
+  --forest-deep: #26352b;
+  --charcoal: #292d29;
+  --ink-soft: #4e5a50;
+
+  /* Linework */
+  --line: rgb(53 72 58 / 0.28);
+  --line-strong: rgb(53 72 58 / 0.6);
+  --line-inverse: rgb(233 238 223 / 0.26);
+  --line-inverse-strong: rgb(233 238 223 / 0.55);
+
+  /* On forest */
+  --on-forest: #e9eedf;
+  --on-forest-soft: rgb(233 238 223 / 0.76);
+
+  /* Nethravathi Group mark — only inside the group mark */
+  --group-lime: #c1e330;
+  --group-leaf: #5fb21a;
+  --group-deep: #02560d;
+
+  /* Type */
+  --font-display: var(--font-zodiak), "Times New Roman", Georgia, serif;
+  --font-text: var(--font-switzer), system-ui, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+  --t-annot: 0.6875rem; /* 11px */
+  --t-small: 0.875rem;
+  --t-body: 1.0625rem;
+  --t-lead: clamp(1.1875rem, 1.05rem + 0.55vw, 1.5rem);
+  --t-h3: clamp(1.5rem, 1.2rem + 1.1vw, 2.125rem);
+  --t-h2: clamp(2.5rem, 1.55rem + 3.6vw, 5rem);
+  --t-h1: clamp(3.5rem, 1.9rem + 6.4vw, 6rem);
+
+  /* Space */
+  --gutter: clamp(20px, 4.2vw, 64px);
+  --max: 1480px;
+  --s-xs: 8px;
+  --s-sm: 12px;
+  --s-md: 20px;
+  --s-lg: 32px;
+  --s-xl: clamp(40px, 5vw, 64px);
+  --s-2xl: clamp(64px, 9vw, 128px);
+  --s-3xl: clamp(96px, 14vw, 200px);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-reveal: 1.15s;
+
+  --nav-h: 72px;
+
+  /* Paper grain for archive sheets */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .25 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html {
-  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 8px);
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--ivory);
+  color: var(--charcoal);
+  font-family: var(--font-text);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  font-weight: 400;
+  font-feature-settings: "kern" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ol,
+ul {
   margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
 }
 
 a {
@@ -42,8 +130,269 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+::selection {
+  background: var(--botanical);
+  color: var(--forest-deep);
+}
+
+/* ---------- Focus ---------- */
+:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
+
+.on-forest :focus-visible,
+[data-ground="forest"] :focus-visible {
+  outline-color: var(--sage);
+}
+
+/* ---------- Typography primitives ---------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 340;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  color: var(--forest);
+  text-wrap: balance;
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-h2);
+  font-weight: 340;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--forest);
+  text-wrap: balance;
+}
+
+.h3 {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  font-weight: 380;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--forest);
+}
+
+.display em,
+.h2 em,
+.h3 em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+.lead {
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: var(--charcoal);
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+.prose p {
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.prose p + p {
+  margin-top: 1.1em;
+}
+
+.annot {
+  font-family: var(--font-text);
+  font-size: var(--t-annot);
+  font-weight: 520;
+  letter-spacing: 0.13em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.soft {
+  color: var(--ink-soft);
+}
+
+/* ---------- Layout primitives ---------- */
+.sheet {
+  position: relative;
+  padding-inline: var(--gutter);
+}
+
+.wrap {
+  max-width: var(--max);
+  margin-inline: auto;
+}
+
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 2vw, 32px);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  z-index: 200;
+  padding: 12px 18px;
+  background: var(--forest);
+  color: var(--ivory);
+  transform: translateY(-160%);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* Hairline rules */
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 0;
+}
+
+/* Paper grain overlay — add to a positioned sheet */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ---------- Text link with drawn underline ---------- */
+.tlink {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.tlink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0.28);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.tlink:hover::after,
+.tlink:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ==========================================================================
+   Reveal system (progressive enhancement; only active when JS has run)
+   [data-reveal="lines"]  heading made of .line > span
+   [data-reveal="fade"]   simple rise + fade
+   [data-reveal="draw"]   svg with [pathLength="1"] strokes
+   [data-reveal="mask"]   clip-path opening (images)
+   ScrollFx sets data-inview="true".
+   ========================================================================== */
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.line > span {
+  display: block;
+}
+
+html.js [data-reveal="lines"] .line > span {
+  transform: translateY(108%);
+  transition: transform var(--dur-reveal) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 85ms + var(--delay, 0ms));
+}
+
+html.js [data-reveal="lines"][data-inview="true"] .line > span {
+  transform: none;
+}
+
+html.js [data-reveal="fade"] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 1s var(--ease-out),
+    transform 1s var(--ease-out);
+  transition-delay: var(--delay, 0ms);
+}
+
+html.js [data-reveal="fade"][data-inview="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+html.js [data-reveal="draw"] [pathLength] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.8s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 120ms + var(--delay, 0ms));
+}
+
+html.js [data-reveal="draw"][data-inview="true"] [pathLength] {
+  stroke-dashoffset: 0;
+}
+
+html.js [data-reveal="mask"] {
+  clip-path: inset(12% 8% 12% 8%);
+  transition: clip-path 1.4s var(--ease-out);
+  transition-delay: var(--delay, 0ms);
+}
+
+html.js [data-reveal="mask"][data-inview="true"] {
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal="lines"] .line > span,
+  html.js [data-reveal="fade"],
+  html.js [data-reveal="mask"] {
+    transform: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+
+  html.js [data-reveal="draw"] [pathLength] {
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
   }
 }

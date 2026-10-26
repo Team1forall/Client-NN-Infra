@@ -1,0 +1,117 @@
+/* Square, architectural buttons. A botanical field wipes in from the left. */
+.btn {
+  --fg: var(--ivory);
+  --bg: var(--forest);
+  --wipe: var(--botanical);
+  --wipe-fg: var(--forest-deep);
+  --bd: var(--forest);
+
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  min-height: 52px;
+  padding: 14px 20px 14px 22px;
+  border: 1px solid var(--bd);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-text);
+  font-size: 0.9375rem;
+  font-weight: 520;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  overflow: hidden;
+  transition: color 0.5s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--wipe);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.6s var(--ease-out);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  color: var(--wipe-fg);
+}
+
+.btn:hover::before,
+.btn:focus-visible::before {
+  clip-path: inset(0 0 0 0);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn[disabled],
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn[disabled]::before {
+  display: none;
+}
+
+.label {
+  position: relative;
+}
+
+.arrow {
+  flex: none;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.arrow[data-dir="down"] {
+  transform: rotate(90deg);
+}
+
+.btn:hover .arrow[data-dir="right"],
+.btn:focus-visible .arrow[data-dir="right"] {
+  transform: translateX(5px);
+}
+
+.btn:hover .arrow[data-dir="down"],
+.btn:focus-visible .arrow[data-dir="down"] {
+  transform: rotate(90deg) translateX(4px);
+}
+
+.outline {
+  --fg: var(--forest);
+  --bg: transparent;
+  --bd: var(--line-strong);
+  --wipe: var(--forest);
+  --wipe-fg: var(--ivory);
+}
+
+.inverse {
+  --fg: var(--forest-deep);
+  --bg: var(--sage);
+  --bd: var(--sage);
+  --wipe: var(--botanical);
+  --wipe-fg: var(--forest-deep);
+}
+
+.inverse-outline {
+  --fg: var(--on-forest);
+  --bg: transparent;
+  --bd: var(--line-inverse-strong);
+  --wipe: var(--sage);
+  --wipe-fg: var(--forest-deep);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn::before,
+  .arrow {
+    transition: none;
+  }
+}
