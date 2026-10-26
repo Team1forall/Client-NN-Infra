@@ -9,7 +9,8 @@ import { ANY_MOTION, loadGsap } from "@/lib/motion";
  *  - Desktop (≥ 1024px): the full-viewport stage pins at the very top; once the
  *    render fills the screen the tagline lands over the image, then fades out
  *    as Project N at a glance rises in over the render.
- *  - Smaller screens: no pin; the render drifts and zooms as it scrolls past.
+ *  - Smaller screens: no pin; the render zooms and drifts while the copy lifts
+ *    away, then each glance detail rises in on its own.
  * Pointer depth on desktop: the render shifts a few pixels against the cursor.
  */
 export function HeroMotion() {
@@ -122,18 +123,12 @@ export function HeroMotion() {
           gsap.fromTo(rule, { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { trigger: rule, start: "top 92%", end: "top 66%", scrub: 0.6 } });
         }
 
-        // Phones: the render drifts and zooms as it scrolls past.
-        gsap.fromTo(
-          zoom,
-          { scale: 1, yPercent: 0 },
-          {
-            scale: 1.14,
-            yPercent: 6,
-            ease: "none",
-            immediateRender: false,
-            scrollTrigger: { trigger: panel, start: "top 85%", end: "bottom top", scrub: 0.5 },
-          },
-        );
+        // Phones: as the hero scrolls away the render zooms and drifts, the
+        // announcement lifts off faster than the page (parallax).
+        const frameEl = stage.firstElementChild as HTMLElement;
+        const away = { trigger: frameEl, start: "top top", end: "bottom top", scrub: 0.5 };
+        gsap.fromTo(zoom, { scale: 1, yPercent: 0 }, { scale: 1.16, yPercent: 8, ease: "none", immediateRender: false, scrollTrigger: away });
+        gsap.fromTo(copy, { y: 0, autoAlpha: 1 }, { y: -90, autoAlpha: 0, ease: "power1.in", immediateRender: false, scrollTrigger: { ...away, end: "bottom 25%" } });
       });
 
       mm.add("(min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)", () => {

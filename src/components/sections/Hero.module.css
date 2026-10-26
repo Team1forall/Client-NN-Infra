@@ -210,6 +210,172 @@
   }
 }
 
+/* ---------- Phones & tablets: an immersive full-screen render ----------
+   The render fills the screen behind the nav (an ivory feather dissolves the
+   bar into it); the announcement sits in ivory on a forest wash at the bottom. */
+@media (max-width: 1023px) {
+  .hero {
+    padding-top: 0;
+  }
+
+  .frame {
+    min-height: max(560px, 100svh);
+    justify-content: flex-end;
+  }
+
+  .panel {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+
+  .img {
+    object-position: 50% 60%;
+  }
+
+  .edge {
+    background:
+      linear-gradient(
+        180deg,
+        var(--ivory) 0,
+        rgb(247 245 238 / 0.88) var(--nav-h),
+        rgb(247 245 238 / 0.36) calc(var(--nav-h) + 8svh),
+        rgb(247 245 238 / 0) calc(var(--nav-h) + 18svh)
+      ),
+      linear-gradient(
+        0deg,
+        var(--forest-deep) 0%,
+        rgb(38 53 43 / 0.94) 20%,
+        rgb(38 53 43 / 0.62) 40%,
+        rgb(38 53 43 / 0.18) 58%,
+        rgb(38 53 43 / 0) 70%
+      );
+  }
+
+  .copy {
+    padding: 0 var(--gutter) calc(48px + env(safe-area-inset-bottom));
+    max-width: 640px;
+  }
+
+  .brand {
+    color: var(--botanical);
+  }
+
+  .dot {
+    background: var(--botanical);
+  }
+
+  .title {
+    font-size: var(--t-hero-phone);
+    color: var(--ivory);
+  }
+
+  .lead {
+    margin-top: 12px;
+    color: rgb(247 245 238 / 0.86);
+  }
+
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 24px;
+  }
+
+  .ctas > a {
+    gap: 14px;
+    padding-inline: 18px 16px;
+  }
+
+  /* Primary reads as the sage "inverse" button on the dark wash */
+  .ctas > a:first-child {
+    --fg: var(--forest-deep);
+    --bg: var(--sage);
+    --bd: var(--sage);
+    --wipe: var(--botanical);
+    --wipe-fg: var(--forest-deep);
+  }
+
+  /* Secondary is a quiet text link with its arrow */
+  .ctas > a:last-child {
+    --fg: var(--ivory);
+    --bg: transparent;
+    --bd: transparent;
+    --wipe: transparent;
+    --wipe-fg: var(--botanical);
+    padding-inline: 4px;
+  }
+
+  .tag {
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    color: rgb(247 245 238 / 0.62);
+  }
+
+  /* The reveal curtain lifts upward, uncovering the render from the street up */
+  .wipe::before {
+    top: -50%;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: auto;
+    height: 250%;
+    background: linear-gradient(0deg, rgb(247 245 238 / 0) 0%, var(--ivory) 40%);
+    transform: translateY(-80%);
+    animation-name: wipeUp;
+  }
+}
+
+/* Landscape phones: a shorter stage and type scale so the announcement fits */
+@media (max-width: 1023px) and (max-height: 520px) {
+  .frame {
+    min-height: max(400px, 100svh);
+  }
+
+  /* The copy climbs higher here, so the forest wash also comes in from the side */
+  .edge {
+    background:
+      linear-gradient(
+        180deg,
+        var(--ivory) 0,
+        rgb(247 245 238 / 0.6) var(--nav-h),
+        rgb(247 245 238 / 0) calc(var(--nav-h) + 10svh)
+      ),
+      linear-gradient(90deg, rgb(38 53 43 / 0.9) 0%, rgb(38 53 43 / 0.6) 40%, rgb(38 53 43 / 0) 72%),
+      linear-gradient(0deg, var(--forest-deep) 0%, rgb(38 53 43 / 0.5) 45%, rgb(38 53 43 / 0) 80%);
+  }
+
+  .copy {
+    padding-bottom: 28px;
+  }
+
+  .title {
+    font-size: var(--t-hero-short);
+  }
+
+  .lead {
+    margin-top: 6px;
+  }
+
+  .ctas {
+    margin-top: 14px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  .copy {
+    padding-left: max(var(--gutter), 40px);
+    padding-bottom: 64px;
+  }
+}
+
+@keyframes wipeUp {
+  from {
+    transform: translateY(0);
+  }
+}
+
 /* ---------- Desktop: copy on the left half, the render on the right half ---------- */
 @media (min-width: 1024px) {
   /* The stage owns the full viewport (it sits under the fixed nav), so the

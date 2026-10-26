@@ -51,7 +51,7 @@ export function Hero() {
                   fill
                   loading="eager"
                   fetchPriority="high"
-                  sizes="100vw"
+                  sizes="(max-width: 1023px) and (orientation: portrait) 210vh, 100vw"
                   quality={82}
                   placeholder="blur"
                   className={styles.img}

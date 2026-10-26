@@ -219,7 +219,7 @@ A committed green-led palette of paper and ink: fields of colour, not accents, w
 **Character:** A light, slightly flared drafting serif set tight and large against a neutral grotesque that does the labour. The serif speaks; the grotesque annotates.
 
 ### Hierarchy
-- **Hero** (400, clamp 3.25–6rem, 0.98): the single "Project N" title over the hero render.
+- **Hero** (400, clamp 3.25–6rem, 0.98): the single "Project N" title beside the hero render. Phones/tablets use **Hero phone** (clamp 3.4–5.5rem, 15vw) over the full-screen render; landscape phones use **Hero short** (clamp 2.6–3.6rem).
 - **Display** (340, display clamp topping out at 6rem, 0.98): page-level headings such as "Project N" and the 404 title. Balanced wrapping, broken into deliberate lines.
 - **Headline** (340, clamp to 5rem, 1.0): section headings and the mobile menu links.
 - **Statement** (300, clamp 2.25–4.5rem, 1.04): set-piece sentences on imagery or alone: the north-star line and the founding belief.
@@ -294,7 +294,7 @@ Fixed 72px bar, transparent over the hero, turning solid ivory with a 1px strong
 The north arrow (half-filled head, fine shaft, Zodiak "N") recurs in hero, Project N, the mobile menu and footer. Linework drawn with pathLength=1 draws on when it enters view.
 
 ### Motion
-Drafting grammar, easing cubic-bezier(0.16, 1, 0.3, 1). Headings rise line by line from a baseline mask (1.15s, 85ms stagger); body only fades up 18px; line art draws over 1.8s; images open from a clip mask. The signature: on desktop the hero stage pins for about 95% of a viewport while the plot polygon opens to full bleed, annotations lift away, the north arrow rotates to true north and docks in the end frame's corner, and the north-star line sets on its baseline. Legacy scrubs an archival-to-colour wipe of the same photograph; the enquiry band moves dawn to dusk of the same land. All reveals are progressive enhancement behind the html.js class.
+Drafting grammar, easing cubic-bezier(0.16, 1, 0.3, 1). Headings rise line by line from a baseline mask (1.15s, 85ms stagger); body only fades up 18px; line art draws over 1.8s; images open from a clip mask. The signature: on desktop the hero stage pins from the very top while the soft-edged render (ivory feather on the page side) opens from the right half to full bleed with a slow zoom, the announcement lifts away, the tagline lands, then gives way to Project N at a glance, whose details arrive one by one along a drawn survey rule. On phones the render fills the screen behind the nav, a curtain lifts off it from the street up, and the copy lifts away in parallax as it zooms; glance details rise in one at a time. Legacy scrubs an archival-to-colour wipe of the same photograph; the enquiry band moves dawn to dusk of the same land. All reveals are progressive enhancement behind the html.js class.
 
 ## Do's and Don'ts
 
