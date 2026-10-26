@@ -200,8 +200,8 @@
   position: absolute;
   z-index: -1;
   inset: -10px -9px;
-  background: rgb(247 245 238 / 0.78);
-  filter: blur(9px);
+  /* soft glow without a filter (cheaper while strips animate) */
+  background: radial-gradient(closest-side, rgb(247 245 238 / 0.82), rgb(247 245 238 / 0));
   pointer-events: none;
 }
 

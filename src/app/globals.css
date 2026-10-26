@@ -472,18 +472,15 @@ html.js [data-reveal="draw"][data-inview="true"] :is(path, line, polyline, polyg
 
 html.js [data-reveal="words"] .w {
   opacity: 0;
-  filter: blur(8px);
   transform: translateY(0.12em);
   transition:
     opacity 0.9s var(--ease-out),
-    filter 0.9s var(--ease-out),
     transform 0.9s var(--ease-out);
   transition-delay: calc(var(--i, 0) * 70ms);
 }
 
 html.js [data-reveal="words"][data-inview="true"] .w {
   opacity: 1;
-  filter: none;
   transform: none;
 }
 

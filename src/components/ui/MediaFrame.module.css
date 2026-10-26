@@ -17,7 +17,6 @@
   --bleed: 0%;
   position: absolute;
   inset: calc(var(--bleed) * -1) 0;
-  will-change: transform;
 }
 
 .img {

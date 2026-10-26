@@ -1,9 +1,10 @@
 /* ==========================================================================
    Hero — mobile first.
-   Opening state: announcement on ivory above a framed render panel.
-   Scroll state (HeroMotion): the panel opens to full bleed with a zoom-in.
-   The panel's frame is a clip-path inset driven by --px (sides), --pt (top)
-   and --pb (bottom), so the no-JS / reduced-motion view is the opening state.
+   Opening state: announcement on ivory, the render melting into the page
+   through feathered gradient edges (no hard frame).
+   Scroll state (HeroMotion): the render opens to full bleed with a zoom-in
+   while the feather dissolves. The visible area is a clip-path inset driven by
+   --pl / --pr / --pt / --pb, so no-JS / reduced motion shows the opening state.
    ========================================================================== */
 
 .hero {
@@ -23,8 +24,8 @@
 /* ---------- Announcement ---------- */
 .copy {
   position: relative;
-  z-index: 2;
-  padding: clamp(24px, 4vh, 40px) var(--gutter) 22px;
+  z-index: 3;
+  padding: clamp(24px, 4vh, 40px) var(--gutter) 8px;
 }
 
 .copy :is(.brand, .title, .lead, .ctas) {
@@ -74,29 +75,27 @@
 
 /* ---------- Render panel ---------- */
 .panel {
-  --px: var(--gutter);
+  --pl: 0px;
+  --pr: 0px;
   --pt: 0px;
-  --pb: var(--gutter);
+  --pb: 0px;
   position: relative;
   flex: 1 1 auto;
-  min-height: 46svh;
+  min-height: 52svh;
   margin: 0;
-  clip-path: inset(var(--pt) var(--px) var(--pb) var(--px));
-  background: var(--forest-deep);
+  clip-path: inset(var(--pt) var(--pr) var(--pb) var(--pl));
   color: var(--ivory);
-  animation: rise 1.4s var(--ease-out) 0.15s backwards;
 }
 
 .zoom {
   position: absolute;
   inset: 0;
-  will-change: transform;
 }
 
 .settle {
   position: absolute;
   inset: 0;
-  animation: settle 2.6s var(--ease-out) backwards;
+  animation: settle 2.8s var(--ease-out) backwards;
 }
 
 .img {
@@ -104,69 +103,99 @@
   object-position: 54% 55%;
 }
 
+/* Darkens the image under the closing tagline; faded in by HeroMotion */
 .scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgb(20 28 22 / 0.86) 0%, rgb(20 28 22 / 0.35) 32%, rgb(20 28 22 / 0) 58%);
+  background: linear-gradient(0deg, rgb(20 28 22 / 0.86) 0%, rgb(20 28 22 / 0.35) 34%, rgb(20 28 22 / 0) 60%);
+  opacity: 0;
   pointer-events: none;
+}
+
+/* The feather: ivory dissolving in from the page side, the forest tone of the
+   next section rising from the bottom. Tracks the visible area. */
+.edge {
+  position: absolute;
+  top: calc(var(--pt) - 2px);
+  right: var(--pr);
+  bottom: var(--pb);
+  left: calc(var(--pl) - 2px);
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      var(--ivory) 0%,
+      rgb(247 245 238 / 0.82) 7%,
+      rgb(247 245 238 / 0.45) 15%,
+      rgb(247 245 238 / 0.14) 23%,
+      rgb(247 245 238 / 0) 30%
+    ),
+    linear-gradient(0deg, rgb(26 38 30 / 0.9) 0%, rgb(26 38 30 / 0.35) 10%, rgb(26 38 30 / 0) 22%);
+}
+
+/* One-shot reveal: an ivory gradient front sweeps off the render */
+.wipe {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.wipe::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 250%;
+  background: linear-gradient(90deg, rgb(247 245 238 / 0) 0%, var(--ivory) 40%);
+  transform: translateX(40%);
+  animation: wipe 1.9s cubic-bezier(0.65, 0, 0.25, 1) 0.1s backwards;
+}
+
+/* One-shot light sweep across the facade after the reveal */
+.sheen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.sheen::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(
+    100deg,
+    rgb(255 232 196 / 0) 0%,
+    rgb(255 232 196 / 0.16) 45%,
+    rgb(255 240 214 / 0.28) 50%,
+    rgb(255 232 196 / 0.16) 55%,
+    rgb(255 232 196 / 0) 100%
+  );
+  transform: translateX(-120%);
+  animation: sheen 2.4s cubic-bezier(0.45, 0, 0.2, 1) 1.5s both;
 }
 
 .tag {
   position: absolute;
-  top: 12px;
-  right: calc(var(--px) + 12px);
+  z-index: 2;
+  right: calc(var(--pr) + 14px);
+  bottom: calc(var(--pb) + 12px);
   margin: 0;
   font-size: var(--t-micro);
   letter-spacing: 0.16em;
-  color: rgb(247 245 238 / 0.78);
+  color: rgb(247 245 238 / 0.8);
+  animation: fadeIn 1s var(--ease-out) 1.4s backwards;
 }
 
 /* Desktop-motion only; hidden until the panel has opened */
 .overlay {
   display: none;
-}
-
-/* ---------- Spec bar (inside the panel, along its bottom) ---------- */
-.facts {
-  position: absolute;
-  left: calc(var(--px) + 16px);
-  right: calc(var(--px) + 16px);
-  bottom: calc(var(--pb) + 10px);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid rgb(247 245 238 / 0.24);
-  margin: 0;
-}
-
-.fact {
-  padding: 10px 0 4px 12px;
-  border-left: 1px solid rgb(247 245 238 / 0.24);
-  animation: lineIn 1s var(--ease-out) backwards;
-  animation-delay: calc(0.95s + var(--i) * 0.08s);
-}
-
-.fact:first-child {
-  padding-left: 0;
-  border-left: 0;
-}
-
-/* Phones: homes, floors, residences */
-.fact:nth-child(n + 4) {
-  display: none;
-}
-
-.fact dt {
-  color: rgb(247 245 238 / 0.66);
-  margin-bottom: 2px;
-}
-
-.fact dd {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--t-body);
-  font-weight: 400;
-  line-height: 1.2;
-  color: var(--ivory);
 }
 
 /* ---------- Tablet ---------- */
@@ -175,70 +204,82 @@
     display: flex;
     flex-wrap: wrap;
   }
-
-  .facts {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    bottom: calc(var(--pb) + 14px);
-  }
-
-  .fact:nth-child(4) {
-    display: block;
-  }
-
-  .fact {
-    padding: 12px 0 6px 16px;
-  }
-
-  .fact dd {
-    font-size: var(--t-subtitle);
-  }
 }
 
-/* ---------- Desktop: copy in one row above the panel ---------- */
+/* ---------- Desktop: copy on the left half, the render on the right half ---------- */
 @media (min-width: 1024px) {
+  /* The stage owns the full viewport (it sits under the fixed nav), so the
+     pinned state has no ivory band above it once the nav slides away. */
+  .hero {
+    padding-top: 0;
+  }
+
+  .stage {
+    min-height: max(640px, 100svh);
+  }
+
   .copy {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    align-items: end;
-    column-gap: clamp(32px, 5vw, 96px);
-    width: 100%;
-    max-width: calc(var(--max) + 2 * var(--gutter));
-    margin-inline: auto;
-    padding-top: clamp(28px, 5vh, 56px);
-    padding-bottom: clamp(24px, 3.4vh, 36px);
+    position: absolute;
+    top: var(--nav-h);
+    bottom: 0;
+    left: var(--gutter);
+    width: calc(46% - var(--gutter) - 24px);
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
   }
 
   .lead {
-    margin-top: 0;
+    margin-top: 22px;
   }
 
-  .copySide {
-    padding-bottom: 0.35rem;
+  .ctas {
+    margin-top: 30px;
   }
 
   .panel {
-    --pb: 20px;
+    --pl: 42%;
+    --pt: var(--nav-h);
+    position: absolute;
+    inset: 0;
     min-height: 0;
   }
 
-  .facts {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    left: calc(var(--px) + 28px);
-    right: calc(var(--px) + 28px);
-    bottom: calc(var(--pb) + 18px);
+  .img {
+    object-position: 62% 55%;
   }
 
-  .fact:nth-child(5) {
-    display: block;
-  }
-
-  .fact dd {
-    font-size: var(--t-h3);
+  /* Wider feather on the page side so the render melts into the copy column.
+     Fixed-size layers, so the feather keeps its width while the panel opens. */
+  .edge {
+    background-image:
+      linear-gradient(
+        90deg,
+        var(--ivory) 0%,
+        rgb(247 245 238 / 0.9) 14%,
+        rgb(247 245 238 / 0.62) 34%,
+        rgb(247 245 238 / 0.3) 57%,
+        rgb(247 245 238 / 0.08) 80%,
+        rgb(247 245 238 / 0) 100%
+      ),
+      linear-gradient(
+        180deg,
+        var(--ivory) 0%,
+        rgb(247 245 238 / 0.7) 27%,
+        rgb(247 245 238 / 0.25) 64%,
+        rgb(247 245 238 / 0) 100%
+      ),
+      linear-gradient(0deg, rgb(26 38 30 / 0.85) 0%, rgb(26 38 30 / 0.3) 45%, rgb(26 38 30 / 0) 100%);
+    background-size: clamp(220px, 24vw, 400px) 100%, 100% 20vh, 100% 20vh;
+    background-position: left top, left top, left bottom;
+    background-repeat: no-repeat;
   }
 
   .tag {
-    top: 16px;
-    right: calc(var(--px) + 20px);
+    right: calc(var(--pr) + 24px);
+    bottom: calc(var(--pb) + 20px);
   }
 }
 
@@ -248,7 +289,7 @@
     display: block;
     position: absolute;
     left: calc(var(--gutter) + 28px);
-    bottom: 132px;
+    bottom: 14vh;
     z-index: 2;
     opacity: 0;
     pointer-events: none;
@@ -271,15 +312,21 @@
 }
 
 /* ---------- Keyframes ---------- */
-@keyframes rise {
+@keyframes settle {
   from {
-    clip-path: inset(calc(var(--pt) + 18%) var(--px) var(--pb) var(--px));
+    transform: scale(1.16);
   }
 }
 
-@keyframes settle {
+@keyframes wipe {
   from {
-    transform: scale(1.14);
+    transform: translateX(-60%);
+  }
+}
+
+@keyframes sheen {
+  to {
+    transform: translateX(260%);
   }
 }
 
@@ -287,15 +334,24 @@
   from {
     opacity: 0;
     transform: translateY(20px);
-    filter: blur(6px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel,
   .settle,
   .copy :is(.brand, .title, .lead, .ctas),
-  .fact {
+  .tag {
     animation: none;
+  }
+
+  .wipe,
+  .sheen {
+    display: none;
   }
 }

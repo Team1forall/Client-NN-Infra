@@ -67,7 +67,19 @@ export function Nav() {
   return (
     <header className={styles.bar} data-hidden={hidden && !open ? "true" : undefined}>
       <div className={styles.inner}>
-        <Link href="/#top" className={styles.brand} aria-label={`${company.name}, home`}>
+        <Link
+          href="/"
+          className={styles.brand}
+          aria-label={`${company.name}, home`}
+          onClick={(e) => {
+            // Already on the home page: glide back to the top instead of re-navigating.
+            if (window.location.pathname === "/") {
+              e.preventDefault();
+              history.replaceState(null, "", "/");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
+        >
           <BrandLogo className={styles.logo} priority />
         </Link>
 
