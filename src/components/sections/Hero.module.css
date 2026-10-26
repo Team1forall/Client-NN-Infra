@@ -15,10 +15,14 @@
 
 .stage {
   position: relative;
+  overflow: hidden;
+}
+
+.frame {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: calc(100svh - var(--nav-h));
-  overflow: hidden;
 }
 
 /* ---------- Announcement ---------- */
@@ -130,7 +134,7 @@
       rgb(247 245 238 / 0.14) 23%,
       rgb(247 245 238 / 0) 30%
     ),
-    linear-gradient(0deg, rgb(26 38 30 / 0.9) 0%, rgb(26 38 30 / 0.35) 10%, rgb(26 38 30 / 0) 22%);
+    linear-gradient(0deg, var(--forest-deep) 0%, rgb(38 53 43 / 0.55) 9%, rgb(38 53 43 / 0) 22%);
 }
 
 /* One-shot reveal: an ivory gradient front sweeps off the render */
@@ -214,7 +218,7 @@
     padding-top: 0;
   }
 
-  .stage {
+  .frame {
     min-height: max(640px, 100svh);
   }
 
@@ -271,7 +275,7 @@
         rgb(247 245 238 / 0.25) 64%,
         rgb(247 245 238 / 0) 100%
       ),
-      linear-gradient(0deg, rgb(26 38 30 / 0.85) 0%, rgb(26 38 30 / 0.3) 45%, rgb(26 38 30 / 0) 100%);
+      linear-gradient(0deg, var(--forest-deep) 0%, rgb(38 53 43 / 0.5) 40%, rgb(38 53 43 / 0) 100%);
     background-size: clamp(220px, 24vw, 400px) 100%, 100% 20vh, 100% 20vh;
     background-position: left top, left top, left bottom;
     background-repeat: no-repeat;
@@ -308,6 +312,139 @@
     letter-spacing: -0.025em;
     color: var(--ivory);
     max-width: 14ch;
+  }
+}
+
+/* ---------- Project N at a glance ----------
+   Phones / reduced motion / no JS: a forest block that follows the render.
+   Desktop motion: laid over the full-bleed render at the end of the pin. */
+.glance {
+  position: relative;
+  z-index: 4;
+  background: var(--forest-deep);
+  color: var(--ivory);
+  padding: var(--s-md) var(--gutter) var(--s-2xl);
+}
+
+.glanceInner {
+  max-width: 600px;
+}
+
+.glanceTitle {
+  margin: 0;
+  color: var(--ivory);
+}
+
+.glanceIntro {
+  margin-top: 12px;
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: rgb(247 245 238 / 0.84);
+  max-width: 44ch;
+}
+
+.glanceFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: var(--s-lg) 0 0;
+  border-top: 1px solid var(--line-inverse);
+}
+
+.glanceFact {
+  padding: 14px 16px 13px 0;
+  border-bottom: 1px solid var(--line-inverse);
+}
+
+.glanceFact:nth-child(even) {
+  padding-left: 16px;
+  border-left: 1px solid var(--line-inverse);
+}
+
+.glanceLabel {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--botanical);
+}
+
+.glanceValue {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--t-subtitle);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ivory);
+}
+
+.glanceAmenities {
+  margin-top: var(--s-md);
+  font-size: var(--t-small);
+  line-height: 1.7;
+  color: rgb(247 245 238 / 0.8);
+  max-width: 60ch;
+}
+
+.glanceFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  margin-top: var(--s-lg);
+}
+
+.glanceFooter > a {
+  flex: 1 1 100%;
+}
+
+.glanceNote {
+  font-size: var(--t-small);
+  color: var(--botanical);
+}
+
+@media (min-width: 600px) {
+  .glanceFooter > a {
+    flex: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .glance {
+    padding-block: var(--s-2xl) var(--s-3xl);
+  }
+
+  .glanceFacts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .glanceFact,
+  .glanceFact:nth-child(even) {
+    padding: 14px 16px 13px;
+    border-left: 1px solid var(--line-inverse);
+  }
+
+  .glanceFact:nth-child(3n + 1) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  /* With the pinned motion the glance lands over the full-bleed render */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .glance {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      padding: var(--nav-h) var(--gutter) 0;
+      background: linear-gradient(
+        90deg,
+        rgb(30 42 34 / 0.94) 0%,
+        rgb(30 42 34 / 0.86) 30%,
+        rgb(30 42 34 / 0.5) 54%,
+        rgb(30 42 34 / 0) 78%
+      );
+      opacity: 0;
+      visibility: hidden;
+    }
   }
 }
 

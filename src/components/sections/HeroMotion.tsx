@@ -7,7 +7,8 @@ import { ANY_MOTION, loadGsap } from "@/lib/motion";
  * The hero's scroll move: the soft-edged render opens to full bleed while the
  * image zooms in, its feather dissolves and the announcement lifts away.
  *  - Desktop (≥ 1024px): the full-viewport stage pins at the very top; once the
- *    render fills the screen the tagline lands over the image.
+ *    render fills the screen the tagline lands over the image, then fades out
+ *    as Project N at a glance rises in over the render.
  *  - Smaller screens: no pin; the render drifts and zooms as it scrolls past.
  * Pointer depth on desktop: the render shifts a few pixels against the cursor.
  */
@@ -41,7 +42,7 @@ export function HeroMotion() {
           scrollTrigger: {
             trigger: stage,
             start: "top top",
-            end: "+=110%",
+            end: "+=230%",
             pin: true,
             scrub: 0.7,
             anticipatePin: 1,
@@ -60,9 +61,40 @@ export function HeroMotion() {
         if (overlay) {
           tl.fromTo(overlay, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out", immediateRender: false }, 0.78);
         }
-        tl.to({}, { duration: 0.15 });
+        // Then the tagline gives way to Project N at a glance.
+        const glance = get("glance");
+        if (glance) {
+          const parts = glance.querySelectorAll("[data-glance]");
+          if (overlay) tl.to(overlay, { autoAlpha: 0, y: -30, duration: 0.25, ease: "power2.in" }, 1.3);
+          tl.to(scrim, { opacity: 0.55, duration: 0.3 }, 1.35)
+            .fromTo(glance, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.35, immediateRender: false }, 1.4)
+            .fromTo(
+              parts,
+              { autoAlpha: 0, y: 36 },
+              { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.07, ease: "power3.out", immediateRender: false },
+              1.45,
+            );
+        }
+        tl.to({}, { duration: 0.3 });
+
+        // "#project-n" links land on the finished glance, not the top of the pin.
+        const st = tl.scrollTrigger;
+        const toGlance = (smooth: boolean) => {
+          if (!st) return;
+          window.scrollTo({ top: st.end - 2, behavior: smooth ? "smooth" : "auto" });
+        };
+        const onClick = (e: MouseEvent) => {
+          const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href$="#project-n"]');
+          if (!a || a.pathname !== window.location.pathname) return;
+          e.preventDefault();
+          history.replaceState(null, "", "#project-n");
+          toGlance(true);
+        };
+        document.addEventListener("click", onClick);
         ScrollTrigger.sort();
         ScrollTrigger.refresh();
+        if (window.location.hash === "#project-n") toGlance(false);
+        return () => document.removeEventListener("click", onClick);
       });
 
       mm.add(`(max-width: 1023px) and ${ANY_MOTION}`, () => {

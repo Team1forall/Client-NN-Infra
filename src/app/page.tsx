@@ -4,7 +4,6 @@ import { Enquire } from "@/components/sections/Enquire";
 import { Hero } from "@/components/sections/Hero";
 import { Leadership } from "@/components/sections/Leadership";
 import { Legacy } from "@/components/sections/Legacy";
-import { ProjectN } from "@/components/sections/ProjectN";
 import { Quote } from "@/components/sections/Quote";
 import { Footer } from "@/components/site/Footer";
 import { Nav } from "@/components/site/Nav";
@@ -39,7 +38,6 @@ export default function Home() {
       <Nav />
       <main id="main">
         <Hero />
-        <ProjectN />
         <Legacy />
         <Quote />
         <Leadership />

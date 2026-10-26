@@ -89,7 +89,7 @@ All facts come from the client's company copy and Project N image (`src/content/
 src/
   app/                 layout (fonts, metadata), page, privacy, not-found, api/enquiry, OG image, sitemap, robots, icon
   components/
-    sections/          Hero (+HeroMotion), ProjectN (at a glance), Legacy (+LegacyVisuals), Quote, Leadership, Developments, Enquire
+    sections/          Hero (+HeroMotion, Project N at a glance), Legacy (+LegacyVisuals), Quote, Leadership, Developments, Enquire
     site/              Nav, Footer
     ui/                Lines, Button, MediaFrame, TitleBlock, Marks (north arrow, group bars, wordmark)
     motion/ScrollFx    shared reveal + parallax driver (data-reveal / data-parallax attributes)
