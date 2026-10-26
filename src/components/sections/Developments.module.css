@@ -214,7 +214,7 @@
 
 .vName {
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 0.85rem + 0.8vw, 1.75rem);
+  font-size: var(--t-lead);
   font-weight: 380;
   line-height: 1;
   letter-spacing: -0.01em;
@@ -243,8 +243,8 @@
 .stripMedia {
   position: absolute;
   inset: 0;
-  opacity: 0.32;
-  filter: grayscale(1) contrast(0.9);
+  opacity: 0.8;
+  filter: grayscale(1) contrast(0.95);
   transform: scale(1.06);
   transform-origin: 50% 60%;
   transition:
@@ -271,9 +271,9 @@
 .scrimLight {
   background: linear-gradient(
     to top,
-    var(--sage) 0%,
-    color-mix(in srgb, var(--sage) 90%, transparent) 45%,
-    transparent 90%
+    color-mix(in srgb, var(--sage) 92%, transparent) 0%,
+    color-mix(in srgb, var(--sage) 70%, transparent) 30%,
+    transparent 62%
   );
 }
 
@@ -321,7 +321,7 @@
 .dName {
   max-width: 14ch;
   font-family: var(--font-display);
-  font-size: clamp(1.875rem, 1.1rem + 1.6vw, 3rem);
+  font-size: var(--t-h3);
   font-weight: 340;
   line-height: 1.02;
   letter-spacing: -0.025em;
@@ -342,7 +342,7 @@
 
 .dFigure {
   font-family: var(--font-display);
-  font-size: 1.375rem;
+  font-size: var(--t-subtitle);
   font-weight: 360;
   line-height: 1.1;
   letter-spacing: -0.01em;
@@ -356,7 +356,7 @@
   top: var(--pad);
   right: var(--pad);
   padding: 6px 10px 5px;
-  font-size: 0.5625rem;
+  font-size: var(--t-micro);
   letter-spacing: 0.16em;
   background: color-mix(in srgb, var(--forest-deep) 72%, transparent);
   color: var(--on-forest);
@@ -559,7 +559,7 @@
     grid-column: 1;
     grid-row: 1;
     align-self: end;
-    font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+    font-size: var(--t-h3);
   }
 }
 

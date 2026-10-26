@@ -29,13 +29,13 @@
 .label {
   display: block;
   color: var(--tb-label);
-  font-size: 0.625rem;
+  font-size: var(--t-micro);
   margin-bottom: 3px;
 }
 
 .value {
   font-family: var(--font-text);
-  font-size: 0.8125rem;
+  font-size: var(--t-meta);
   font-weight: 500;
   color: var(--tb-value);
   white-space: nowrap;

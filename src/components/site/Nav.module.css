@@ -11,15 +11,8 @@
 }
 
 .bar[data-solid] {
-  background: rgb(247 245 238 / 0.94);
-  box-shadow: 0 1px 0 var(--line);
-}
-
-@supports (backdrop-filter: blur(1px)) {
-  .bar[data-solid] {
-    background: rgb(247 245 238 / 0.82);
-    backdrop-filter: blur(14px) saturate(1.1);
-  }
+  background: var(--ivory);
+  box-shadow: 0 1px 0 var(--line-strong);
 }
 
 .bar[data-hidden] {
@@ -45,7 +38,7 @@
 }
 
 .wordmark {
-  font-size: 1.125rem;
+  font-size: var(--t-body);
 }
 
 /* ---------- Desktop links ---------- */
@@ -242,7 +235,7 @@
   align-items: center;
   min-height: 64px;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 8.5vw, 3.25rem);
+  font-size: var(--t-h2);
   font-weight: 340;
   letter-spacing: -0.025em;
   line-height: 1.1;

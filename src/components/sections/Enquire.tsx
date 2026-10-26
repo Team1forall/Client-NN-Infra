@@ -19,6 +19,7 @@ const COPY = {
   newTab: "(opens in a new tab)",
   phonePending: "Phone number — to be added",
   emailPending: "Email address — to be added",
+  whatsappPending: "WhatsApp number — to be added",
   privacyLink: "Read the privacy notice",
   tag: "Illustrative images",
 } as const;
@@ -116,10 +117,10 @@ export function Enquire() {
                   )}
                 </dd>
               </div>
-              {contact.whatsapp && (
-                <div className={styles.row}>
-                  <dt className={`annot ${styles.key}`}>{COPY.whatsapp}</dt>
-                  <dd className={styles.value}>
+              <div className={styles.row}>
+                <dt className={`annot ${styles.key}`}>{COPY.whatsapp}</dt>
+                <dd className={styles.value}>
+                  {contact.whatsapp ? (
                     <a
                       className="tlink"
                       href={`https://wa.me/${contact.whatsapp}`}
@@ -129,9 +130,11 @@ export function Enquire() {
                       +{contact.whatsapp}
                       <span className="sr-only"> {COPY.newTab}</span>
                     </a>
-                  </dd>
-                </div>
-              )}
+                  ) : (
+                    <Pending>{COPY.whatsappPending}</Pending>
+                  )}
+                </dd>
+              </div>
             </dl>
             <p className={styles.privacy}>
               {enquiry.privacy}{" "}

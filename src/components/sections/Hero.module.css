@@ -121,7 +121,7 @@
   top: calc(2% + 14px);
   margin: 0;
   padding: 5px 9px 4px;
-  font-size: 0.5625rem;
+  font-size: var(--t-micro);
   letter-spacing: 0.16em;
   background: rgb(247 245 238 / 0.86);
   color: var(--forest);
@@ -131,12 +131,13 @@
   position: absolute;
   left: 7%;
   top: 14%;
-  width: 26px;
-  color: var(--ivory);
+  width: 34px;
+  padding: 6px 7px;
+  background: rgb(247 245 238 / 0.88);
+  color: var(--forest);
   transform: rotate(-16deg);
   transform-origin: 50% 55%;
   animation: needle 2.2s var(--ease-out) 0.6s backwards;
-  filter: drop-shadow(0 1px 6px rgb(38 53 43 / 0.25));
 }
 
 .northGlyph {
@@ -167,7 +168,7 @@
 }
 
 .titleWord {
-  font-size: clamp(3.25rem, 15vw, 4.5rem);
+  font-size: var(--t-h1);
   letter-spacing: -0.035em;
   order: 0;
 }
@@ -241,8 +242,9 @@
   animation-delay: 0.65s;
 }
 
-/* ---------- North-star overlay (desktop motion only) ---------- */
-.northStar {
+/* ---------- North-star overlay + end frame (desktop motion only) ---------- */
+.northStar,
+.endFrame {
   display: none;
 }
 
@@ -278,7 +280,7 @@
   position: relative;
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: clamp(2rem, 7.5vw, 4.5rem);
+  font-size: var(--t-statement);
   line-height: 1.04;
   letter-spacing: -0.025em;
   max-width: 18ch;
@@ -349,8 +351,8 @@
     left: 36.5%;
     top: 12%;
     width: 30px;
-    color: var(--forest);
-    filter: none;
+    padding: 0;
+    background: none;
   }
 
   .copy {
@@ -368,7 +370,7 @@
 
   .titleWord {
     display: block;
-    font-size: clamp(4rem, 2rem + 4.6vw, 6rem);
+    font-size: var(--t-h1);
     margin-bottom: 0.04em;
   }
 
@@ -418,12 +420,57 @@
   }
 
   :global(html.js) .northStarText {
-    font-size: clamp(2.75rem, 1.4rem + 3.4vw, 5rem);
+    font-size: var(--t-statement);
     max-width: 16ch;
   }
 
   :global(html.js) .northStar :global(.line) > span {
     transform: translateY(108%);
+  }
+
+  :global(html.js) .endFrame {
+    display: block;
+    position: absolute;
+    inset: calc(var(--nav-h) + 24px) var(--gutter) 28px;
+    z-index: 2;
+    border: 1px solid rgb(247 245 238 / 0.55);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .endFrame i {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    margin: -5px 0 0 -5px;
+    border: 1px solid var(--forest);
+    border-radius: 50%;
+    background: var(--ivory);
+  }
+
+  .endFrame i:nth-child(1) {
+    left: 0;
+    top: 0;
+  }
+  .endFrame i:nth-child(2) {
+    left: 100%;
+    top: 0;
+  }
+  .endFrame i:nth-child(3) {
+    left: 100%;
+    top: 100%;
+  }
+  .endFrame i:nth-child(4) {
+    left: 0;
+    top: 100%;
+  }
+
+  .endNote {
+    position: absolute;
+    right: 20px;
+    bottom: 16px;
+    margin: 0;
+    color: var(--ivory);
   }
 }
 

@@ -71,7 +71,7 @@ export function DawnDusk({
               scrollTrigger: {
                 trigger: band,
                 start: "top 85%",
-                end: "center 42%",
+                end: "top 32%",
                 scrub: 0.6,
               },
             },

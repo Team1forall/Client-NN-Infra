@@ -36,6 +36,7 @@ export function HeroMotion() {
         const fades = Array.from(q("fade"));
         const titleBlock = section.querySelector<HTMLElement>("dl");
         const starLines = Array.from(q("northstar-line"));
+        const endFrame = q("endframe")[0];
 
         gsap.set(zoom, { scale: 1.14, transformOrigin: "60% 50%" });
         gsap.set(starLines, { y: 0, yPercent: 108 });
@@ -50,6 +51,7 @@ export function HeroMotion() {
             scrub: 0.7,
             anticipatePin: 1,
             refreshPriority: 10,
+            invalidateOnRefresh: true,
           },
         });
 
@@ -64,9 +66,22 @@ export function HeroMotion() {
           .fromTo(fades, { opacity: 1 }, { opacity: 0, duration: 0.3, immediateRender: false }, 0)
           .to(titleBlock, { opacity: 0, duration: 0.25 }, 0)
           .to(copy, { yPercent: -14, opacity: 0, duration: 0.42 }, 0)
-          .fromTo(north, { rotate: -16 }, { rotate: 0, duration: 0.8, immediateRender: false }, 0)
+          // The arrow settles on true north and docks inside the end frame's corner.
+          .fromTo(
+            north,
+            { rotate: -16, x: 0, y: 0 },
+            {
+              rotate: 0,
+              x: () => endFrame.offsetLeft + 24 - north.offsetLeft,
+              y: () => endFrame.offsetTop + 22 - north.offsetTop,
+              duration: 0.8,
+              immediateRender: false,
+            },
+            0,
+          )
+          .fromTo(endFrame, { opacity: 0 }, { opacity: 1, duration: 0.2, immediateRender: false }, 0.9)
           .to(scrim, { opacity: 1, duration: 0.5 }, 0.35)
-          .to(starLines, { yPercent: 0, duration: 0.35, stagger: 0.07, ease: "power3.out" }, 0.58)
+          .to(starLines, { yPercent: 0, duration: 0.32, stagger: 0.07, ease: "power3.out" }, 0.8)
           .to({}, { duration: 0.12 });
 
         ScrollTrigger.sort();

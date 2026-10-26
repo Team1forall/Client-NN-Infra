@@ -107,7 +107,7 @@ export function Legacy() {
                 <span className={`annot ${styles.label} ${styles.labelThen}`}>{THEN}</span>
               </div>
               <span className={styles.edge} aria-hidden="true" />
-              {landAerial.tag && <span className={`annot ${styles.tag}`}>{landAerial.tag}</span>}
+              {landAerial.tag && <span className={`annot ${styles.tag}`}>{landAerial.tag} · archival treatment</span>}
             </div>
           </div>
         </div>

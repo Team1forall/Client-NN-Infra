@@ -30,8 +30,6 @@ export const project = {
   announcement: "January 2027",
   announcementShort: "Jan 2027",
   status: "Upcoming",
-  /** Bengaluru city centre — used only as a city annotation, never as the site location. */
-  cityCoordinates: "12.97° N  77.59° E",
 } as const;
 
 /** Rows for the scannable fact sheet. `value: null` renders as "To be announced". */
@@ -88,7 +86,7 @@ export const projectIntro = {
 export const ownership = {
   heading: ["Limited fractional", "ownership."],
   body: [
-    "The Project N material refers to a limited number of fractional ownership opportunities. Fractional ownership generally means holding a share of a property alongside other owners.",
+    "NN Infra plans to make a limited number of fractional ownership opportunities available in Project N. Fractional ownership generally means holding a share of a property alongside other owners.",
     "How it will work for Project N, including the structure, terms, eligibility and documentation, is still being finalised. We would rather explain it properly than summarise it here.",
   ],
   receiveTitle: "When you request details, you receive",
@@ -111,7 +109,7 @@ export const legacy = {
       id: "founding",
       marker: "1986",
       title: "The founding",
-      text: "Mr. B. K. Nagabhushana Reddy establishes Nethravathi Group with a simple conviction: everyone deserves a piece of land they can call their own.",
+      text: "Mr. B. K. Nagabhushana Reddy establishes Nethravathi Group, the start of four decades of land development.",
     },
     {
       id: "layouts",
@@ -150,7 +148,7 @@ export const leadership = {
       role: "Founder, Nethravathi Group",
       monogram: "BKN",
       since: "1986",
-      text: "Established Nethravathi Group in 1986 on the belief that everyone deserves a piece of land they can call their own.",
+      text: "Founded Nethravathi Group in 1986 and built it through residential layouts and commercial development.",
     },
     {
       id: "chairman",

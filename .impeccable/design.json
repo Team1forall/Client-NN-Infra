@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-27T00:00:00Z",
+  "title": "Design System: NN Infra",
+  "extensions": {
+    "colorMeta": {
+      "forest": { "role": "primary", "displayName": "Forest Ink", "canonical": "#35483a", "tonalRamp": ["#141c16", "#1f2a22", "#26352b", "#35483a", "#4e6553", "#6f8673", "#9fb2a2", "#d6dfd7"] },
+      "forest-deep": { "role": "primary", "displayName": "Forest Night", "canonical": "#26352b", "tonalRamp": ["#0f1611", "#18221b", "#1f2b23", "#26352b", "#3a4d40", "#5b6f61", "#8fa293", "#cfd9d1"] },
+      "botanical": { "role": "secondary", "displayName": "Botanical", "canonical": "#b9c9af", "tonalRamp": ["#26301f", "#3d4b34", "#58694d", "#768a69", "#98ab8b", "#b9c9af", "#d5e0ce", "#eef3ea"] },
+      "laterite": { "role": "tertiary", "displayName": "Laterite (errors only)", "canonical": "#9a3d23", "tonalRamp": ["#2e120a", "#4d1e11", "#6e2b18", "#9a3d23", "#bb5a3e", "#d4836b", "#e8b6a6", "#f7e4dd"] },
+      "ivory": { "role": "neutral", "displayName": "Ivory Sheet", "canonical": "#f7f5ee", "tonalRamp": ["#2a2924", "#47453d", "#6a675c", "#908c7f", "#b6b2a4", "#d8d5c9", "#ebe9e0", "#f7f5ee"] },
+      "sage": { "role": "neutral", "displayName": "Sage Sheet", "canonical": "#e9eedf", "tonalRamp": ["#262a1f", "#3f4634", "#5d664e", "#7e886d", "#a1ab90", "#c5ceb6", "#e9eedf", "#f5f7f0"] },
+      "stone": { "role": "neutral", "displayName": "Stone Archive", "canonical": "#e6e0d5", "tonalRamp": ["#29251e", "#443e33", "#645c4e", "#877e6e", "#aba292", "#cbc4b6", "#e6e0d5", "#f4f1eb"] },
+      "charcoal": { "role": "neutral", "displayName": "Charcoal", "canonical": "#292d29", "tonalRamp": ["#151715", "#1f221f", "#292d29", "#3d433d", "#5a615a", "#7f867f", "#aeb4ae", "#e0e3e0"] },
+      "ink-soft": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#4e5a50", "tonalRamp": ["#1a1f1b", "#2b332d", "#3c463e", "#4e5a50", "#68766a", "#8a978c", "#b5bfb6", "#e2e7e3"] },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "rgb(53 72 58 / 0.28)" },
+      "line-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "rgb(53 72 58 / 0.6)" },
+      "line-inverse": { "role": "neutral", "displayName": "Inverse Hairline", "canonical": "rgb(233 238 223 / 0.26)" },
+      "line-inverse-strong": { "role": "neutral", "displayName": "Strong Inverse Hairline", "canonical": "rgb(233 238 223 / 0.55)" },
+      "on-forest-soft": { "role": "neutral", "displayName": "Sage Soft (on forest)", "canonical": "rgb(233 238 223 / 0.76)" },
+      "group-lime": { "role": "brand-mark", "displayName": "Group Lime (mark only)", "canonical": "#c1e330" },
+      "group-leaf": { "role": "brand-mark", "displayName": "Group Leaf (mark only)", "canonical": "#5fb21a" },
+      "group-deep": { "role": "brand-mark", "displayName": "Group Deep (mark only)", "canonical": "#02560d" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page-level headings on deliberately broken lines; max 6rem." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings." },
+      "title": { "displayName": "Title", "purpose": "Sub-heads, station and development names." },
+      "lead": { "displayName": "Lead", "purpose": "One supporting paragraph under a heading, max 34ch." },
+      "body": { "displayName": "Body", "purpose": "Prose, max 62ch." },
+      "small": { "displayName": "Small", "purpose": "Notes, helper text, nav links." },
+      "label": { "displayName": "Annotation", "purpose": "Uppercase tracked tabular annotations, title-block labels, image tags." }
+    },
+    "shadows": [
+      { "name": "nav-rule", "value": "0 1px 0 rgb(53 72 58 / 0.6)", "purpose": "Hairline under the solid nav bar; not elevation." },
+      { "name": "field-focus-rule", "value": "inset 0 -1px 0 #35483a", "purpose": "Thickens an input underline to 2px on focus." },
+      { "name": "field-error-rule", "value": "inset 0 -2px 0 #9a3d23", "purpose": "Laterite underline on an invalid input." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Drafting ease for all reveals, wipes and state changes." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.65, 0, 0.35, 1)", "purpose": "Symmetric transitions." },
+      { "name": "dur-reveal", "value": "1.15s", "purpose": "Heading line rise; lines stagger 85ms." },
+      { "name": "fade-reveal", "value": "opacity + translateY(18px), 1s", "purpose": "The only motion body copy receives." },
+      { "name": "draw-reveal", "value": "stroke-dashoffset 1 -> 0, 1.8s, 120ms stagger", "purpose": "Linework drafting on entry." },
+      { "name": "mask-reveal", "value": "clip-path inset(12% 8%) -> inset(0), 1.4s", "purpose": "Image frames opening." },
+      { "name": "button-wipe", "value": "clip-path inset(0 100% 0 0) -> inset(0), 0.6s", "purpose": "Botanical field wiping into buttons from the left." },
+      { "name": "hero-pin", "value": "ScrollTrigger pin, end +=95%, scrub 0.7, >=900px only", "purpose": "Plot polygon opens to full bleed; north arrow settles on true north." },
+      { "name": "parallax", "value": "yPercent scrub, strength 6-10%, >=900px only", "purpose": "Images drift inside their frames." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "No pins, scrub, parallax or video autoplay; final states shown instantly." }
+    ],
+    "breakpoints": [
+      { "name": "title-block-stack", "value": "560px" },
+      { "name": "wide-band", "value": "700px" },
+      { "name": "motion", "value": "900px" },
+      { "name": "cinema-band", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Square forest button; botanical field wipes in from the left on hover and focus.",
+      "html": "<a class=\"ds-btn\" href=\"#\"><span>Register your interest</span><svg class=\"ds-btn-arrow\" width=\"18\" height=\"12\" viewBox=\"0 0 18 12\" aria-hidden=\"true\"><path d=\"M0 6h16M11 1l5 5-5 5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.25\"/></svg></a>",
+      "css": ".ds-btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; min-height: 52px; padding: 14px 20px 14px 22px; border: 1px solid var(--forest, #35483a); background: var(--forest, #35483a); color: var(--ivory, #f7f5ee); font-family: var(--font-text, system-ui); font-size: 0.9375rem; font-weight: 520; letter-spacing: 0.01em; line-height: 1.2; text-decoration: none; overflow: hidden; border-radius: 0; transition: color 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn::before { content: \"\"; position: absolute; inset: 0; z-index: -1; background: var(--botanical, #b9c9af); clip-path: inset(0 100% 0 0); transition: clip-path 0.6s cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover, .ds-btn:focus-visible { color: var(--forest-deep, #26352b); } .ds-btn:hover::before, .ds-btn:focus-visible::before { clip-path: inset(0 0 0 0); } .ds-btn:focus-visible { outline: 2px solid #35483a; outline-offset: 3px; } .ds-btn:active { transform: translateY(1px); } .ds-btn-arrow { transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover .ds-btn-arrow, .ds-btn:focus-visible .ds-btn-arrow { transform: translateX(5px); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action on light sheets; forest wipes in, label turns ivory.",
+      "html": "<a class=\"ds-btn-o\" href=\"#\"><span>Discover Project N</span><svg class=\"ds-btn-o-arrow\" width=\"18\" height=\"12\" viewBox=\"0 0 18 12\" aria-hidden=\"true\"><path d=\"M0 6h16M11 1l5 5-5 5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.25\"/></svg></a>",
+      "css": ".ds-btn-o { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; min-height: 52px; padding: 14px 20px 14px 22px; border: 1px solid rgb(53 72 58 / 0.6); background: transparent; color: #35483a; font-family: var(--font-text, system-ui); font-size: 0.9375rem; font-weight: 520; line-height: 1.2; text-decoration: none; overflow: hidden; border-radius: 0; transition: color 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-o::before { content: \"\"; position: absolute; inset: 0; z-index: -1; background: #35483a; clip-path: inset(0 100% 0 0); transition: clip-path 0.6s cubic-bezier(0.16,1,0.3,1); } .ds-btn-o:hover, .ds-btn-o:focus-visible { color: #f7f5ee; } .ds-btn-o:hover::before, .ds-btn-o:focus-visible::before { clip-path: inset(0); } .ds-btn-o:focus-visible { outline: 2px solid #35483a; outline-offset: 3px; } .ds-btn-o-arrow { transform: rotate(90deg); transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); } .ds-btn-o:hover .ds-btn-o-arrow, .ds-btn-o:focus-visible .ds-btn-o-arrow { transform: rotate(90deg) translateX(4px); }"
+    },
+    {
+      "name": "Inverse Button",
+      "kind": "button",
+      "refersTo": "button-inverse",
+      "description": "Primary action on forest sheets; botanical wipe, sage focus ring.",
+      "html": "<div class=\"ds-forest\"><a class=\"ds-btn-i\" href=\"#\"><span>Request ownership details</span><svg width=\"18\" height=\"12\" viewBox=\"0 0 18 12\" aria-hidden=\"true\"><path d=\"M0 6h16M11 1l5 5-5 5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.25\"/></svg></a></div>",
+      "css": ".ds-forest { background: #35483a; padding: 32px; } .ds-btn-i { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 28px; min-height: 52px; padding: 14px 20px 14px 22px; border: 1px solid #e9eedf; background: #e9eedf; color: #26352b; font-size: 0.9375rem; font-weight: 520; text-decoration: none; overflow: hidden; border-radius: 0; } .ds-btn-i::before { content: \"\"; position: absolute; inset: 0; z-index: -1; background: #b9c9af; clip-path: inset(0 100% 0 0); transition: clip-path 0.6s cubic-bezier(0.16,1,0.3,1); } .ds-btn-i:hover::before, .ds-btn-i:focus-visible::before { clip-path: inset(0); } .ds-btn-i:focus-visible { outline: 2px solid #e9eedf; outline-offset: 3px; }"
+    },
+    {
+      "name": "Underline Text Field",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Underline-only field with an always-visible label; laterite only on error.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Full name</span><input class=\"ds-input\" type=\"text\" /></label><label class=\"ds-field\" data-invalid><span class=\"ds-field-label\">Phone</span><input class=\"ds-input\" type=\"tel\" value=\"98\" /><span class=\"ds-field-error\"><b>!</b>Enter a 10-digit phone number</span></label>",
+      "css": ".ds-field { display: block; margin-bottom: 24px; color: #292d29; } .ds-field-label { font-size: 0.9375rem; font-weight: 520; } .ds-input { width: 100%; min-height: 52px; padding: 12px 0 10px; border: 0; border-bottom: 1px solid rgb(53 72 58 / 0.6); border-radius: 0; background: transparent; font: inherit; font-size: 1.125rem; color: #292d29; transition: border-color 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-input:hover { border-bottom-color: #35483a; } .ds-input:focus-visible { outline: 2px solid #35483a; outline-offset: 3px; border-bottom-color: #35483a; box-shadow: inset 0 -1px 0 #35483a; } .ds-field[data-invalid] .ds-input { border-bottom-color: #9a3d23; box-shadow: inset 0 -2px 0 #9a3d23; } .ds-field-error { display: flex; gap: 10px; margin-top: 6px; font-size: 0.9375rem; font-weight: 580; color: #9a3d23; } .ds-field-error b { display: inline-grid; place-items: center; width: 18px; height: 18px; background: #9a3d23; color: #f7f5ee; font-size: 0.75rem; }"
+    },
+    {
+      "name": "Title Block",
+      "kind": "custom",
+      "refersTo": "title-block-cell",
+      "description": "Drawing title block annotating a sheet corner with true facts; never above a heading.",
+      "html": "<dl class=\"ds-tb\"><div class=\"ds-tb-cell\"><dt>Project</dt><dd>Project N</dd></div><div class=\"ds-tb-cell\"><dt>City</dt><dd>Bengaluru</dd></div><div class=\"ds-tb-cell\"><dt>Announcing</dt><dd>January 2027</dd></div></dl>",
+      "css": ".ds-tb { display: grid; grid-auto-flow: column; border: 1px solid rgb(53 72 58 / 0.6); width: max-content; margin: 0; } .ds-tb-cell { padding: 9px 14px 10px; } .ds-tb-cell + .ds-tb-cell { border-left: 1px solid rgb(53 72 58 / 0.6); } .ds-tb dt { font-size: 0.625rem; font-weight: 520; letter-spacing: 0.13em; text-transform: uppercase; color: #4e5a50; margin-bottom: 3px; } .ds-tb dd { margin: 0; font-size: 0.8125rem; font-weight: 500; color: #35483a; white-space: nowrap; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Crop-marked Image Frame",
+      "kind": "card",
+      "refersTo": "image-frame",
+      "description": "Square image frame with surveyor crop marks and a stand-in tag.",
+      "html": "<figure class=\"ds-frame\"><div class=\"ds-frame-clip\"></div><span class=\"ds-crop ds-c1\"></span><span class=\"ds-crop ds-c2\"></span><span class=\"ds-crop ds-c3\"></span><span class=\"ds-crop ds-c4\"></span><figcaption class=\"ds-frame-tag\">Illustrative image</figcaption></figure>",
+      "css": ".ds-frame { position: relative; width: 280px; height: 200px; margin: 24px; } .ds-frame-clip { position: absolute; inset: 0; background: #b9c9af; } .ds-crop { position: absolute; width: 14px; height: 14px; } .ds-crop::before, .ds-crop::after { content: \"\"; position: absolute; background: rgb(53 72 58 / 0.6); } .ds-crop::before { width: 14px; height: 1px; top: 7px; } .ds-crop::after { width: 1px; height: 14px; left: 7px; } .ds-c1 { top: -15px; left: -15px; } .ds-c2 { top: -15px; right: -15px; } .ds-c3 { bottom: -15px; left: -15px; } .ds-c4 { bottom: -15px; right: -15px; } .ds-frame-tag { position: absolute; right: 0; bottom: 0; padding: 6px 10px 5px; font-size: 0.6875rem; font-weight: 520; letter-spacing: 0.13em; text-transform: uppercase; background: rgb(247 245 238 / 0.86); color: #35483a; }"
+    },
+    {
+      "name": "To Be Announced Row",
+      "kind": "custom",
+      "refersTo": "fact-row-pending",
+      "description": "Honest unknown: soft-ink text behind a 34px dashed rule.",
+      "html": "<div class=\"ds-fact\"><span class=\"ds-fact-k\">Configuration</span><span class=\"ds-fact-v\"><span class=\"ds-dash\"></span>To be announced</span></div>",
+      "css": ".ds-fact { display: grid; grid-template-columns: 1fr 1.4fr; gap: 16px; padding: 14px 0; border-top: 1px solid rgb(53 72 58 / 0.28); } .ds-fact-k { font-size: 0.6875rem; font-weight: 520; letter-spacing: 0.13em; text-transform: uppercase; color: #4e5a50; } .ds-fact-v { display: flex; align-items: center; gap: 12px; color: #4e5a50; } .ds-dash { width: 34px; border-top: 1px dashed rgb(53 72 58 / 0.6); }"
+    },
+    {
+      "name": "Drawn-underline Link",
+      "kind": "custom",
+      "refersTo": "text-link",
+      "description": "1px underline resting at 28% width, drawn to full width on hover and focus.",
+      "html": "<a class=\"ds-tlink\" href=\"#\">Open in Maps</a>",
+      "css": ".ds-tlink { position: relative; display: inline-block; padding-bottom: 2px; color: #35483a; text-decoration: none; } .ds-tlink::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0.28); transform-origin: left; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); } .ds-tlink:hover::after, .ds-tlink:focus-visible::after { transform: scaleX(1); } .ds-tlink:focus-visible { outline: 2px solid #35483a; outline-offset: 3px; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav-bar-solid",
+      "description": "Fixed 72px bar; solid ivory with a hairline rule after scroll.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-mark\"><b>NN</b> INFRA</span><span class=\"ds-nav-links\"><a href=\"#\">Project N</a><a href=\"#\">Legacy</a><a href=\"#\">Developments</a></span></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 72px; padding: 0 32px; background: #f7f5ee; box-shadow: 0 1px 0 rgb(53 72 58 / 0.6); color: #35483a; } .ds-nav-mark { font-size: 1.125rem; font-weight: 560; letter-spacing: 0.32em; } .ds-nav-mark b { font-family: var(--font-display, Georgia, serif); font-weight: 460; font-size: 1.5em; letter-spacing: -0.04em; } .ds-nav-links { display: flex; gap: 24px; font-size: 0.875rem; } .ds-nav-links a { color: inherit; text-decoration: none; } .ds-nav-links a:hover { color: #26352b; } .ds-nav-links a:focus-visible { outline: 2px solid #35483a; outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Survey",
+    "overview": "The site is one drawing set, and every section is a sheet in it. Project N is the north point marked on that set: the direction NN Infra faces next. The vocabulary is a land surveyor's, not a property brochure's: paper-toned sheets, forest ink, 1px linework, plot polygons with boundary pins, contour paths, chainage lines with stations, a north arrow, crop-marked image frames, and architectural title blocks that annotate with true facts only.\n\nDensity is editorial and unhurried: large left-weighted Zodiak display set on deliberately broken lines, generous sheet padding, small tracked-caps annotations doing the labelling work that icons and eyebrows do elsewhere. Depth comes from changing the paper (ivory, sage, stone, forest), never from lifting surfaces off it. Motion is \"drafting\": lines are drawn, plots are cleared, type sits down on its baseline.\n\nThe confirmed rejection is the real-estate category default: a drone hero with a centred headline, amenity icon grids, glossy renders, rounded image cards, countdowns.",
+    "keyCharacteristics": [
+      "Sheet grounds change by section; each change is a deliberate turn of the page.",
+      "1px hairlines in forest at 28% / 60% (or sage on forest) carry all structure.",
+      "Square everything: buttons, frames, fields, title blocks.",
+      "Annotations are uppercase, tracked, tabular, and only ever state true facts.",
+      "Honest unknowns are designed states (\"To be announced\" + dashed rule), not gaps.",
+      "Every stand-in image is labelled as such, in its corner."
+    ],
+    "rules": [
+      { "name": "The Laterite Rule", "body": "Laterite is the error colour and nothing else. It never decorates, never highlights, never marks a CTA.", "section": "colors" },
+      { "name": "The Group Mark Rule", "body": "The three Nethravathi greens appear only inside the three-bar group mark. They are a logo, not palette.", "section": "colors" },
+      { "name": "The Paper Turn Rule", "body": "Grounds change at section boundaries in this order: ivory (hero) → sage (Project N) → forest (ownership) → stone + grain (legacy) → ivory (leadership) → sage (developments) → ivory (enquiry) → forest-deep (footer). New sheets choose one of these grounds; no gradients and no tinted cards on top of a sheet.", "section": "colors" },
+      { "name": "The One Italic Rule", "body": "Italic Zodiak (weight 300) marks at most one word per heading; punctuation stays upright.", "section": "typography" },
+      { "name": "The Graphic Numeral Exception", "body": "The hero \"N\" glyph, legacy year numerals and the footer wordmark may exceed 6rem because they are drawn objects, not text blocks. No running heading does.", "section": "typography" },
+      { "name": "The No Eyebrow Rule", "body": "No kicker or eyebrow label sits above a heading, and no section carries \"01/02/03\" numbering. Annotation belongs at a sheet corner or beside a fact, not as a heading's preface.", "section": "typography" },
+      { "name": "The Flat Sheet Rule", "body": "Nothing floats above the paper. If a surface needs separation, change its ground or draw a 1px line.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do build every structure from 1px hairlines (line on light, line-inverse on forest) and square corners.",
+      "Do label every stand-in image \"Representative image\" (stock) or \"Illustrative image\" (AI-generated) in its bottom-right corner.",
+      "Do render every undecided fact as \"To be announced\" with the dashed rule, in soft ink.",
+      "Do keep laterite for errors and the three group greens inside the group mark.",
+      "Do use tracked-caps annotations (11px, 0.13em, tabular) for meta and title blocks, carrying true facts only.",
+      "Do honour prefers-reduced-motion fully: no pins, no scrub, no parallax, no video autoplay; content shows in its final state (the dawn/dusk band shows dusk).",
+      "Do keep content fully visible without JS; hidden initial states exist only under html.js."
+    ],
+    "donts": [
+      "Don't round corners on buttons, frames, cards or fields; the only circles are 9px survey pins and station nodes.",
+      "Don't add drop shadows or floating cards; change the ground or draw a line.",
+      "Don't place eyebrow labels above headings or number sections \"01/02/03\".",
+      "Don't set a running heading above 6rem; only the hero N, legacy numerals and the footer wordmark are graphic objects.",
+      "Don't use more than one italic word per heading, or any monospace face.",
+      "Don't fabricate bearings, measurements, plot sizes or specs in annotations, polygons or title blocks.",
+      "Don't lead with a centred drone hero, an amenity icon grid or rounded image cards."
+    ]
+  }
+}

@@ -19,7 +19,7 @@
 .tagline {
   margin-bottom: var(--s-xl);
   font-family: var(--font-display);
-  font-size: clamp(3rem, 1.6rem + 6vw, 6rem);
+  font-size: var(--t-h1);
   font-weight: 300;
   line-height: 0.98;
   letter-spacing: -0.035em;
@@ -150,7 +150,7 @@
 }
 
 .list .link {
-  font-size: 1rem;
+  font-size: var(--t-body);
 }
 
 .ext {
@@ -182,7 +182,7 @@
 
 .contactLabel {
   color: var(--on-forest-soft);
-  font-size: 0.625rem;
+  font-size: var(--t-micro);
 }
 
 /* A deliberately marked gap in the drawing: the client sees where each detail goes */

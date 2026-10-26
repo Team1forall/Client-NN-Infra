@@ -94,7 +94,7 @@
   min-height: 44px;
   padding: 8px 0;
   color: var(--forest);
-  font-size: 0.9375rem;
+  font-size: var(--t-ui);
   font-weight: 500;
   transition: color 0.3s var(--ease-out);
 }

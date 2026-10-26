@@ -32,7 +32,7 @@
   gap: 10px;
   min-height: 44px;
   padding: 0 14px;
-  font-size: 0.625rem;
+  font-size: var(--t-micro);
   background: rgb(247 245 238 / 0.88);
   color: var(--forest);
   transition: background-color 0.4s var(--ease-out);
@@ -67,7 +67,7 @@
   right: 0;
   top: 0;
   padding: 6px 10px 5px;
-  font-size: 0.5625rem;
+  font-size: var(--t-micro);
   letter-spacing: 0.16em;
   background: rgb(247 245 238 / 0.86);
   color: var(--forest);

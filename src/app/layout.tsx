@@ -53,7 +53,7 @@ THESIS: "The Survey" — Project N is the north point on NN Infra's drawing set.
 OWN-WORLD: ivory/sage/stone sheets, forest ink, 1px survey linework, plot polygons, north arrow, drawing title blocks, crop-marked image frames; Zodiak display, Switzer text, tracked caps annotations; square buttons with botanical wipe.
 STORY: know Project N (Bengaluru, Jan 2027) in one viewport → understand ownership is enquiry-led → trust the 1986 lineage and developments → register interest.
 FIRST VIEWPORT: left-weighted "Project N" display with lead, launch annotation and two CTAs (primary forest "Register your interest"); right: image inside a plot polygon annotated with true facts; north arrow.
-FORM: brief-pinned world (palette, serif+sans, land/survey metaphor) — concept roll skipped because the brief pins the direction; staging: scrubbed plot-to-full-bleed signature transition. seed: brief-pinned.
+FORM: brief-pinned world. The user's master brief fixes the palette, the editorial serif + sans pairing and the land/survey north star, and asks to build without stopping at concepts; per new-work a brief-pinned direction beats the roll, so none was run. Staging: scrubbed plot-to-full-bleed transition that resolves into a surveyed end frame. seed: none (brief-pinned).
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
 -->`;
 

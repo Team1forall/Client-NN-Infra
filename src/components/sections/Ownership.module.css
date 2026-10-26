@@ -40,7 +40,7 @@
   padding: 16px 0 15px;
   border-bottom: 1px solid var(--line-inverse);
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+  font-size: var(--t-lead);
   font-weight: 340;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -65,7 +65,7 @@
   padding-top: 18px;
   border-top: 1px solid var(--line-inverse);
   max-width: 64ch;
-  font-size: 0.8125rem;
+  font-size: var(--t-meta);
   line-height: 1.6;
   color: var(--on-forest-soft);
 }
@@ -144,7 +144,7 @@
   right: 0;
   bottom: 0;
   padding: 6px 10px 5px;
-  font-size: 0.5625rem;
+  font-size: var(--t-micro);
   letter-spacing: 0.16em;
   background: rgb(38 53 43 / 0.72);
   color: var(--on-forest);

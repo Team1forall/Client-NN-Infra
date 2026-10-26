@@ -72,7 +72,7 @@ export function Hero() {
             ))}
           </div>
           <p className={`annot ${styles.edge} ${styles.edgeTop}`} data-hero="fade" aria-hidden="true">
-            {project.city} · {project.cityCoordinates}
+            {project.city} · Location to be announced
           </p>
           <p className={`annot ${styles.edge} ${styles.edgeRight}`} data-hero="fade" aria-hidden="true">
             Announcing {project.announcement}
@@ -113,12 +113,23 @@ export function Hero() {
         <TitleBlock
           className={styles.titleBlock}
           cells={[
-            { label: "Project", value: project.name },
+            { label: "Status", value: project.status },
             { label: "City", value: project.city },
             { label: "Announcing", value: project.announcement },
             { label: "Developer", value: company.name },
           ]}
         />
+
+        {/* The transition resolves into a surveyed frame rather than a bare photo */}
+        <div className={styles.endFrame} data-hero="endframe" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+          <p className={`annot ${styles.endNote}`}>
+            {project.name} · {project.city} · Announcing {project.announcement}
+          </p>
+        </div>
 
         {/* Revealed at the end of the signature transition (desktop, motion allowed) */}
         <div className={styles.northStar}>

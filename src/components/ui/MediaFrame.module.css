@@ -24,12 +24,26 @@
   object-fit: cover;
 }
 
+.frame :global(.cropmarks) {
+  transition: opacity 0.8s var(--ease-out) 0.45s;
+}
+
+:global(html.js) .clip[data-reveal="mask"]:not([data-inview="true"]) ~ :global(.cropmarks) {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html.js) .clip[data-reveal="mask"]:not([data-inview="true"]) ~ :global(.cropmarks) {
+    opacity: 1;
+  }
+}
+
 .tag {
   position: absolute;
   right: 0;
   bottom: 0;
   padding: 6px 10px 5px;
-  font-size: 0.5625rem;
+  font-size: var(--t-micro);
   letter-spacing: 0.16em;
   background: rgb(247 245 238 / 0.86);
   color: var(--forest);
