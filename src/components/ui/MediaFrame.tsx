@@ -57,7 +57,7 @@ export function MediaFrame({
         </div>
       </div>
       {marks && (
-        <span className={styles.marks} aria-hidden="true">
+        <span className="cropmarks" aria-hidden="true">
           <i />
           <i />
           <i />

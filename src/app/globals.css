@@ -292,6 +292,89 @@ button {
   pointer-events: none;
 }
 
+/* Surveyor crop marks: <span class="cropmarks"><i/><i/><i/><i/></span> inside a positioned frame */
+.cropmarks i {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.cropmarks i::before,
+.cropmarks i::after {
+  content: "";
+  position: absolute;
+  background: var(--line-strong);
+}
+
+.cropmarks i::before {
+  width: 14px;
+  height: 1px;
+}
+
+.cropmarks i::after {
+  width: 1px;
+  height: 14px;
+}
+
+.cropmarks i:nth-child(1) {
+  top: -8px;
+  left: -8px;
+}
+.cropmarks i:nth-child(1)::before {
+  top: 7px;
+  left: -6px;
+}
+.cropmarks i:nth-child(1)::after {
+  left: 7px;
+  top: -6px;
+}
+
+.cropmarks i:nth-child(2) {
+  top: -8px;
+  right: -8px;
+}
+.cropmarks i:nth-child(2)::before {
+  top: 7px;
+  right: -6px;
+}
+.cropmarks i:nth-child(2)::after {
+  right: 7px;
+  top: -6px;
+}
+
+.cropmarks i:nth-child(3) {
+  bottom: -8px;
+  left: -8px;
+}
+.cropmarks i:nth-child(3)::before {
+  bottom: 7px;
+  left: -6px;
+}
+.cropmarks i:nth-child(3)::after {
+  left: 7px;
+  bottom: -6px;
+}
+
+.cropmarks i:nth-child(4) {
+  bottom: -8px;
+  right: -8px;
+}
+.cropmarks i:nth-child(4)::before {
+  bottom: 7px;
+  right: -6px;
+}
+.cropmarks i:nth-child(4)::after {
+  right: 7px;
+  bottom: -6px;
+}
+
+
+.cropmarks[data-tone="dark"] i::before,
+.cropmarks[data-tone="dark"] i::after {
+  background: var(--line-inverse-strong);
+}
+
 /* ---------- Text link with drawn underline ---------- */
 .tlink {
   position: relative;

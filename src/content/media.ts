@@ -23,27 +23,30 @@ export type Media = {
 };
 
 const REP = "Representative image";
+const GEN = "Illustrative image";
 
 /**
- * Media registry. Every image is a licensed stock or AI-generated stand-in until
- * NN Infra supplies real photography — replace the file in src/assets/media and
- * update `alt` (and set `tag: null` for genuine project photographs).
+ * Media registry. Every image is a stand-in until NN Infra supplies real
+ * photography: licensed stock ("Representative image") or AI-generated with
+ * Nano Banana ("Illustrative image"). See media-src/ for sources and credits.
+ * To replace one, drop the real file into src/assets/media under the same name,
+ * update `alt`, and set `tag: null` for genuine project photographs.
  */
 export const media = {
-  hero: { src: hero, alt: "Open land at first light with scattered trees and low mist", tag: REP },
-  heroDusk: { src: heroDusk, alt: "The same open land at dusk, mist settling under a deep green sky", tag: REP },
-  detailWall: { src: detailWall, alt: "Lime-plaster wall with soft leaf shadows", tag: REP },
-  canopy: { src: canopy, alt: "Looking up into a broad tree canopy with sunlight through the leaves", tag: REP },
-  terrain: { src: terrain, alt: "Layered paper model of gentle terrain in sage and stone tones", tag: "Illustrative" },
-  landAerial: { src: landAerial, alt: "Aerial view of open land with faint field boundaries and clusters of trees", tag: REP },
-  surveyStone: { src: surveyStone, alt: "Weathered stone boundary marker set in red earth and grass", tag: REP },
-  courtyard: { src: courtyard, alt: "Quiet courtyard with a single tree, stone paving and plastered walls", tag: REP },
-  bengaluru: { src: bengaluru, alt: "Tree-lined Bengaluru street", tag: REP },
-  devKrishnappa: { src: devKrishnappa, alt: "Aerial view of a leafy residential layout", tag: REP },
-  devSai: { src: devSai, alt: "Tree-lined residential street", tag: REP },
-  devSrirama: { src: devSrirama, alt: "Plotted residential land with young trees", tag: REP },
-  devCommercial: { src: devCommercial, alt: "Detail of a commercial building facade", tag: REP },
-  devMore: { src: devMore, alt: "Green avenue in Bengaluru", tag: REP },
+  hero: { src: hero, alt: "Misty open land at dawn with broad rain trees and winding red-earth paths", tag: GEN },
+  heroDusk: { src: heroDusk, alt: "The same open land at dusk, mist settling between the trees under a blue-green sky", tag: GEN },
+  detailWall: { src: detailWall, alt: "Pale sage plaster wall with soft dappled leaf shadows and a fine horizontal line", tag: GEN },
+  canopy: { src: canopy, alt: "Looking up into the spreading branches and fine leaves of a large rain tree", tag: REP },
+  terrain: { src: terrain, alt: "Layered paper model of gentle terrain in sage, ivory and stone tones", tag: GEN },
+  landAerial: { src: landAerial, alt: "Aerial view of red-earth land divided by faint boundaries and footpaths, with clusters of trees", tag: GEN },
+  surveyStone: { src: surveyStone, alt: "Weathered granite boundary stone standing in red earth and dry grass", tag: GEN },
+  courtyard: { src: courtyard, alt: "Quiet courtyard with a frangipani tree against plastered walls in warm light", tag: GEN },
+  bengaluru: { src: bengaluru, alt: "Old trees with spreading branches over open grass in Cubbon Park, Bengaluru", tag: REP },
+  devKrishnappa: { src: devKrishnappa, alt: "Aerial view of a residential neighbourhood laid out on a street grid with many trees", tag: REP },
+  devSai: { src: devSai, alt: "Empty road under tall arching trees", tag: REP },
+  devSrirama: { src: devSrirama, alt: "Red-earth track curving between grassy banks", tag: REP },
+  devCommercial: { src: devCommercial, alt: "Black-and-white detail of a plain white building facade with deep-set windows", tag: REP },
+  devMore: { src: devMore, alt: "Old trees over open grass in Cubbon Park, Bengaluru", tag: REP },
 } satisfies Record<string, Media>;
 
 export const video = {

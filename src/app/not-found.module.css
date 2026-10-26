@@ -1,0 +1,114 @@
+/* 404 — an empty, dashed plot; the north arrow settles back to north. */
+
+.main {
+  display: flex;
+  align-items: center;
+  min-height: 82svh;
+  background: var(--ivory);
+  padding-top: calc(var(--nav-h) + var(--s-xl));
+  padding-bottom: var(--s-2xl);
+}
+
+.main > section {
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--s-xl);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(12px, 2vw, 32px);
+  }
+
+  .drawing {
+    grid-column: 1 / span 5;
+  }
+
+  .text {
+    grid-column: 7 / span 6;
+  }
+}
+
+.drawing {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+}
+
+@media (min-width: 900px) {
+  .drawing {
+    max-width: 440px;
+  }
+}
+
+.plot {
+  width: 100%;
+  height: auto;
+}
+
+.arrow {
+  position: absolute;
+  left: calc(46% - 15px);
+  top: calc(48% - 41px);
+  width: 30px;
+  height: 83px;
+  color: var(--forest);
+  transform-origin: 50% 50%;
+  animation: find-north 2s var(--ease-out) 0.35s both;
+}
+
+@media (min-width: 900px) {
+  .arrow {
+    left: calc(46% - 21px);
+    top: calc(48% - 58px);
+    width: 42px;
+    height: 116px;
+  }
+}
+
+@keyframes find-north {
+  0% {
+    transform: rotate(-42deg);
+  }
+
+  62% {
+    transform: rotate(5deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.titleBlock {
+  margin-top: var(--s-md);
+}
+
+.text {
+  min-width: 0;
+}
+
+.line {
+  max-width: 44ch;
+  margin-top: var(--s-lg);
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  color: var(--charcoal);
+  text-wrap: pretty;
+}
+
+.cta {
+  margin-top: var(--s-xl);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    animation: none;
+  }
+}

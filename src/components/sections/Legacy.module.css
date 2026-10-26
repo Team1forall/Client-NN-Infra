@@ -1,0 +1,442 @@
+/* ==========================================================================
+   #legacy — the archive sheet. Stone ground + paper grain.
+   Mobile first: heading → then/now plate → chainage stations.
+   ≥ 900px: sticky marker + plate on the left, stations on the right.
+   Motion-only states are gated behind html.js + prefers-reduced-motion.
+   ========================================================================== */
+
+.section {
+  background: var(--stone);
+  padding-top: var(--s-3xl);
+  padding-bottom: var(--s-2xl);
+  /* clip (not hidden) so position: sticky keeps working */
+  overflow: clip;
+}
+
+/* ---------- Background contours ---------- */
+.contours {
+  position: absolute;
+  top: calc(var(--s-3xl) * -0.35);
+  right: -260px;
+  width: 640px;
+  height: 640px;
+  pointer-events: none;
+}
+
+.contours path {
+  stroke: var(--line);
+  stroke-width: 1.4; /* ≈ 1px at this size */
+}
+
+@media (min-width: 900px) {
+  .contours {
+    top: calc(var(--s-3xl) * -0.5);
+    right: -250px;
+    width: 900px;
+    height: 900px;
+  }
+
+  .contours path {
+    stroke-width: 1;
+  }
+}
+
+/* ---------- Grid ---------- */
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "head"
+    "aside"
+    "list";
+  row-gap: var(--s-xl);
+}
+
+.head {
+  grid-area: head;
+}
+
+.aside {
+  grid-area: aside;
+}
+
+.stations {
+  grid-area: list;
+}
+
+.intro {
+  margin-top: var(--s-lg);
+  max-width: 38ch;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-areas: none;
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(12px, 2vw, 32px);
+    row-gap: var(--s-2xl);
+  }
+
+  .aside {
+    grid-column: 1 / span 5;
+    grid-row: 1 / span 2;
+  }
+
+  .head {
+    grid-column: 7 / span 6;
+    grid-row: 1;
+  }
+
+  .stations {
+    grid-column: 7 / span 6;
+    grid-row: 2;
+  }
+
+  .sticky {
+    position: sticky;
+    top: calc(var(--nav-h) + 24px);
+  }
+}
+
+/* ---------- Sticky marker (desktop + motion + JS only) ---------- */
+.sticky {
+  --size: clamp(6rem, 13vw, 12.5rem);
+}
+
+.bigMarker {
+  display: none;
+  container-type: inline-size;
+  grid-template-areas: "m";
+  align-items: last baseline;
+  overflow: hidden;
+  margin: 0 0 var(--s-md) -0.04em;
+  color: var(--forest);
+}
+
+.bigItem {
+  grid-area: m;
+  font-family: var(--font-display);
+  font-weight: 230;
+  font-size: min(var(--size), calc(100cqi / var(--em, 2.4)));
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  font-variant-numeric: lining-nums;
+  transform: translateY(104%);
+  opacity: 0;
+  transition:
+    transform 0.9s var(--ease-out),
+    opacity 0s linear 0.9s;
+}
+
+.bigItem[data-state="above"] {
+  transform: translateY(-104%);
+}
+
+.bigItem[data-state="active"] {
+  transform: none;
+  opacity: 1;
+  transition:
+    transform 0.9s var(--ease-out),
+    opacity 0s;
+}
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .bigMarker {
+    display: grid;
+  }
+}
+
+/* ---------- Then → now plate ---------- */
+.plate {
+  --reveal: 1;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 72svh;
+}
+
+@media (min-width: 900px) {
+  .plate {
+    aspect-ratio: 5 / 4;
+    min-height: 240px;
+    /* keep marker + plate inside the viewport while sticky */
+    max-height: calc(100svh - var(--nav-h) - 24px - var(--size) * 1.05 - var(--s-md) - 56px);
+  }
+}
+
+.now {
+  position: absolute;
+  z-index: 0; /* own stacking context: the "Now" label stays under the archival layer */
+  inset: 0;
+}
+
+/* Static default (no JS, reduced motion): an archival print inset on the colour image */
+.then {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  left: 14px;
+  width: 34%;
+  height: 34%;
+  overflow: hidden;
+  border: 5px solid var(--stone);
+  outline: 1px solid var(--line-strong);
+  background: var(--stone);
+}
+
+.thenImg {
+  object-fit: cover;
+  filter: grayscale(1) sepia(0.42) hue-rotate(42deg) saturate(0.55) contrast(0.8) brightness(1.06);
+}
+
+/* stone wash + paper grain over the archival image */
+.then::before,
+.then::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.then::before {
+  background: var(--stone);
+  mix-blend-mode: multiply;
+  opacity: 0.38;
+}
+
+.then::after {
+  background-image: var(--grain);
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+
+.label {
+  position: absolute;
+  z-index: 2;
+  padding: 6px 10px 5px;
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  color: var(--forest);
+}
+
+.labelThen {
+  top: 0;
+  left: 0;
+  background: color-mix(in srgb, var(--stone) 90%, transparent);
+}
+
+.labelNow {
+  left: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--ivory) 86%, transparent);
+}
+
+.tag {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0;
+  padding: 6px 10px 5px;
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  background: color-mix(in srgb, var(--ivory) 86%, transparent);
+  color: var(--forest);
+}
+
+/* The wipe edge: forest ticks outside the frame, an ivory hairline across it */
+.edge {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  left: -14px;
+  right: -14px;
+  height: 1px;
+  margin-top: -0.5px;
+  background: var(--forest);
+  pointer-events: none;
+}
+
+.edge::after {
+  content: "";
+  position: absolute;
+  inset: 0 14px;
+  background: var(--ivory);
+}
+
+/* Motion: the archival layer covers the whole frame and is wiped away */
+@media (prefers-reduced-motion: no-preference) {
+  :global(html.js) .plate {
+    --reveal: 0;
+  }
+
+  :global(html.js) .then {
+    inset: 0;
+    width: auto;
+    height: auto;
+    border: 0;
+    outline: 0;
+    clip-path: inset(0 0 calc(var(--reveal) * 100%) 0);
+  }
+
+  :global(html.js) .edge {
+    display: block;
+    top: calc((1 - var(--reveal)) * 100%);
+    opacity: calc(min(var(--reveal), 1 - var(--reveal)) * 24);
+  }
+}
+
+/* Below 900px: one IO-triggered transition instead of a scrub */
+@media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .plate[data-state="now"] {
+    --reveal: 1;
+  }
+
+  :global(html.js) .then {
+    transition: clip-path 2.2s var(--ease-in-out) 0.25s;
+  }
+
+  :global(html.js) .edge {
+    display: none;
+  }
+}
+
+/* ---------- Chainage line + stations ---------- */
+.stations {
+  --pad: 34px;
+  --node: 11px;
+  --draw: 1;
+  position: relative;
+  padding-left: var(--pad);
+}
+
+/* Survey guide: faint full route, minor ticks every 24px, major every 96px */
+.stations::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--node);
+  background:
+    linear-gradient(var(--line), var(--line)) center top / 1px 100% no-repeat,
+    linear-gradient(var(--line-strong), var(--line-strong)) left bottom / 100% 1px no-repeat,
+    repeating-linear-gradient(to bottom, var(--line-strong) 0 1px, transparent 1px 96px) center top / 100% 100%
+      no-repeat,
+    repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 24px) center top / 5px 100% no-repeat;
+  pointer-events: none;
+}
+
+/* The drawn chainage: forest hairline, scrubbed from the top on desktop */
+.stations::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc((var(--node) - 1px) / 2);
+  width: 1px;
+  background: var(--forest);
+  transform: scaleY(var(--draw));
+  transform-origin: top;
+  pointer-events: none;
+}
+
+.station {
+  position: relative;
+  padding-bottom: var(--s-xl);
+}
+
+.station:last-child {
+  padding-bottom: var(--s-sm);
+}
+
+.marker {
+  position: relative;
+  margin-bottom: var(--s-sm);
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 2.9rem + 2.6vw, 4.5rem);
+  font-weight: 240;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--forest);
+  font-variant-numeric: lining-nums;
+}
+
+.node {
+  position: absolute;
+  top: 50%;
+  left: calc(-1 * var(--pad));
+  width: var(--node);
+  height: var(--node);
+  margin-top: calc(var(--node) / -2);
+  border: 1px solid var(--forest);
+  border-radius: 50%;
+  background: var(--ivory);
+  outline: 1px solid transparent;
+  outline-offset: 3px;
+  transition:
+    background-color 0.5s var(--ease-out),
+    outline-color 0.5s var(--ease-out);
+}
+
+.station[data-state="past"] .node,
+.station[data-state="active"] .node {
+  background: var(--forest);
+}
+
+.station[data-state="active"] .node {
+  outline-color: var(--forest);
+}
+
+.title {
+  margin-bottom: var(--s-sm);
+}
+
+.text p {
+  max-width: 46ch;
+}
+
+@media (min-width: 900px) {
+  .stations {
+    --pad: 48px;
+  }
+
+  .station {
+    padding-bottom: var(--s-2xl);
+  }
+}
+
+/* Desktop + motion + JS: the sticky marker carries the big type, so each
+   station's own marker drops to an annotation, and stations are spaced
+   ~60vh apart so the roll has time to read. */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .station {
+    min-height: 62vh;
+  }
+
+  /* room for 2027 to hold before the sticky column releases */
+  :global(html.js) .station:last-child {
+    min-height: 56vh;
+  }
+
+  :global(html.js) .marker {
+    margin-bottom: var(--s-md);
+    font-family: var(--font-text);
+    font-size: var(--t-annot);
+    font-weight: 520;
+    line-height: 1.4;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bigItem,
+  .node {
+    transition: none;
+  }
+}

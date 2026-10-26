@@ -1,0 +1,260 @@
+.section {
+  background: var(--sage);
+  padding-top: var(--s-3xl);
+  padding-bottom: var(--s-2xl);
+  overflow: hidden;
+}
+
+/* ---------- Opening statement ---------- */
+.intro {
+  display: grid;
+  gap: var(--s-lg);
+}
+
+.heading {
+  max-width: 13ch;
+}
+
+.body {
+  font-size: 1.0625rem;
+}
+
+/* ---------- Composition ---------- */
+.composition {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 2vw, 32px);
+  margin-top: var(--s-2xl);
+}
+
+.videoCell {
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 3;
+  position: relative;
+  z-index: 1;
+}
+
+.detailCell {
+  grid-column: 6 / -1;
+  aspect-ratio: 4 / 5;
+  margin-top: -18%;
+  position: relative;
+  z-index: 2;
+  outline: 10px solid var(--sage);
+}
+
+.survey {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -64px;
+  width: 100%;
+  height: 120px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.survey path {
+  fill: none;
+  stroke: var(--forest);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.survey .tick {
+  stroke: var(--line-strong);
+}
+
+.surveyNorth {
+  position: absolute;
+  right: 0;
+  bottom: -76px;
+  width: 16px;
+  color: var(--forest);
+}
+
+/* ---------- Record: facts + QR ---------- */
+.record {
+  display: grid;
+  gap: var(--s-2xl);
+  margin-top: calc(var(--s-2xl) + 64px);
+}
+
+.sheetTitle {
+  margin-bottom: var(--s-md);
+}
+
+.facts {
+  border-top: 1px solid var(--line-strong);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: 16px;
+  padding: 15px 0 14px;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+
+.label {
+  color: var(--ink-soft);
+}
+
+.value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--forest);
+  line-height: 1.4;
+}
+
+.value[data-pending] {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.dash {
+  flex: none;
+  width: 34px;
+  border-top: 1px dashed var(--line-strong);
+}
+
+.note {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--t-small);
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.pending {
+  margin-top: var(--s-md);
+  max-width: 56ch;
+  font-size: var(--t-small);
+  line-height: 1.6;
+}
+
+.qrCol {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+}
+
+.qrFrame {
+  position: relative;
+  width: min(220px, 60vw);
+  aspect-ratio: 1;
+  padding: 16px;
+  background: var(--ivory);
+}
+
+.qr,
+.qr svg {
+  width: 100%;
+  height: 100%;
+}
+
+.qrTitle {
+  margin-top: 26px;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 380;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--forest);
+  max-width: 18ch;
+}
+
+.qrUrl {
+  margin-top: 8px;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  word-break: break-all;
+}
+
+.qrActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  margin-top: 24px;
+}
+
+.share {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.shareBtn {
+  min-height: 44px;
+  font-size: 0.9375rem;
+  font-weight: 520;
+  color: var(--forest);
+}
+
+.shareStatus {
+  min-height: 1em;
+  color: var(--ink-soft);
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 900px) {
+  .intro {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(12px, 2vw, 32px);
+    align-items: end;
+  }
+
+  .heading {
+    grid-column: 1 / span 7;
+  }
+
+  .body {
+    grid-column: 8 / -1;
+    padding-bottom: 0.4em;
+  }
+
+  .videoCell {
+    grid-column: 1 / span 8;
+    aspect-ratio: 16 / 10;
+  }
+
+  .detailCell {
+    grid-column: 9 / -1;
+    margin-top: 34%;
+    outline: none;
+  }
+
+  .survey {
+    bottom: -78px;
+  }
+
+  .surveyNorth {
+    bottom: -92px;
+  }
+
+  .record {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(12px, 2vw, 32px);
+    margin-top: calc(var(--s-3xl) + 20px);
+  }
+
+  .sheetCol {
+    grid-column: 1 / span 7;
+  }
+
+  .qrCol {
+    grid-column: 9 / -1;
+    padding-top: 6px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .row {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+  }
+}

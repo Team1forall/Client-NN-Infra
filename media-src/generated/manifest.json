@@ -1,0 +1,82 @@
+[
+  {
+    "slot": "G01",
+    "file": "g01-dawn-land.png",
+    "prompt": "Cinematic wide landscape photograph at first light on the edge of Bengaluru, India: open, gently undulating land with red laterite earth paths, scattered rain trees and young neem trees, low morning mist, soft overcast pastel light. Palette of muted sage green, botanical green, warm ivory and soft stone. Calm, spacious composition with a large quiet sky in the upper third and a low horizon. Medium-format film photograph, natural colour grade, fine grain. No buildings, no people, no text, no watermark. Aspect ratio 16:9.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2752,
+    "height": 1536,
+    "suggestedAlt": "Misty open land at dawn with winding red earth paths, granite outcrops and scattered rain trees under a pale overcast sky.",
+    "notes": "Pass, first try. Aspect selector 16:9. Gemini sparkle mark in bottom-right corner (left as delivered). Representative imagery only."
+  },
+  {
+    "slot": "G08",
+    "file": "g08-dusk-land.png",
+    "prompt": "Edit the image you just generated. Keep exactly the same composition, viewpoint and landscape, but change the time to blue hour just after sunset: a soft deep-green and dusky blue sky with a faint warm glow on the horizon, mist settling, calm and quiet. Same film photography style. No text. Aspect ratio 16:9.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool; edit of G01 in same chat",
+    "width": 2752,
+    "height": 1536,
+    "suggestedAlt": "The same misty landscape at blue hour, with a dusky blue sky, a faint warm glow on the horizon and silhouetted rain trees.",
+    "notes": "Pass. Composition matches G01 closely (same trees, paths and rocks), suitable for a dawn/dusk crossfade. First edit attempt returned a Gemini error; 'Try again' succeeded. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "G02",
+    "file": "g02-survey-stone.png",
+    "prompt": "Close-up editorial photograph of a weathered granite survey boundary stone set in red earth and short grass in Karnataka, India. Soft late-afternoon side light, shallow depth of field, muted sage and stone palette, quiet and tactile. Nothing carved or written on the stone, no people. Vertical portrait aspect ratio 4:5.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 1856,
+    "height": 2304,
+    "suggestedAlt": "A weathered, lichen-flecked granite boundary stone standing in red earth and dry grass, softly lit from the side.",
+    "notes": "Pass, first try. True 4:5 (UI has no 4:5 option; aspect requested in prompt only). No markings on stone. Palette is warmer and drier (ochre grass) than the sage world; may want a slight cool/sage grade in post. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "G03",
+    "file": "g03-canopy.png",
+    "prompt": "Looking straight up into the canopy of a giant rain tree on a Bengaluru avenue, sunlight filtering through fine feathery leaves, layered greens from pale sage to deep forest, soft contrast, editorial nature photography. No people, no text. Aspect ratio 3:4.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 1792,
+    "height": 2400,
+    "suggestedAlt": "Looking up into the spreading branches of a large rain tree, with fine feathery leaves backlit against a pale sky.",
+    "notes": "Pass, first try. Aspect selector 3:4. Camera angle is steeply upward rather than strictly vertical; a faint street-light pole is visible at the lower right edge (crop from bottom if needed). Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "G04",
+    "file": "g04-plaster-shadow.png",
+    "prompt": "Minimal architectural detail photograph: a smooth lime-plaster wall in pale sage green with soft dappled leaf shadows and one fine horizontal reveal line, warm afternoon light, extremely calm, large negative space. No objects, no furniture, no text. Aspect ratio 16:9.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2752,
+    "height": 1536,
+    "suggestedAlt": "A pale sage lime-plaster wall with a single fine horizontal groove, dappled with soft leaf shadows in warm afternoon light.",
+    "notes": "Pass, first try. Aspect selector 16:9. Large calm negative space, good for text overlay. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "G05",
+    "file": "g05-land-aerial.png",
+    "prompt": "Top-down aerial photograph of open land on the outskirts of a South Indian city: red-brown earth, faint field boundaries and footpaths forming an irregular geometric pattern like an abstract site plan, a few clusters of trees. Muted pastel grade (sage, stone, ivory), soft overcast light. No buildings, no vehicles, no text. Aspect ratio 1:1. | Follow-up in same chat: Generate a new version of this top-down aerial photograph with a much more muted, pastel palette: mostly pale sage-green dry grass and soft stone/ivory coloured earth, with the red-brown laterite showing only in the thin footpaths and a few bare patches. Keep the irregular geometric pattern of faint field boundaries and footpaths like an abstract site plan, and a few clusters of trees. Soft overcast light, matte film look. No buildings, no vehicles, no text, no numbers. Aspect ratio 1:1.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2048,
+    "height": 2048,
+    "suggestedAlt": "Aerial top-down view of open land: pale red earth divided by faint field boundaries and crossing footpaths, with scattered clusters of trees.",
+    "notes": "Regenerated once. First version was dominated by saturated pinkish terracotta. The follow-up kept the same layout with a softer stone/ivory grade, though it still reads more terracotta than sage. Rejected v1 is kept outside the project in the session scratchpad. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "G06",
+    "file": "g06-courtyard.png",
+    "prompt": "A quiet courtyard garden at dusk: a single frangipani tree, granite stone paving, lime-plastered walls in soft ivory and sage, warm light falling from an unseen opening. Only walls and paving are visible - no complete building, no facade, no people, no text. Editorial architecture photograph. Vertical portrait aspect ratio 4:5.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 1856,
+    "height": 2304,
+    "suggestedAlt": "A small open-sky courtyard with a flowering frangipani tree, worn stone paving and ivory-sage plaster walls, warm light spilling from a side opening.",
+    "notes": "Pass, first try. True 4:5 (aspect requested in prompt only). Only abstract walls, a side opening and paving are shown, with no facade or full building. Label it as representative imagery. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "G07",
+    "file": "g07-terrain-model.png",
+    "prompt": "Overhead photograph of a hand-cut layered paper topographic model of gentle terrain, contour layers in shades of sage green, ivory and soft stone, soft studio light with long shadows, architectural model-making craft. No buildings, no text, no labels. Aspect ratio 16:9.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2752,
+    "height": 1536,
+    "suggestedAlt": "Overhead view of a layered paper contour model in sage green, ivory and stone tones, its stacked edges casting soft shadows.",
+    "notes": "Pass, first try. Aspect selector 16:9. Palette matches the brand closely. Shadows are soft and short rather than long. Gemini sparkle mark bottom-right."
+  }
+]

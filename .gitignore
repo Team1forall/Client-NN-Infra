@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw media sources (large); web-ready copies live in src/assets/media and public/media.
+# credits.json / manifest.json stay tracked.
+/media-src/**/*.png
+/media-src/**/*.jpg
+/media-src/**/*.mp4
+
+# local screenshots
+/shots/
