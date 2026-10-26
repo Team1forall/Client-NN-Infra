@@ -78,5 +78,95 @@
     "height": 1536,
     "suggestedAlt": "Overhead view of a layered paper contour model in sage green, ivory and stone tones, its stacked edges casting soft shadows.",
     "notes": "Pass, first try. Aspect selector 16:9. Palette matches the brand closely. Shadows are soft and short rather than long. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "L1",
+    "file": "l1-founding-1986.png",
+    "prompt": "Wide view of open, newly surveyed land on the edge of Bengaluru, India, in the late 1980s: red laterite earth, freshly set granite boundary stones and lime-powder lines marking out the first residential plots, a few rain trees, low early-morning golden light with soft mist. Aspect ratio 4:3. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2400,
+    "height": 1792,
+    "suggestedAlt": "Misty open red-earth land at sunrise, with rows of granite boundary stones and white lime lines marking out plots, rain trees in the background.",
+    "notes": "Pass, first try. Aspect selector 4:3. Gemini sparkle mark bottom-right. Illustrative image."
+  },
+  {
+    "slot": "L2",
+    "file": "l2-krishnappa-aerial.png",
+    "prompt": "Drone view at a 45° angle of a small residential layout of about fifty plots in a South Bengaluru neighbourhood: independent two-storey houses with flat terraces in white, cream and terracotta, compound walls, a few tree-lined internal roads with coconut and neem trees, one neat entry road. Soft morning light. Aspect ratio 4:3. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2400,
+    "height": 1792,
+    "suggestedAlt": "Angled aerial view of a compact neighbourhood of white, cream and terracotta two-storey houses with flat terraces, coconut palms and narrow internal roads.",
+    "notes": "Pass, first try. Aspect selector 4:3. Illustrative image."
+  },
+  {
+    "slot": "L3",
+    "file": "l3-sai-aerial.png",
+    "prompt": "High drone view looking steeply down on a planned residential layout of about two hundred plots in Karnataka, India, with a modest school campus inside it: a clean two-storey school building with plain painted walls and a flat roof, a playground and small sports field near the centre, surrounded by streets of independent houses and young trees. The school has no name board and no lettering on any wall. Soft afternoon light. Aspect ratio 4:3. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2400,
+    "height": 1792,
+    "suggestedAlt": "Aerial view of a planned layout of independent houses around an L-shaped two-storey school and a large earth playground with goalposts.",
+    "notes": "Regenerated. v1 (brief's prompt) had a name board with pseudo-script on the school; an in-chat edit made it more legible. v3 is a fresh chat with the revised prompt shown (steeper angle, explicit no name board): clean. Some houses are under construction and the land is dry. Rejected v1/v2 kept in the session scratchpad. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "L4",
+    "file": "l4-srirama-aerial.png",
+    "prompt": "High drone view of a large planned residential layout of over four hundred plots on the outskirts of Bengaluru: a regular grid of tree-lined streets, rows of independent houses, a central park and a wide main avenue. Soft hazy morning light. Aspect ratio 4:3. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 2400,
+    "height": 1792,
+    "suggestedAlt": "High aerial view of a large grid of white and cream independent houses with a wide central avenue and a green park, fading into hazy countryside.",
+    "notes": "Pass, first try. Very regular, uniform housing (reads as a modern planned layout). Illustrative image."
+  },
+  {
+    "slot": "L5",
+    "file": "l5-commercial.png",
+    "prompt": "A contemporary commercial office campus in Bengaluru: several mid-rise buildings with stone and glass facades, a landscaped plaza with trees and a wide driveway, at blue hour with warm interior lights. Aspect ratio 4:3. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark. | Follow-up edit: remove the small illuminated vertical signs and logos on the upper corners of the stone-clad buildings on the right; replace with plain stone cladding; no signs, logos, letters or characters anywhere.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool; follow-up edit in same chat",
+    "width": 2400,
+    "height": 1792,
+    "suggestedAlt": "Stone-and-glass mid-rise office buildings lit warmly at blue hour, around a landscaped plaza with trees and a curving wet driveway with a car's light trails.",
+    "notes": "Regenerated once via edit. v1 had a small illuminated vertical sign on the right building's corner. In v2 it is reduced to a faint lit slot with no legible marks (top-right corner of the right building); the lobby is clean. Rejected v1 in scratchpad. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "D1",
+    "file": "d1-krishnappa-street.png",
+    "prompt": "Street-level view along a quiet tree-lined residential road in a Bengaluru layout: independent houses with compound walls and gates, bougainvillea over the walls, a parked scooter, morning light. Aspect ratio 3:4. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark. | Follow-up edit: remove both parked cars, make the scooter plain with no badge or number plate, remove the plaque on the gate pillar; no letters, numbers or characters anywhere.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool; follow-up edit in same chat",
+    "width": 1792,
+    "height": 2400,
+    "suggestedAlt": "A quiet residential lane with weathered compound walls, a black iron gate, pink bougainvillea, an old scooter parked by the wall and a canopy of trees.",
+    "notes": "Regenerated once via edit. v1 had a pseudo-text number plate on a car behind the gate and a scooter badge. v2 removed the cars, badge and plaque; it is clean. A dog lies in the road in the distance. Rejected v1 in scratchpad. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "D2",
+    "file": "d2-sai-school.png",
+    "prompt": "A simple, well-kept two-storey school building inside a residential layout in Karnataka: open courtyard, playground, trees, residential houses in the background, soft light, empty of people. Aspect ratio 3:4. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark. | Follow-up edit: remove the small raised house-number characters on the parapet of the cream house at the upper right.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool; follow-up edit in same chat",
+    "width": 1792,
+    "height": 2400,
+    "suggestedAlt": "Elevated view of a modest two-storey school with colonnaded verandas beside an empty earth playground with swings, a slide and basketball hoops, houses and palms behind.",
+    "notes": "Regenerated once via edit. v1 had small house-number characters on a background parapet. In v2 only a faint, unreadable smudge remains. No board on the school. Building looks lived-in rather than new. Rejected v1 in scratchpad. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "D3",
+    "file": "d3-srirama-avenue.png",
+    "prompt": "A wide residential avenue in a large plotted layout in Bengaluru: rows of independent houses, mature rain trees forming a canopy, clean footpaths, warm evening light. Aspect ratio 3:4. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark. | Follow-up edit: remove every car and vehicle; no number plates, letters, numbers or characters anywhere.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool; follow-up edit in same chat",
+    "width": 1792,
+    "height": 2400,
+    "suggestedAlt": "A wide, empty residential avenue under an arching canopy of rain trees, with modern independent houses behind gated compound walls and a tiled footpath in warm evening light.",
+    "notes": "Regenerated once via edit. v1 had several cars with pseudo-text number plates. v2 removed all vehicles. Only tiny, illegible pillar fixtures remain. Rejected v1 in scratchpad. Gemini sparkle mark bottom-right."
+  },
+  {
+    "slot": "D4",
+    "file": "d4-commercial-facade.png",
+    "prompt": "Close view of a contemporary commercial building facade in Bengaluru: stone cladding, glass curtain wall, vertical fins, landscaping at the base, dusk with warm lights. Aspect ratio 3:4. Photorealistic, high-end architectural and documentary photography, natural colour, soft natural light, crisp fine detail, shot on a medium-format camera. No people's faces, no text, no signage, no logos, no watermark.",
+    "model": "Nano Banana Pro (gemini-3-pro-image) via Gemini app, Pro mode (3.1 Pro) + Create image tool",
+    "width": 1792,
+    "height": 2400,
+    "suggestedAlt": "Close view of a stone-clad office facade with glass curtain walls and slender vertical fins glowing warmly at dusk, with tropical planting and bollard lights at the base.",
+    "notes": "Pass, first try. No signage. Gemini sparkle mark bottom-right."
   }
 ]

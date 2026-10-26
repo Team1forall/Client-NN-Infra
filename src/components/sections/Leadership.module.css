@@ -89,13 +89,14 @@
   vector-effect: non-scaling-stroke;
 }
 
-/* non-scaling strokes can't use pathLength dashes, so the line draws with a clip */
-:global(html.js) .line[data-reveal] {
+/* non-scaling strokes can't use pathLength dashes, so the line draws with a clip.
+   The trigger sits on the wrapper: a fully clipped target never reports as visible. */
+:global(html.js) .link[data-reveal] .line {
   clip-path: inset(0 100% 0 0);
   transition: clip-path 1.8s var(--ease-out) 0.3s;
 }
 
-:global(html.js) .line[data-inview="true"] {
+:global(html.js) .link[data-inview="true"] .line {
   clip-path: inset(0 0 0 0);
 }
 
@@ -145,7 +146,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   :global(html.js) .photo[data-reveal] .img,
-  :global(html.js) .line[data-reveal] {
+  :global(html.js) .link[data-reveal] .line {
     filter: none;
     transform: none;
     clip-path: none;

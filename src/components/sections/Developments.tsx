@@ -35,6 +35,8 @@ const plots: Plot[] = [
     meta: featured.status,
     detail: keepTogether(featured.summary),
     media: media.projectFront,
+    // Collapsed, the strip shows a tower rather than the signage behind the vertical label
+    focus: "28% 50%",
     cta: { href: "#contact", label: COPY.enquire },
   },
   ...developments.completed.map((item, i) => ({

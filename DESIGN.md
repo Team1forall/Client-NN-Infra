@@ -20,6 +20,12 @@ colors:
   group-leaf: "#5fb21a"
   group-deep: "#02560d"
 typography:
+  hero:
+    fontFamily: "Zodiak, Times New Roman, Georgia, serif"
+    fontSize: "clamp(3.25rem, 2rem + 4.6vw, 6rem)"
+    fontWeight: 400
+    lineHeight: 0.98
+    letterSpacing: "-0.025em"
   display:
     fontFamily: "Zodiak, Times New Roman, Georgia, serif"
     fontSize: "clamp(3.5rem, 1.9rem + 6.4vw, 6rem)"
@@ -213,6 +219,7 @@ A committed green-led palette of paper and ink: fields of colour, not accents, w
 **Character:** A light, slightly flared drafting serif set tight and large against a neutral grotesque that does the labour. The serif speaks; the grotesque annotates.
 
 ### Hierarchy
+- **Hero** (400, clamp 3.25–6rem, 0.98): the single "Project N" title over the hero render.
 - **Display** (340, display clamp topping out at 6rem, 0.98): page-level headings such as "Project N" and the 404 title. Balanced wrapping, broken into deliberate lines.
 - **Headline** (340, clamp to 5rem, 1.0): section headings and the mobile menu links.
 - **Statement** (300, clamp 2.25–4.5rem, 1.04): set-piece sentences on imagery or alone: the north-star line and the founding belief.

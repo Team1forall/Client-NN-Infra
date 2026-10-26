@@ -10,6 +10,28 @@ import styles from "./Nav.module.css";
 export function Nav() {
   const [active, setActive] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+
+  // Hide on scroll down, reveal on scroll up; always shown near the top.
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const delta = y - lastY;
+        if (y < 120) setHidden(false);
+        else if (delta > 6) setHidden(true);
+        else if (delta < -6) setHidden(false);
+        lastY = y;
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
@@ -43,7 +65,7 @@ export function Nav() {
   };
 
   return (
-    <header className={styles.bar}>
+    <header className={styles.bar} data-hidden={hidden && !open ? "true" : undefined}>
       <div className={styles.inner}>
         <Link href="/#top" className={styles.brand} aria-label={`${company.name}, home`}>
           <BrandLogo className={styles.logo} priority />

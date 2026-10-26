@@ -21,6 +21,9 @@ mkdirSync(brandDir, { recursive: true });
 const ESRGAN = process.env.REALESRGAN_BIN && existsSync(process.env.REALESRGAN_BIN) ? process.env.REALESRGAN_BIN : null;
 const tmp = mkdtempSync(path.join(os.tmpdir(), "nn-media-"));
 const TARGET = 3840; // 4K UHD width
+// Optional: ONLY=legacy-,dev- limits the run to outputs whose names start with those prefixes.
+const ONLY = process.env.ONLY ? process.env.ONLY.split(",") : null;
+const wanted = (name) => !ONLY || ONLY.some((p) => name.startsWith(p));
 
 /** Super-resolve `input` (a sharp-readable buffer or path) `passes` times at 4×. Returns a PNG path. */
 function superResolve(inputPng, name, passes) {
@@ -38,6 +41,7 @@ function superResolve(inputPng, name, passes) {
 
 /** Writes a 4K-wide (or as large as sensible) JPEG from a source region. */
 async function build(name, { src, crop, passes = 1, width = TARGET, maxInput }) {
+  if (!wanted(name)) return;
   const base = path.join(tmp, `${name}-base.png`);
   let img = sharp(src);
   if (crop) img = img.extract(crop);
@@ -90,7 +94,7 @@ const portraits = {
   "leader-founder.jpg": { src: "media-src/client/bk-nagabhushana-reddy.jpg", trimFrame: 16 },
 };
 for (const [name, { src, trimFrame }] of Object.entries(portraits)) {
-  if (!existsSync(src)) continue;
+  if (!existsSync(src) || !wanted(name)) continue;
   const meta = await sharp(src).metadata();
   let img = sharp(src);
   if (trimFrame) img = img.extract({ left: trimFrame, top: trimFrame, width: meta.width - trimFrame * 2, height: meta.height - trimFrame * 2 });
@@ -100,7 +104,7 @@ for (const [name, { src, trimFrame }] of Object.entries(portraits)) {
 
 // ---- 4. Company logo (client-supplied): white background → transparency, then favicons
 const logoSrc = "media-src/client/nethravathi-group-logo.png";
-if (existsSync(logoSrc)) {
+if (existsSync(logoSrc) && wanted("logo")) {
   const { data, info } = await sharp(logoSrc).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const out = Buffer.alloc(data.length);
   for (let i = 0; i < info.width * info.height; i++) {

@@ -116,12 +116,14 @@
 
 /* Phones and tablets: one wipe per image and a small marker rise, once */
 @media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
-  :global(html.js) .visual {
+  /* the clip sits on the frame inside: a fully clipped box never reports
+     itself to IntersectionObserver */
+  :global(html.js) .visual > figure {
     clip-path: inset(100% 0 0 0);
     transition: clip-path 1.2s var(--ease-out) 0.1s;
   }
 
-  :global(html.js) .visual[data-inview="true"] {
+  :global(html.js) .visual[data-inview="true"] > figure {
     clip-path: inset(0);
   }
 
@@ -281,10 +283,14 @@
     padding-block: var(--pad-y);
   }
 
-  /* Contours behind the text column, drifting gently (LegacyScene) */
+  /* Contours off the top-right corner, drifting gently (LegacyScene) */
   :global(html.js) .contours {
-    top: calc(50% - 450px);
-    right: calc(var(--gutter) * -1 - 300px);
+    top: -330px;
+    right: calc(var(--gutter) * -1 - 330px);
+  }
+
+  :global(html.js) .contours path {
+    stroke: rgb(53 72 58 / 0.15);
   }
 
   /* Right column: heading at the image's top edge, topic at its foot */
@@ -406,7 +412,7 @@
     z-index: 2;
   }
 
-  :global(html.js) .topic[data-state="active"] .visual[data-inview="true"] {
+  :global(html.js) .main[data-inview="true"] .topic[data-state="active"] .visual {
     clip-path: inset(0);
     transition: clip-path 0.9s var(--ease-out);
   }
@@ -416,7 +422,7 @@
     transition: transform 0s linear 0.95s;
   }
 
-  :global(html.js) .topic[data-state="active"] .visual[data-inview="true"] :global(img) {
+  :global(html.js) .main[data-inview="true"] .topic[data-state="active"] .visual :global(img) {
     transform: none;
     transition: transform 1.6s var(--ease-out);
   }

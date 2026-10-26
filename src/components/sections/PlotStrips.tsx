@@ -14,6 +14,8 @@ export type Plot = {
   meta: string;
   detail: string;
   media: Media;
+  /** Focal point for the tall strip crop (CSS object-position); the accordion keeps the centre. */
+  focus?: string;
   /** Optional link inside the open panel (Project N's enquiry). */
   cta?: { href: string; label: string };
 };
@@ -124,7 +126,13 @@ export function PlotStrips({ plots }: { plots: readonly Plot[] }) {
               {/* Closed panels are inert: hidden from AT and out of the tab order (the enquiry link). */}
               <div id={panelId} className={styles.stripPanel} inert={!isActive}>
                 <div className={styles.stripMedia}>
-                  <MediaFrame media={plot.media} sizes="(min-width: 1600px) 880px, 56vw" marks={false} tag={null} />
+                  <MediaFrame
+                    media={plot.media}
+                    sizes="(min-width: 1600px) 880px, 56vw"
+                    marks={false}
+                    tag={null}
+                    objectPosition={plot.focus}
+                  />
                 </div>
                 <span className={styles.scrimDark} />
                 <div className={styles.stripDetails}>

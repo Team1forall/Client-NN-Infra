@@ -47,9 +47,9 @@ export function Leadership() {
           {card(founder, "left")}
 
           {/* One line, two generations */}
-          <div className={styles.link} aria-hidden="true">
+          <div className={styles.link} aria-hidden="true" data-reveal="draw">
             <span className={`annot ${styles.end}`}>{ENDS[0]}</span>
-            <svg className={styles.line} viewBox="0 0 100 10" preserveAspectRatio="none" data-reveal="draw">
+            <svg className={styles.line} viewBox="0 0 100 10" preserveAspectRatio="none">
               <path d="M0 5 H100" />
             </svg>
             <span className={`annot ${styles.end}`}>{ENDS[1]}</span>
