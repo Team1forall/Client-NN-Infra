@@ -44,6 +44,10 @@ Environment variables (Vercel → Project → Settings → Environment Variables
 
 After adding or changing a variable, redeploy (`npx vercel deploy --prod`) so the build picks it up.
 
+Current setup: the folder is linked to the Vercel project `nn-infra` (`.vercel/`, git-ignored). `vercel.json` pins the framework preset to Next.js. A project created from the CLI starts on the "Other" preset, which serves `public/` and returns 404, and pinning it here avoids that. Preview deployments are protected by Vercel Authentication; the production domain (`nn-infra.vercel.app`, or your custom domain) is public.
+
+> Vercel's Hobby plan is for personal, non-commercial use. For the live NN Infra site, move the project to a Pro team or to NN Infra's own Vercel account.
+
 ## Configuration (`.env.local`)
 
 | Variable | Purpose |
