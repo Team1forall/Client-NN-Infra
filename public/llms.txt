@@ -1,0 +1,27 @@
+# NN Infra — Project N
+
+> Project N by NN Infra: 20 premium 3 & 4 BHK apartments (G+4) on 20,000 sq ft in Bengaluru, launching January 2027. NN Infra is a Nethravathi Group venture; the group has been developing land in and around Bengaluru since 1986.
+
+## Project N
+- Location: Bengaluru, Karnataka, India
+- Homes: 20 premium homes, 3 & 4 BHK
+- Floors: G+4
+- Land area: 20,000 sq ft
+- Launch: January 2027
+- Amenities: private lifts, landscaped gardens, club lounge, children's play area, 24x7 security, power backup, CCTV surveillance
+- Limited fractional ownership positions open in 2027
+
+## Company
+- NN Infra, part of the Nethravathi Group (founded 1986 by Mr. B K Nagabhushana Reddy)
+- Chairman & Director: Mr. Jayanth N
+- Tagline: Legacy. Design. Delivery.
+
+## Contact
+- Phone: +91 81976 66839
+- WhatsApp: +91 94480 63384
+- Email: nethravathigroupinfo@gmail.com
+- Office: 270/4, 1st Cross Road, Krishna Reddy Layout, Bengaluru 560068, Karnataka, India
+
+## Pages
+- [Home](https://nn-infra.vercel.app/): Project N, legacy, leadership, developments, enquiry
+- [Privacy notice](https://nn-infra.vercel.app/privacy)

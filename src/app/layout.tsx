@@ -43,6 +43,7 @@ export const metadata: Metadata = {
     description: seo.description,
   },
   twitter: { card: "summary_large_image", title: seo.title, description: seo.description },
+  other: { "geo.region": "IN-KA", "geo.placename": "Bengaluru" },
   formatDetection: { telephone: false },
 };
 

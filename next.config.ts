@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 828, 1080, 1440, 1920, 2560, 3840],
   },
   poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
+        ],
+      },
+    ];
+  },
   // A stray package-lock.json in the user home folder confuses root detection.
   turbopack: { root: process.cwd() },
 };

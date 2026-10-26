@@ -76,8 +76,8 @@ export const contact = {
 };
 
 export const seo = {
-  title: `${project.name} by ${company.name} | Premium 3 & 4 BHK Apartments in ${project.city}`,
-  description: `${project.name} by ${company.name}: premium 3 & 4 BHK residential apartments in ${project.city}, launching ${project.launch}. 20 homes on 20,000 sq ft, from a Nethravathi Group venture building since ${company.founded}.`,
+  title: `${project.name} by ${company.name} | 3 & 4 BHK Apartments, ${project.city}`,
+  description: `${project.name} by ${company.name}: 20 premium 3 & 4 BHK apartments on 20,000 sq ft in ${project.city}, launching ${project.launch}. A ${company.group} venture since ${company.founded}.`,
   keywords: [
     "NN Infra",
     "Project N",
