@@ -28,6 +28,12 @@
   stroke-width: 1.4; /* ≈ 1px at this size */
 }
 
+/* Chrome does not restyle descendants matched only by the global [pathLength]
+   selector when data-inview flips; a type selector does invalidate. */
+:global(html.js) .contours[data-inview="true"] path {
+  stroke-dashoffset: 0;
+}
+
 @media (min-width: 900px) {
   .contours {
     top: calc(var(--s-3xl) * -0.5);

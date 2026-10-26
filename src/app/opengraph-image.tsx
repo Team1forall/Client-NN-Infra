@@ -19,6 +19,9 @@ const INK_SOFT = "#4e5a50";
 const LINE = "rgba(53,72,58,0.28)";
 const LINE_STRONG = "rgba(53,72,58,0.6)";
 
+/* Drawing placement: a 500×470 viewBox scaled into the right of the card. */
+const DRAW = { x: 696, y: 92, w: 440, h: 414, k: 440 / 500 };
+
 const PLOT: [number, number][] = [
   [92, 118],
   [318, 76],
@@ -67,10 +70,10 @@ export default function Image() {
 
         {/* Survey drawing */}
         <svg
-          width="500"
-          height="470"
+          width={DRAW.w}
+          height={DRAW.h}
           viewBox="0 0 500 470"
-          style={{ position: "absolute", right: 64, top: 80 }}
+          style={{ position: "absolute", left: DRAW.x, top: DRAW.y }}
         >
           <rect x="0" y="0" width="500" height="470" fill={SAGE} />
           {CONTOURS.map((d) => (
@@ -100,8 +103,8 @@ export default function Image() {
         <div
           style={{
             position: "absolute",
-            right: 64 + 500 - 440 - 12,
-            top: 80 + 24,
+            left: DRAW.x + 440 * DRAW.k - 12,
+            top: DRAW.y + 30 * DRAW.k - 8,
             width: 24,
             display: "flex",
             justifyContent: "center",
@@ -120,7 +123,7 @@ export default function Image() {
             left: 88,
             top: 0,
             bottom: 0,
-            width: 560,
+            width: 568,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -130,9 +133,9 @@ export default function Image() {
             style={{
               display: "flex",
               fontFamily: "Zodiak",
-              fontSize: 156,
+              fontSize: 128,
               lineHeight: 1,
-              letterSpacing: -5,
+              letterSpacing: -3.5,
               color: FOREST,
             }}
           >
@@ -144,9 +147,7 @@ export default function Image() {
               marginTop: 36,
               paddingTop: 22,
               borderTop: `1px solid ${LINE_STRONG}`,
-              fontSize: 21,
-              letterSpacing: 2.4,
-              textTransform: "uppercase",
+              fontSize: 25,
               color: INK_SOFT,
             }}
           >

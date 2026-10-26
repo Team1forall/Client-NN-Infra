@@ -62,7 +62,7 @@ export function LegacyScene({ sectionId }: { sectionId: string }) {
             reveal?.disconnect();
           }
         },
-        { threshold: 0.6 },
+        { threshold: 0.75 },
       );
       reveal.observe(plate);
     }

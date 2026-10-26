@@ -51,8 +51,14 @@ export function GroupBars({ className, title = "Nethravathi Group" }: SvgProps) 
  */
 export function Wordmark({ className }: { className?: string }) {
   return (
-    <span className={className} style={{ display: "inline-flex", alignItems: "baseline", gap: "0.42em", lineHeight: 1 }}>
+    <span
+      className={className}
+      role="img"
+      aria-label="NN Infra"
+      style={{ display: "inline-flex", alignItems: "baseline", gap: "0.42em", lineHeight: 1 }}
+    >
       <span
+        aria-hidden="true"
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 460,
@@ -63,6 +69,7 @@ export function Wordmark({ className }: { className?: string }) {
         NN
       </span>
       <span
+        aria-hidden="true"
         style={{
           fontFamily: "var(--font-text)",
           fontWeight: 560,

@@ -114,6 +114,12 @@
 
 .intro {
   min-width: 0;
+  container-type: inline-size;
+}
+
+/* Keep each heading entry on one line: size to the column, never above --t-h2. */
+.intro .title {
+  font-size: min(var(--t-h2), 11.5cqi);
 }
 
 .intro .lead {
@@ -134,7 +140,7 @@
   border-top: 1px solid var(--line);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .body {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-template-rows: auto 1fr;

@@ -20,7 +20,7 @@ const COPY = {
   phonePending: "Phone number — to be added",
   emailPending: "Email address — to be added",
   privacyLink: "Read the privacy notice",
-  tag: "Representative images",
+  tag: "Illustrative images",
 } as const;
 
 const BAND_SIZES = "(min-width: 1560px) 1480px, 94vw";
@@ -59,7 +59,7 @@ export function Enquire() {
 
         <div className={styles.body}>
           <div className={styles.intro}>
-            <Lines lines={enquiry.heading} className="h2" id="enquire-title" />
+            <Lines lines={enquiry.heading} className={`h2 ${styles.title}`} id="enquire-title" />
             <p className={`lead ${styles.lead}`}>{enquiry.body}</p>
           </div>
 

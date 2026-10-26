@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#35483a"/>
+  <!-- "N" whose right stroke rises into a north arrow -->
+  <polyline points="8.5,25.5 8.5,12 20.5,25.5 20.5,12" fill="none" stroke="#f7f5ee" stroke-width="2.5" stroke-linejoin="miter" stroke-miterlimit="4"/>
+  <polygon points="20.5,3.5 25,11.5 16,11.5" fill="#f7f5ee"/>
+</svg>

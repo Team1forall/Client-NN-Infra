@@ -38,7 +38,7 @@ export function Hero() {
                   src={img.src}
                   alt={img.alt}
                   fill
-                  preload
+                  loading="eager"
                   fetchPriority="high"
                   sizes="100vw"
                   quality={75}

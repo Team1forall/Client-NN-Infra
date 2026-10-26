@@ -13,6 +13,8 @@
   --forest-deep: #26352b;
   --charcoal: #292d29;
   --ink-soft: #4e5a50;
+  /* Laterite: the red earth in the imagery. Errors only (6.2:1 on ivory). */
+  --laterite: #9a3d23;
 
   /* Linework */
   --line: rgb(53 72 58 / 0.28);
@@ -443,14 +445,16 @@ html.js [data-reveal="fade"][data-inview="true"] {
   transform: none;
 }
 
-html.js [data-reveal="draw"] [pathLength] {
+/* Type selectors matter: Chrome does not re-match a bare [pathLength] descendant
+   when the ancestor attribute changes. */
+html.js [data-reveal="draw"] :is(path, line, polyline, polygon, circle, rect)[pathLength] {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   transition: stroke-dashoffset 1.8s var(--ease-out);
   transition-delay: calc(var(--i, 0) * 120ms + var(--delay, 0ms));
 }
 
-html.js [data-reveal="draw"][data-inview="true"] [pathLength] {
+html.js [data-reveal="draw"][data-inview="true"] :is(path, line, polyline, polygon, circle, rect)[pathLength] {
   stroke-dashoffset: 0;
 }
 
@@ -474,7 +478,7 @@ html.js [data-reveal="mask"][data-inview="true"] {
     transition: none !important;
   }
 
-  html.js [data-reveal="draw"] [pathLength] {
+  html.js [data-reveal="draw"] :is(path, line, polyline, polygon, circle, rect)[pathLength] {
     stroke-dashoffset: 0 !important;
     transition: none !important;
   }

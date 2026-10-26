@@ -57,6 +57,7 @@
 /* The one line — vertical between the stacked people on small screens */
 .link {
   position: relative;
+  z-index: 1; /* end nodes sit over the frame edges */
   height: clamp(112px, 22vw, 160px);
   margin-block: var(--s-xl);
 }
@@ -65,6 +66,13 @@
   fill: none;
   stroke: var(--forest);
   stroke-width: 1;
+}
+
+/* Chrome does not restyle descendants matched only by the global [pathLength]
+   selector when data-inview flips; a type selector does invalidate. */
+:global(html.js) .link[data-inview="true"] path,
+:global(html.js) .monoContours[data-inview="true"] path {
+  stroke-dashoffset: 0;
 }
 
 .lineH {
@@ -187,6 +195,19 @@
   }
 }
 
+/* Narrow gap (tablet): stagger the labels either side of the line */
+@media (min-width: 720px) and (max-width: 1099px) {
+  .linkStart {
+    left: 10px;
+  }
+
+  .linkEnd {
+    right: 10px;
+    top: 14px;
+    bottom: auto;
+  }
+}
+
 @media (min-width: 1100px) {
   .founder {
     grid-column: 1 / span 4;
@@ -198,6 +219,21 @@
 
   .link {
     grid-column: 5 / span 4;
+  }
+}
+
+/* Wide: smaller sheets, so the line between them carries the composition */
+@media (min-width: 1280px) {
+  .founder {
+    grid-column: 1 / span 3;
+  }
+
+  .chairman {
+    grid-column: 10 / span 3;
+  }
+
+  .link {
+    grid-column: 4 / span 6;
   }
 }
 

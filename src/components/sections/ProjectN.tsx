@@ -38,7 +38,7 @@ export async function ProjectN() {
             <AmbientVideo {...video.aerial} />
           </div>
           <div className={styles.detailCell}>
-            <MediaFrame media={media.detailWall} sizes="(min-width: 900px) 30vw, 70vw" parallax={10} reveal />
+            <MediaFrame media={media.courtyard} sizes="(min-width: 900px) 30vw, 70vw" parallax={10} reveal />
           </div>
           <svg className={styles.survey} viewBox="0 0 1000 200" preserveAspectRatio="none" data-reveal="draw" aria-hidden="true">
             <path d="M0 40 H640 L700 160 H1000" pathLength={1} />
