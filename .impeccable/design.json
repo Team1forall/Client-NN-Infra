@@ -1,58 +1,321 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-27T00:00:00Z",
+  "generatedAt": "2026-10-26T18:51:46.205Z",
   "title": "Design System: NN Infra",
   "extensions": {
     "colorMeta": {
-      "forest": { "role": "primary", "displayName": "Forest Ink", "canonical": "#35483a", "tonalRamp": ["#141c16", "#1f2a22", "#26352b", "#35483a", "#4e6553", "#6f8673", "#9fb2a2", "#d6dfd7"] },
-      "forest-deep": { "role": "primary", "displayName": "Forest Night", "canonical": "#26352b", "tonalRamp": ["#0f1611", "#18221b", "#1f2b23", "#26352b", "#3a4d40", "#5b6f61", "#8fa293", "#cfd9d1"] },
-      "botanical": { "role": "secondary", "displayName": "Botanical", "canonical": "#b9c9af", "tonalRamp": ["#26301f", "#3d4b34", "#58694d", "#768a69", "#98ab8b", "#b9c9af", "#d5e0ce", "#eef3ea"] },
-      "laterite": { "role": "tertiary", "displayName": "Laterite (errors only)", "canonical": "#9a3d23", "tonalRamp": ["#2e120a", "#4d1e11", "#6e2b18", "#9a3d23", "#bb5a3e", "#d4836b", "#e8b6a6", "#f7e4dd"] },
-      "ivory": { "role": "neutral", "displayName": "Ivory Sheet", "canonical": "#f7f5ee", "tonalRamp": ["#2a2924", "#47453d", "#6a675c", "#908c7f", "#b6b2a4", "#d8d5c9", "#ebe9e0", "#f7f5ee"] },
-      "sage": { "role": "neutral", "displayName": "Sage Sheet", "canonical": "#e9eedf", "tonalRamp": ["#262a1f", "#3f4634", "#5d664e", "#7e886d", "#a1ab90", "#c5ceb6", "#e9eedf", "#f5f7f0"] },
-      "stone": { "role": "neutral", "displayName": "Stone Archive", "canonical": "#e6e0d5", "tonalRamp": ["#29251e", "#443e33", "#645c4e", "#877e6e", "#aba292", "#cbc4b6", "#e6e0d5", "#f4f1eb"] },
-      "charcoal": { "role": "neutral", "displayName": "Charcoal", "canonical": "#292d29", "tonalRamp": ["#151715", "#1f221f", "#292d29", "#3d433d", "#5a615a", "#7f867f", "#aeb4ae", "#e0e3e0"] },
-      "ink-soft": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#4e5a50", "tonalRamp": ["#1a1f1b", "#2b332d", "#3c463e", "#4e5a50", "#68766a", "#8a978c", "#b5bfb6", "#e2e7e3"] },
-      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "rgb(53 72 58 / 0.28)" },
-      "line-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "rgb(53 72 58 / 0.6)" },
-      "line-inverse": { "role": "neutral", "displayName": "Inverse Hairline", "canonical": "rgb(233 238 223 / 0.26)" },
-      "line-inverse-strong": { "role": "neutral", "displayName": "Strong Inverse Hairline", "canonical": "rgb(233 238 223 / 0.55)" },
-      "on-forest-soft": { "role": "neutral", "displayName": "Sage Soft (on forest)", "canonical": "rgb(233 238 223 / 0.76)" },
-      "group-lime": { "role": "brand-mark", "displayName": "Group Lime (mark only)", "canonical": "#c1e330" },
-      "group-leaf": { "role": "brand-mark", "displayName": "Group Leaf (mark only)", "canonical": "#5fb21a" },
-      "group-deep": { "role": "brand-mark", "displayName": "Group Deep (mark only)", "canonical": "#02560d" }
+      "forest": {
+        "role": "primary",
+        "displayName": "Forest Ink",
+        "canonical": "#35483a",
+        "tonalRamp": [
+          "#141c16",
+          "#1f2a22",
+          "#26352b",
+          "#35483a",
+          "#4e6553",
+          "#6f8673",
+          "#9fb2a2",
+          "#d6dfd7"
+        ]
+      },
+      "forest-deep": {
+        "role": "primary",
+        "displayName": "Forest Night",
+        "canonical": "#26352b",
+        "tonalRamp": [
+          "#0f1611",
+          "#18221b",
+          "#1f2b23",
+          "#26352b",
+          "#3a4d40",
+          "#5b6f61",
+          "#8fa293",
+          "#cfd9d1"
+        ]
+      },
+      "botanical": {
+        "role": "secondary",
+        "displayName": "Botanical",
+        "canonical": "#b9c9af",
+        "tonalRamp": [
+          "#26301f",
+          "#3d4b34",
+          "#58694d",
+          "#768a69",
+          "#98ab8b",
+          "#b9c9af",
+          "#d5e0ce",
+          "#eef3ea"
+        ]
+      },
+      "laterite": {
+        "role": "tertiary",
+        "displayName": "Laterite (errors only)",
+        "canonical": "#9a3d23",
+        "tonalRamp": [
+          "#2e120a",
+          "#4d1e11",
+          "#6e2b18",
+          "#9a3d23",
+          "#bb5a3e",
+          "#d4836b",
+          "#e8b6a6",
+          "#f7e4dd"
+        ]
+      },
+      "ivory": {
+        "role": "neutral",
+        "displayName": "Ivory Sheet",
+        "canonical": "#f7f5ee",
+        "tonalRamp": [
+          "#2a2924",
+          "#47453d",
+          "#6a675c",
+          "#908c7f",
+          "#b6b2a4",
+          "#d8d5c9",
+          "#ebe9e0",
+          "#f7f5ee"
+        ]
+      },
+      "sage": {
+        "role": "neutral",
+        "displayName": "Sage Sheet",
+        "canonical": "#e9eedf",
+        "tonalRamp": [
+          "#262a1f",
+          "#3f4634",
+          "#5d664e",
+          "#7e886d",
+          "#a1ab90",
+          "#c5ceb6",
+          "#e9eedf",
+          "#f5f7f0"
+        ]
+      },
+      "stone": {
+        "role": "neutral",
+        "displayName": "Stone Archive",
+        "canonical": "#e6e0d5",
+        "tonalRamp": [
+          "#29251e",
+          "#443e33",
+          "#645c4e",
+          "#877e6e",
+          "#aba292",
+          "#cbc4b6",
+          "#e6e0d5",
+          "#f4f1eb"
+        ]
+      },
+      "charcoal": {
+        "role": "neutral",
+        "displayName": "Charcoal",
+        "canonical": "#292d29",
+        "tonalRamp": [
+          "#151715",
+          "#1f221f",
+          "#292d29",
+          "#3d433d",
+          "#5a615a",
+          "#7f867f",
+          "#aeb4ae",
+          "#e0e3e0"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#4e5a50",
+        "tonalRamp": [
+          "#1a1f1b",
+          "#2b332d",
+          "#3c463e",
+          "#4e5a50",
+          "#68766a",
+          "#8a978c",
+          "#b5bfb6",
+          "#e2e7e3"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "rgb(53 72 58 / 0.28)"
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "rgb(53 72 58 / 0.6)"
+      },
+      "line-inverse": {
+        "role": "neutral",
+        "displayName": "Inverse Hairline",
+        "canonical": "rgb(233 238 223 / 0.26)"
+      },
+      "line-inverse-strong": {
+        "role": "neutral",
+        "displayName": "Strong Inverse Hairline",
+        "canonical": "rgb(233 238 223 / 0.55)"
+      },
+      "on-forest-soft": {
+        "role": "neutral",
+        "displayName": "Sage Soft (on forest)",
+        "canonical": "rgb(233 238 223 / 0.76)"
+      },
+      "group-lime": {
+        "role": "brand-mark",
+        "displayName": "Group Lime (mark only)",
+        "canonical": "#c1e330"
+      },
+      "group-leaf": {
+        "role": "brand-mark",
+        "displayName": "Group Leaf (mark only)",
+        "canonical": "#5fb21a"
+      },
+      "group-deep": {
+        "role": "brand-mark",
+        "displayName": "Group Deep (mark only)",
+        "canonical": "#02560d"
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Page-level headings on deliberately broken lines; max 6rem." },
-      "headline": { "displayName": "Headline", "purpose": "Section headings." },
-      "title": { "displayName": "Title", "purpose": "Sub-heads, station and development names." },
-      "lead": { "displayName": "Lead", "purpose": "One supporting paragraph under a heading, max 34ch." },
-      "body": { "displayName": "Body", "purpose": "Prose, max 62ch." },
-      "small": { "displayName": "Small", "purpose": "Notes, helper text, nav links." },
-      "label": { "displayName": "Annotation", "purpose": "Uppercase tracked tabular annotations, title-block labels, image tags." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page-level headings on deliberately broken lines; max 6rem."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "Set-piece sentences: the north-star line and the founding belief."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Sub-heads, station and development names."
+      },
+      "subtitle": {
+        "displayName": "Subtitle",
+        "purpose": "Small serif titles: QR caption, confirmation stamp, plot names at rest."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "One supporting paragraph under a heading, max 34ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, max 62ch."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Buttons, inline actions and form messages."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Notes, helper text, nav links."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Title-block values and disclaimers."
+      },
+      "label": {
+        "displayName": "Annotation",
+        "purpose": "Uppercase tracked tabular annotations, title-block labels, image tags."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Image stand-in tags, title-block labels, the video toggle. Nothing smaller exists."
+      }
     },
     "shadows": [
-      { "name": "nav-rule", "value": "0 1px 0 rgb(53 72 58 / 0.6)", "purpose": "Hairline under the solid nav bar; not elevation." },
-      { "name": "field-focus-rule", "value": "inset 0 -1px 0 #35483a", "purpose": "Thickens an input underline to 2px on focus." },
-      { "name": "field-error-rule", "value": "inset 0 -2px 0 #9a3d23", "purpose": "Laterite underline on an invalid input." }
+      {
+        "name": "nav-rule",
+        "value": "0 1px 0 rgb(53 72 58 / 0.6)",
+        "purpose": "Hairline under the solid nav bar; not elevation."
+      },
+      {
+        "name": "field-focus-rule",
+        "value": "inset 0 -1px 0 #35483a",
+        "purpose": "Thickens an input underline to 2px on focus."
+      },
+      {
+        "name": "field-error-rule",
+        "value": "inset 0 -2px 0 #9a3d23",
+        "purpose": "Laterite underline on an invalid input."
+      }
     ],
     "motion": [
-      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Drafting ease for all reveals, wipes and state changes." },
-      { "name": "ease-in-out", "value": "cubic-bezier(0.65, 0, 0.35, 1)", "purpose": "Symmetric transitions." },
-      { "name": "dur-reveal", "value": "1.15s", "purpose": "Heading line rise; lines stagger 85ms." },
-      { "name": "fade-reveal", "value": "opacity + translateY(18px), 1s", "purpose": "The only motion body copy receives." },
-      { "name": "draw-reveal", "value": "stroke-dashoffset 1 -> 0, 1.8s, 120ms stagger", "purpose": "Linework drafting on entry." },
-      { "name": "mask-reveal", "value": "clip-path inset(12% 8%) -> inset(0), 1.4s", "purpose": "Image frames opening." },
-      { "name": "button-wipe", "value": "clip-path inset(0 100% 0 0) -> inset(0), 0.6s", "purpose": "Botanical field wiping into buttons from the left." },
-      { "name": "hero-pin", "value": "ScrollTrigger pin, end +=95%, scrub 0.7, >=900px only", "purpose": "Plot polygon opens to full bleed; north arrow settles on true north." },
-      { "name": "parallax", "value": "yPercent scrub, strength 6-10%, >=900px only", "purpose": "Images drift inside their frames." },
-      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "No pins, scrub, parallax or video autoplay; final states shown instantly." }
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Drafting ease for all reveals, wipes and state changes."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "Symmetric transitions."
+      },
+      {
+        "name": "dur-reveal",
+        "value": "1.15s",
+        "purpose": "Heading line rise; lines stagger 85ms."
+      },
+      {
+        "name": "fade-reveal",
+        "value": "opacity + translateY(18px), 1s",
+        "purpose": "The only motion body copy receives."
+      },
+      {
+        "name": "draw-reveal",
+        "value": "stroke-dashoffset 1 -> 0, 1.8s, 120ms stagger",
+        "purpose": "Linework drafting on entry."
+      },
+      {
+        "name": "mask-reveal",
+        "value": "clip-path inset(12% 8%) -> inset(0), 1.4s",
+        "purpose": "Image frames opening."
+      },
+      {
+        "name": "button-wipe",
+        "value": "clip-path inset(0 100% 0 0) -> inset(0), 0.6s",
+        "purpose": "Botanical field wiping into buttons from the left."
+      },
+      {
+        "name": "hero-pin",
+        "value": "ScrollTrigger pin, end +=95%, scrub 0.7, >=900px only",
+        "purpose": "Plot polygon opens to full bleed; north arrow settles on true north."
+      },
+      {
+        "name": "parallax",
+        "value": "yPercent scrub, strength 6-10%, >=900px only",
+        "purpose": "Images drift inside their frames."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "No pins, scrub, parallax or video autoplay; final states shown instantly."
+      }
     ],
     "breakpoints": [
-      { "name": "title-block-stack", "value": "560px" },
-      { "name": "wide-band", "value": "700px" },
-      { "name": "motion", "value": "900px" },
-      { "name": "cinema-band", "value": "1024px" }
+      {
+        "name": "title-block-stack",
+        "value": "560px"
+      },
+      {
+        "name": "wide-band",
+        "value": "700px"
+      },
+      {
+        "name": "motion",
+        "value": "900px"
+      },
+      {
+        "name": "cinema-band",
+        "value": "1024px"
+      }
     ]
   },
   "components": [
@@ -141,13 +404,41 @@
       "Every stand-in image is labelled as such, in its corner."
     ],
     "rules": [
-      { "name": "The Laterite Rule", "body": "Laterite is the error colour and nothing else. It never decorates, never highlights, never marks a CTA.", "section": "colors" },
-      { "name": "The Group Mark Rule", "body": "The three Nethravathi greens appear only inside the three-bar group mark. They are a logo, not palette.", "section": "colors" },
-      { "name": "The Paper Turn Rule", "body": "Grounds change at section boundaries in this order: ivory (hero) → sage (Project N) → forest (ownership) → stone + grain (legacy) → ivory (leadership) → sage (developments) → ivory (enquiry) → forest-deep (footer). New sheets choose one of these grounds; no gradients and no tinted cards on top of a sheet.", "section": "colors" },
-      { "name": "The One Italic Rule", "body": "Italic Zodiak (weight 300) marks at most one word per heading; punctuation stays upright.", "section": "typography" },
-      { "name": "The Graphic Numeral Exception", "body": "The hero \"N\" glyph, legacy year numerals and the footer wordmark may exceed 6rem because they are drawn objects, not text blocks. No running heading does.", "section": "typography" },
-      { "name": "The No Eyebrow Rule", "body": "No kicker or eyebrow label sits above a heading, and no section carries \"01/02/03\" numbering. Annotation belongs at a sheet corner or beside a fact, not as a heading's preface.", "section": "typography" },
-      { "name": "The Flat Sheet Rule", "body": "Nothing floats above the paper. If a surface needs separation, change its ground or draw a 1px line.", "section": "elevation" }
+      {
+        "name": "The Laterite Rule",
+        "body": "Laterite is the error colour and nothing else. It never decorates, never highlights, never marks a CTA.",
+        "section": "colors"
+      },
+      {
+        "name": "The Group Mark Rule",
+        "body": "The three Nethravathi greens appear only inside the three-bar group mark. They are a logo, not palette.",
+        "section": "colors"
+      },
+      {
+        "name": "The Paper Turn Rule",
+        "body": "Grounds change at section boundaries in this order: ivory (hero) → sage (Project N) → forest (ownership) → stone + grain (legacy) → ivory (leadership) → sage (developments) → ivory (enquiry) → forest-deep (footer). New sheets choose one of these grounds; no gradients and no tinted cards on top of a sheet.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Italic Rule",
+        "body": "Italic Zodiak (weight 300) marks at most one word per heading; punctuation stays upright.",
+        "section": "typography"
+      },
+      {
+        "name": "The Graphic Numeral Exception",
+        "body": "The hero \"N\" glyph, legacy year numerals and the footer wordmark may exceed 6rem because they are drawn objects, not text blocks. No running heading does.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Eyebrow Rule",
+        "body": "No kicker or eyebrow label sits above a heading, and no section carries \"01/02/03\" numbering. Annotation belongs at a sheet corner or beside a fact, not as a heading's preface.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Sheet Rule",
+        "body": "Nothing floats above the paper. If a surface needs separation, change its ground or draw a 1px line.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do build every structure from 1px hairlines (line on light, line-inverse on forest) and square corners.",
