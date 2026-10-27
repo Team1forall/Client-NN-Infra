@@ -2,7 +2,8 @@
  * NN Infra — Project N enquiries → Google Sheet
  *
  * Receives JSON from the website's /api/enquiry route and appends one row per
- * enquiry to the "Enquiries" sheet of the spreadsheet this script is bound to.
+ * enquiry to the "Enquiries" sheet. A phone number already in the sheet is
+ * answered with { ok: true, duplicate: true } and no second row is written.
  *
  * Payload: { secret, submittedAt, name, phone, email, message, page, userAgent }
  * (message may be empty; phone arrives normalised as +91XXXXXXXXXX).
@@ -26,6 +27,7 @@ const DEFAULT_SPREADSHEET_ID = '1_gCnrX117143Vm037gMyhLsHSFcOYvKO4rn6e7XRL9A';
 const SHEET_NAME = 'Enquiries';
 const HEADERS = ['Submitted at', 'Name', 'Phone', 'Email', 'Message', 'Page', 'User agent'];
 const MESSAGE_COLUMN = HEADERS.indexOf('Message') + 1;
+const PHONE_COLUMN = HEADERS.indexOf('Phone') + 1;
 
 /** Website → Sheet. Always answers JSON: { ok: true } or { ok: false, error }. */
 function doPost(e) {
@@ -50,6 +52,12 @@ function doPost(e) {
 
   try {
     const sheet = getSheet_(props);
+
+    // One row per phone number: a repeat enquiry is acknowledged, not recorded again.
+    if (isDuplicate_(sheet, data.phone)) {
+      return respond_({ ok: true, duplicate: true });
+    }
+
     let submittedAt = new Date(data.submittedAt);
     if (isNaN(submittedAt.getTime())) submittedAt = new Date();
 
@@ -113,6 +121,30 @@ function getSheet_(props) {
 function text_(value, max) {
   const s = (value === null || value === undefined ? '' : String(value)).trim().slice(0, max);
   return /^[=+\-@]/.test(s) ? "'" + s : s;
+}
+
+/**
+ * True when this phone number is already in the Phone column.
+ * Numbers arrive normalised (+91XXXXXXXXXX) but text_ prefixes an apostrophe to
+ * stop Sheets reading a leading '+' as a formula, and older rows may have been
+ * typed by hand, so the comparison is on digits alone.
+ */
+function isDuplicate_(sheet, phone) {
+  const target = digits_(phone);
+  if (!target) return false;
+
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return false;
+
+  const values = sheet.getRange(2, PHONE_COLUMN, lastRow - 1, 1).getValues();
+  for (let i = 0; i < values.length; i++) {
+    if (digits_(values[i][0]) === target) return true;
+  }
+  return false;
+}
+
+function digits_(value) {
+  return String(value === null || value === undefined ? '' : value).replace(/D/g, '');
 }
 
 function safeEqual_(a, b) {

@@ -172,7 +172,10 @@ export async function POST(request: Request) {
       body = null;
     }
 
-    if (upstream.ok && isRecord(body) && body.ok === true) return json(200, { ok: true });
+    if (upstream.ok && isRecord(body) && body.ok === true) {
+      // The script reports a phone number it already holds; the form thanks them without resubmitting.
+      return json(200, body.duplicate === true ? { ok: true, duplicate: true } : { ok: true });
+    }
 
     const detail = isRecord(body) ? str(body.error) || "no error field" : `non-JSON body: ${text.slice(0, 200)}`;
     console.error(`[enquiry] Upstream rejected the enquiry (HTTP ${upstream.status}): ${detail}`);

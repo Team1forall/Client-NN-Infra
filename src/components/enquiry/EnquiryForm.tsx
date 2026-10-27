@@ -17,7 +17,9 @@ const COPY = {
   sendingStatus: "Sending your enquiry…",
   summaryTitle: "There is a problem",
   errorPrefix: "Error:",
-  successText: "Your enquiry has been sent. The NN Infra team will get back to you.",
+  successText: "Thanks for filling in the form. Your enquiry has reached the NN Infra team and they will get back to you soon.",
+  duplicateText:
+    "You have already filled in the form with this phone number, so we have not added it again. The NN Infra team has your enquiry and will get back to you soon.",
   another: "Send another enquiry",
   call: "Call",
   whatsapp: "WhatsApp",
@@ -42,7 +44,7 @@ const FIELDS = ["name", "phone", "email", "message"] as const;
 type Field = (typeof FIELDS)[number];
 type Errors = Partial<Record<Field, string>>;
 type Values = Record<Field, string>;
-type Status = "idle" | "submitting" | "success" | "not_configured" | "error" | "rate_limited";
+type Status = "idle" | "submitting" | "success" | "duplicate" | "not_configured" | "error" | "rate_limited";
 type FocusTarget = "summary" | "notice" | "success" | "name";
 
 const INITIAL: Values = { name: "", phone: "", email: "", message: "" };
@@ -143,7 +145,7 @@ function DirectContact() {
   );
 }
 
-type ApiBody = { ok?: boolean; code?: string; fields?: Record<string, unknown> };
+type ApiBody = { ok?: boolean; duplicate?: boolean; code?: string; fields?: Record<string, unknown> };
 
 export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
   const [values, setValues] = useState<Values>(INITIAL);
@@ -234,7 +236,7 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
 
       if (res.ok && body?.ok) {
         setSentName(firstName(values.name));
-        setStatus("success");
+        setStatus(body.duplicate === true ? "duplicate" : "success");
         requestFocus("success");
         return;
       }
@@ -285,7 +287,7 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
     requestFocus("name");
   }
 
-  if (status === "success" && sentName !== null) {
+  if ((status === "success" || status === "duplicate") && sentName !== null) {
     return (
       <div className={styles.root}>
         <div
@@ -300,7 +302,7 @@ export function EnquiryForm({ labelledBy }: { labelledBy?: string }) {
             Thank you, {sentName}.
           </h3>
           <p id="enq-success-text" className={styles.successText}>
-            {COPY.successText}
+            {status === "duplicate" ? COPY.duplicateText : COPY.successText}
           </p>
           <button type="button" className={styles.another} onClick={reset}>
             {COPY.another}
