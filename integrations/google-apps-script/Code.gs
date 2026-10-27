@@ -10,11 +10,18 @@
  * Script Properties (Project Settings → Script Properties):
  *   SHARED_SECRET   required  Must equal GOOGLE_SHEETS_WEBHOOK_SECRET on the website.
  *   NOTIFY_EMAIL    optional  Comma-separated address(es) to email on every new enquiry.
- *   SPREADSHEET_ID  optional  Only for a standalone (unbound) script: the target Sheet's ID.
+ *   SPREADSHEET_ID  optional  Overrides DEFAULT_SPREADSHEET_ID below (e.g. to point at a test Sheet).
  *
  * Deploy: Deploy → New deployment → Web app → Execute as: Me → Who has access: Anyone.
  * After any change: Deploy → Manage deployments → Edit → Version: New version → Deploy.
  */
+
+/**
+ * The NN Infra leads Sheet (the id between /d/ and /edit in its URL).
+ * A SPREADSHEET_ID Script Property overrides this; set both to '' to write to
+ * whichever Sheet the script is bound to instead.
+ */
+const DEFAULT_SPREADSHEET_ID = '1_gCnrX117143Vm037gMyhLsHSFcOYvKO4rn6e7XRL9A';
 
 const SHEET_NAME = 'Enquiries';
 const HEADERS = ['Submitted at', 'Name', 'Phone', 'Email', 'Message', 'Page', 'User agent'];
@@ -84,9 +91,9 @@ function setup() {
 /* ---------- helpers ---------- */
 
 function getSheet_(props) {
-  const id = props.getProperty('SPREADSHEET_ID');
+  const id = props.getProperty('SPREADSHEET_ID') || DEFAULT_SPREADSHEET_ID;
   const ss = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
-  if (!ss) throw new Error('No spreadsheet: bind this script to a Sheet or set the SPREADSHEET_ID property.');
+  if (!ss) throw new Error('No spreadsheet: set DEFAULT_SPREADSHEET_ID or the SPREADSHEET_ID property, or bind this script to a Sheet.');
 
   const sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
   if (sheet.getLastRow() === 0) {

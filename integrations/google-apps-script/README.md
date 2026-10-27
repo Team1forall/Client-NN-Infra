@@ -21,36 +21,46 @@ What the website sends to the script (one JSON object per enquiry):
 
 ## What you need
 
-- A Google account owned by NN Infra (the Sheet and the script live here).
-- Access to the website's environment variables (`.env.local` for local development, or the hosting provider's settings in production).
+- Sign in to Google as the account that owns the leads Sheet:
+  <https://docs.google.com/spreadsheets/d/1_gCnrX117143Vm037gMyhLsHSFcOYvKO4rn6e7XRL9A/edit>
+- Access to the website's environment variables (`.env.local` locally, and the Vercel project's settings in production).
+
+That Sheet's id is already pinned in [`Code.gs`](./Code.gs) as `DEFAULT_SPREADSHEET_ID`, so the script writes to it whether it is bound to the Sheet or standalone. To point at a different Sheet later, change that constant or set a `SPREADSHEET_ID` Script Property.
 
 ## Setup (about 10 minutes)
 
-1. **Create the Sheet.** In Google Drive, create a new Google Sheet, for example "Project N — Enquiries". Share it only with the people who handle enquiries.
-2. **Open Apps Script.** In the Sheet: **Extensions → Apps Script**. Delete the sample code in `Code.gs`, paste the whole of [`Code.gs`](./Code.gs) from this folder, and click **Save**. Give the project a name, for example "NN Infra enquiries".
-3. **Create a shared secret.** Any long random string works. To generate one:
-   - macOS / Linux / Git Bash: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
-   - PowerShell: `-join (1..2 | ForEach-Object { [guid]::NewGuid().ToString('N') })`
-4. **Set Script Properties.** In the Apps Script editor: **Project Settings** (gear icon) → **Script Properties** → **Add script property**:
-   - `SHARED_SECRET` = the secret from step 3 (required)
-   - `NOTIFY_EMAIL` = an address to email on every new enquiry, e.g. the sales inbox (optional; comma-separate several)
+1. **Open Apps Script.** In the Sheet above: **Extensions → Apps Script**. Delete the sample `myFunction` code, paste the whole of [`Code.gs`](./Code.gs) from this folder, and click **Save**. Name the project, for example "NN Infra enquiries".
+2. **Set the shared secret.** **Project Settings** (gear icon) → **Script Properties** → **Add script property**:
+   - `SHARED_SECRET` = the value of `GOOGLE_SHEETS_WEBHOOK_SECRET` in `.env.local` (required — copy it exactly, no surrounding spaces)
+   - `NOTIFY_EMAIL` = an address to email on every new lead (optional; comma-separate several)
    - Save.
-5. **Authorise and create the sheet tab.** Back in the editor, choose the function **`setup`** in the toolbar and click **Run**. Google asks for permission (to edit this spreadsheet and send email as you). Because the script is private to NN Infra, Google shows "Google hasn't verified this app": choose **Advanced → Go to … (unsafe)** → **Allow**. A tab called **Enquiries** appears with a bold, frozen header row: Submitted at, Name, Phone, Email, Message, Page, User agent.
-6. **Deploy as a web app.** **Deploy → New deployment** → gear next to "Select type" → **Web app**:
+
+   There is already a secret in `.env.local`; reuse it so local development and production agree. To mint a fresh one instead, generate it and put the same value in all three places (`.env.local`, Vercel, and this property):
+   - Git Bash: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
+   - PowerShell: `-join (1..2 | ForEach-Object { [guid]::NewGuid().ToString('N') })`
+3. **Authorise and create the tab.** In the editor, choose the function **`setup`** in the toolbar and click **Run**. Google asks for permission (to edit the spreadsheet and send email as you). Because the script is private, Google shows "Google hasn't verified this app": choose **Advanced → Go to … (unsafe)** → **Allow**. A tab called **Enquiries** appears with a bold, frozen header row: Submitted at, Name, Phone, Email, Message, Page, User agent. Your existing first tab is left alone.
+4. **Deploy as a web app.** **Deploy → New deployment** → gear next to "Select type" → **Web app**:
    - Description: `Project N enquiries`
    - Execute as: **Me**
    - Who has access: **Anyone**
    - Click **Deploy** and copy the **Web app URL** (it ends in `/exec`).
+
    "Anyone" only means the URL can be called without a Google login; every request must still carry the shared secret, and the script never returns Sheet data.
-7. **Connect the website.** Add to `.env.local` (and to the hosting provider's environment variables for production):
+5. **Connect the website.** Put the URL in `.env.local`:
 
    ```
    GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/XXXXXXXX/exec
-   GOOGLE_SHEETS_WEBHOOK_SECRET=the-same-secret-as-SHARED_SECRET
    ```
 
-   Restart `npm run dev` locally, or redeploy the site, so the new values are picked up. Never put the secret in a `NEXT_PUBLIC_` variable.
-8. **Test** (below), then submit the real form once and check that a row appears.
+   and add both variables to the Vercel project (**Settings → Environment Variables**, Production + Preview + Development):
+
+   | Name | Value |
+   | --- | --- |
+   | `GOOGLE_SHEETS_WEBHOOK_URL` | the `/exec` URL from step 4 |
+   | `GOOGLE_SHEETS_WEBHOOK_SECRET` | the same string as the `SHARED_SECRET` property |
+
+   Restart `npm run dev` locally, and **redeploy** on Vercel — environment variables are read at build and run time, so an existing deployment will not pick them up on its own. Never prefix either name with `NEXT_PUBLIC_`.
+6. **Test** (below), then submit the real form once and check that a row appears.
 
 ## Changing the script later
 
