@@ -25,65 +25,66 @@ Deploys as a standard Next.js 16 app (Vercel, Netlify, or any Node host). The en
 
 ## Deploy on Vercel
 
-The project is set up for Vercel: `vercel.json` pins serverless functions (the enquiry API) to Mumbai (`bom1`), and `.vercelignore` keeps raw media sources and local files out of uploads.
+The site is live at **<https://nn-infra.vercel.app>**, deployed from GitHub by Vercel's own Git
+integration: every push to `master` builds and goes to production, and pull requests get their own
+preview URL. Nothing needs deploying by hand.
+
+| | |
+|---|---|
+| Repository | [`Team1forall/Client-NN-Infra`](https://github.com/Team1forall/Client-NN-Infra), branch `master` |
+| Vercel project | `nn-infra`, owned by `1forallyouneed-7560` |
+| Production URL | `nn-infra.vercel.app` |
+
+`vercel.json` pins the framework preset to Next.js and the enquiry API's function to Mumbai
+(`bom1`); `.vercelignore` keeps raw media sources and local files out of uploads. Preview
+deployments are protected by Vercel Authentication and answer `401` to anything unauthenticated —
+worth remembering before pointing a health check at one. The production domain is public.
+
+To deploy by hand, which should rarely be necessary:
 
 ```bash
-npx vercel login                 # once, in your own terminal
-npx vercel link                  # link this folder to the Vercel project
-npx vercel deploy                # preview deployment (protected by Vercel Authentication by default)
-npx vercel deploy --prod         # production
-```
-
-Environment variables (Vercel → Project → Settings → Environment Variables, or `npx vercel env add NAME production`):
-
-| Variable | Production / Preview | Notes |
-|---|---|---|
-| `GOOGLE_SHEETS_WEBHOOK_SECRET` | required | Already generated in `.env.local`; the same value goes into the Apps Script `SHARED_SECRET` property. |
-| `GOOGLE_SHEETS_WEBHOOK_URL` | required for enquiries | The Apps Script `/exec` URL. Until it is set, the form clearly says online registration isn't connected yet. |
-| `NEXT_PUBLIC_SITE_URL` | optional | Leave unset on Vercel: the site uses the project's production domain automatically (your custom domain once it is primary). Set it only to force a specific URL. Changing it needs a redeploy because it is read at build time. |
-
-After adding or changing a variable, redeploy (`npx vercel deploy --prod`) so the build picks it up.
-
-Current setup: the folder is linked to the Vercel project `nn-infra` (`.vercel/`, git-ignored). `vercel.json` pins the framework preset to Next.js. A project created from the CLI starts on the "Other" preset, which serves `public/` and returns 404, and pinning it here avoids that. Preview deployments are protected by Vercel Authentication; the production domain (`nn-infra.vercel.app`, or your custom domain) is public.
-
-> Vercel's Hobby plan is for personal, non-commercial use. For the live NN Infra site, move the project to a Pro team or to NN Infra's own Vercel account.
-
-### Move the site to another Vercel account
-
-This folder has **no git remote** — the current deployment was pushed straight from this machine with the Vercel CLI, so there is no repository for a new account to import. Pick one of the two routes below.
-
-Before either route, note what the old project holds, because none of it travels automatically: the environment variables above, any **custom domain**, and the production URL.
-
-**Route A — redeploy from this machine (fastest).**
-
-```bash
-npx vercel logout
-npx vercel login                 # sign in as the NEW account
-rm -rf .vercel                   # drop the link to the old project
-npx vercel link                  # create/choose a project in the new scope
-npx vercel env add GOOGLE_SHEETS_WEBHOOK_URL production
-npx vercel env add GOOGLE_SHEETS_WEBHOOK_SECRET production
 npx vercel deploy --prod
 ```
 
-Repeat the two `env add` lines with `preview` (and `development` if you use `vercel dev`). Deleting `.vercel` is safe — it is git-ignored and only stores the project link.
+### Environment variables
 
-**Route B — put it on GitHub first (recommended for the live site).** Gives the new account automatic deploys on every push and a backup of the source, which Route A does not.
+Vercel -> Project -> Settings -> Environment Variables, or `npx vercel env add NAME production`.
 
-1. Create an empty repository under NN Infra's GitHub account (no README, no .gitignore — this folder already has both).
-2. `git remote add origin <repo-url>` then `git push -u origin master`.
-3. In the **new** Vercel account: **Add New → Project → Import** that repository. Keep the defaults; `vercel.json` already pins the Next.js preset and the `bom1` region.
-4. Add `GOOGLE_SHEETS_WEBHOOK_URL` and `GOOGLE_SHEETS_WEBHOOK_SECRET` under **Settings → Environment Variables** (Production + Preview) **before** the first deploy, so the build has them.
-5. Deploy.
+| Variable | Production / Preview | Notes |
+|---|---|---|
+| `GOOGLE_SHEETS_WEBHOOK_SECRET` | required | Must equal the Apps Script `SHARED_SECRET` property. |
+| `GOOGLE_SHEETS_WEBHOOK_URL` | required for enquiries | The Apps Script `/exec` URL. Until it is set, the form clearly says online registration isn't connected yet. |
+| `NEXT_PUBLIC_SITE_URL` | leave unset | The site uses the project's production domain automatically, including a custom domain once one is primary. Set it only to force a specific URL. |
 
-**Finishing up, either route.**
+They are read at build time, so a change needs a redeploy before it takes effect.
 
-1. Check the new production URL: the form submits and a row lands in the Sheet.
-2. Move the custom domain: remove it from the **old** project first (**Settings → Domains**), then add it to the new one — Vercel will not let two projects claim the same domain. Expect a few minutes of downtime; the DNS records usually stay the same.
-3. If `NEXT_PUBLIC_SITE_URL` is set anywhere, update it to the new URL — it is baked in at build time and feeds canonical tags, the sitemap, and the Project N QR code.
-4. Only once the new deployment is confirmed working, delete the old project (**Settings → Advanced → Delete Project**).
+> Vercel's Hobby plan is for personal, non-commercial use. For the live NN Infra site, move the
+> project to a Pro team when convenient.
 
-Transferring the existing project instead (**Settings → Advanced → Transfer Project**) keeps the domain and variables in place, but it only offers scopes your current login is already a member of — so it works between your own teams, not between two unconnected accounts.
+### Moving to another Vercel account again
+
+The site was moved once already, in October 2026, from a previous Hobby account. If it moves again,
+these three things cost the most time:
+
+1. **The new account needs a GitHub login connection before any repository can be linked.** An
+   account created with an email address has no Git provider attached, and `vercel git connect`
+   keeps failing with *"You need to add a Login Connection to your GitHub account first"* until one
+   is added under **Settings -> Authentication**. This is not a plan limit: Git deploys work on
+   Hobby.
+2. **`<project>.vercel.app` is globally unique.** A new project cannot take `nn-infra.vercel.app`
+   while the old project still holds it, and is given a suffixed name instead. Delete the old
+   project first and the subdomain frees up for the new one.
+3. **Redeploy once the domain has moved.** `siteUrl` is baked in at build time from the production
+   domain, so canonical tags, the sitemap, `og:url` and the **Project N QR code** all keep pointing
+   at the old URL until the next build.
+
+A custom domain moves the same way: remove it from the old project (**Settings -> Domains**) before
+adding it to the new one, then redeploy. Verify by submitting the form once and checking that a row
+lands in the Sheet, and only delete the old project after the new deployment is confirmed working.
+
+**Transferring** the project instead (**Settings -> Advanced -> Transfer Project**) keeps domains
+and variables in place, but only offers scopes your current login already belongs to — so it works
+between your own teams, not between two unconnected accounts.
 
 ## Configuration (`.env.local`)
 
